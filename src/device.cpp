@@ -95,10 +95,11 @@ void Device::_Create()
     if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &_Rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
     if (snd_pcm_hw_params_set_channels(_PlaybackHandle, hw_params, _Channels)<0) ERROR("snd_pcm_hw_params_set_channels");
 
-    snd_pcm_uframes_t buffer_size = 1024;
+    /*snd_pcm_uframes_t buffer_size = 1024;
     snd_pcm_uframes_t period_size = 64;
     snd_pcm_hw_params_set_buffer_size_near(_PlaybackHandle, hw_params, &buffer_size);
     snd_pcm_hw_params_set_period_size_near(_PlaybackHandle, hw_params, &period_size, NULL);
+*/
 
     if (snd_pcm_hw_params(_PlaybackHandle, hw_params)<0) ERROR("snd_pcm_hw_params");
     snd_pcm_hw_params_free(hw_params);

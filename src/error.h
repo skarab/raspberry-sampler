@@ -11,7 +11,7 @@ public:
 
     Error(string message);
 
-    void Log();
+    void Log() const;
 
 private:
 

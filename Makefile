@@ -1,22 +1,23 @@
 CC=gcc
 CXX=g++
 RM=rm -f
-CPPFLAGS=-O3 -s -std=c99
+CPPFLAGS=-O3 -s
 LDFLAGS=
 LDLIBS=-L/usr/lib -lasound -lpthread -lncurses
 
-SRCS=main.cpp device.cpp error.cpp sample.cpp voice.cpp wav.cpp
-OBJS=$(subst .c,.o,$(SRCS))
+SRCS=src/main.cpp src/device.cpp src/error.cpp src/sample.cpp src/voice.cpp src/wav.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: sampler
 
 sampler: $(OBJS)
 	$(CXX) $(LDFLAGS) -o sampler $(OBJS) $(LDLIBS)
 
-main.o: main.cpp
+%.o : %.cpp
+	$(CXX) -c $< -o $@
 
 clean:
-	$(R%) $(OBJS)
+	$(RM) $(OBJS)
 
 distclean: clean
 	$(RM) sample
