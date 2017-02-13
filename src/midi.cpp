@@ -2,10 +2,10 @@
 
 struct MidiDevice
 {
-    bool NoteOn = false;
-    bool NoteOff = false;
-    int Channel = -1;
-    int Note = -1;
+    bool NoteOn;
+    bool NoteOff;
+    int Channel;
+    int Note;
 };
 
 Midi::Midi() :
@@ -57,7 +57,12 @@ void Midi::_Run()
             int device_id = buffer[2];
 
             while (device_id>=devices.size())
-                devices.push_back(MidiDevice());
+            {
+                MidiDevice dev;
+                dev.NoteOn = false;
+                dev.NoteOff = false;
+                devices.push_back(dev);
+            }
 
             MidiDevice& device = devices[device_id];
             if (!device.NoteOn && !device.NoteOff)
@@ -71,7 +76,7 @@ void Midi::_Run()
                 else if (value>=0x80 && value<=0x8F)
                 {
                     device.NoteOff = true;
-                    device.Channel = value-0x90+1;
+                    device.Channel = value-0x80+1;
                     device.Note = -1;
                 }
             }
@@ -98,7 +103,6 @@ void Midi::_Run()
                 {
                     int velocity = value;
 
-                    // got full note message
                     if (device.NoteOn)
                     {
                         LOG("NOTE ON [device %d] [channel %d] [note %d] [velocity %d]", device_id, device.Channel, device.Note, velocity);
@@ -120,15 +124,6 @@ void Midi::_Run()
     close(_Sequencer);
     LOG("midi destroyed");
 }
-
-/*
-typedef struct
-{
-    char name[30];
-    int device;
-    char dummies[255];
-} midi_info;
-*/
 
 void Midi::_List()
 {
