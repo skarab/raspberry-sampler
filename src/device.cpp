@@ -82,6 +82,8 @@ void Device::_Run()
 
     while (!_Quit)
     {
+        usleep(1);
+
         if (snd_pcm_wait(_PlaybackHandle, 10)<0)
             ERROR("snd_pcm_wait failed");
 
@@ -99,8 +101,6 @@ void Device::_Run()
             _Update(frames_to_deliver);
             pthread_mutex_unlock(&_Lock);
         }
-
-        usleep(10);
     }
 
     _Destroy();
