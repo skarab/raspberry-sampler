@@ -1,29 +1,29 @@
-#include "voice.h"
+#include "device.h"
 
-Voice::Voice(string device, unsigned int rate, unsigned int channels, unsigned int buffer_size) :
-    _Device(device),
+Device::Device(string path, unsigned int rate, unsigned int channels, unsigned int buffer_size, unsigned int voices) :
+    _Path(path),
     _Rate(rate),
     _Channels(channels),
     _BufferSize(buffer_size),
-     _Quit(false)
+    _Quit(false)
 {
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 }
 
-Voice::~Voice()
+Device::~Device()
 {
     _Quit = true;
     pthread_join(_Thread, NULL);
 }
 
-void* Voice::_RunThreaded(void* data)
+void* Device::_RunThreaded(void* data)
 {
-    Voice* voice = (Voice*)data;
-    voice->_Run();
+    Device* device = (Device*)data;
+    device->_Run();
 }
 
-void Voice::_Run()
+void Device::_Run()
 {
     _Create();
 
@@ -52,10 +52,10 @@ void Voice::_Run()
     _Destroy();
 }
 
-void Voice::_Create()
+void Device::_Create()
 {
-    if (snd_pcm_open(&_PlaybackHandle, _Device.c_str(), SND_PCM_STREAM_PLAYBACK, 0)<0)
-        ERROR("device not found");
+    if (snd_pcm_open(&_PlaybackHandle, _Path.c_str(), SND_PCM_STREAM_PLAYBACK, 0)<0)
+        ERROR("device is not available");
 
     snd_pcm_hw_params_t* hw_params;
     if (snd_pcm_hw_params_malloc(&hw_params)<0) ERROR("failed to alloc hw_params");
@@ -84,7 +84,7 @@ void Voice::_Create()
         ERROR("failed to alloc buffer");
 }
 
-void Voice::_Destroy()
+void Device::_Destroy()
 {
     if (_Buffer!=NULL)
         free(_Buffer);
@@ -92,7 +92,7 @@ void Voice::_Destroy()
     snd_pcm_close(_PlaybackHandle);
 }
 
-void Voice::_Update(snd_pcm_uframes_t frames)
+void Device::_Update(snd_pcm_uframes_t frames)
 {
     for (int i=0 ; i<frames ; ++i)
     {

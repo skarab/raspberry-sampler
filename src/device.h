@@ -1,14 +1,14 @@
-#ifndef __SAMPLER_VOICE__
-#define __SAMPLER_VOICE__
+#ifndef __SAMPLER_DEVICE__
+#define __SAMPLER_DEVICE__
 
 #include "includes.h"
 
-class Voice
+class Device
 {
 public:
 
-    Voice(string device, unsigned int rate=44100, unsigned int channels=2, unsigned int buffer_size=4096);
-    ~Voice();
+    Device(string path, unsigned int rate, unsigned int channels, unsigned int buffer_size, unsigned int voices);
+    ~Device();
 
 private:
 
@@ -19,7 +19,7 @@ private:
     void _Destroy();
     void _Update(snd_pcm_uframes_t frames);
 
-    string _Device;
+    string _Path;
     unsigned int _Rate;
     unsigned int _Channels;
     unsigned int _BufferSize;
@@ -28,6 +28,5 @@ private:
     snd_pcm_t* _PlaybackHandle;
     short* _Buffer;
 };
-
 
 #endif

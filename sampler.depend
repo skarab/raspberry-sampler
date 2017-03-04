@@ -3,7 +3,7 @@
 	"includes.h"
 	"voice.h"
 
-1488650846 /home/skarab/prog/raspberry/raspberry-sampler/src/includes.h
+1488652489 /home/skarab/prog/raspberry/raspberry-sampler/src/includes.h
 	<stdio.h>
 	<stdlib.h>
 	<errno.h>
@@ -13,9 +13,10 @@
 	<fcntl.h>
 	<pthread.h>
 	<string>
+	<vector>
 	"error.h"
 	"config.h"
-	"voice.h"
+	"device.h"
 	"wav.h"
 	"midi.h"
 
@@ -25,7 +26,7 @@
 1488648631 source:/home/skarab/prog/raspberry/raspberry-sampler/src/channel.cpp
 	"channel.h"
 
-1488648612 /home/skarab/prog/raspberry/raspberry-sampler/src/error.h
+1488652483 /home/skarab/prog/raspberry/raspberry-sampler/src/error.h
 	"includes.h"
 
 1488647412 source:/home/skarab/prog/raspberry/raspberry-sampler/src/wav.cpp
@@ -39,13 +40,19 @@
 1488649139 source:/home/skarab/prog/raspberry/raspberry-sampler/src/voice.cpp
 	"voice.h"
 
-1488649270 /home/skarab/prog/raspberry/raspberry-sampler/src/config.h
+1488652571 /home/skarab/prog/raspberry/raspberry-sampler/src/config.h
 
-1488650818 source:/home/skarab/prog/raspberry/raspberry-sampler/src/main.cpp
+1488652530 source:/home/skarab/prog/raspberry/raspberry-sampler/src/main.cpp
 	"includes.h"
 
 1488647496 /home/skarab/prog/raspberry/raspberry-sampler/src/wav.h
 	"includes.h"
 
 1488632685 /home/skarab/prog/raspberry/raspberry-sampler/src/midi.h
+
+1488652473 /home/skarab/prog/raspberry/raspberry-sampler/src/device.h
+	"includes.h"
+
+1488652447 source:/home/skarab/prog/raspberry/raspberry-sampler/src/device.cpp
+	"device.h"
 
