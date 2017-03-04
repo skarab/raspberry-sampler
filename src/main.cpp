@@ -1,10 +1,18 @@
 #include "includes.h"
-#include "channel.h"
 
 int main(int argc, char *argv[])
 {
-    Channel* channel = new Channel("default"); // hw:2,0
-    while(!channel->HasError()) {}
+    try
+    {
+        Voice* voice = new Voice("default"); // hw:2,0
+        while(1)
+        {
+        }
+    }
+    catch(Error& error)
+    {
+        error.Log();
+    }
     return 0;
 }
 

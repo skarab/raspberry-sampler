@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1488649153 source:/home/skarab/prog/raspberry/raspberry-sampler/main.cpp
+	"includes.h"
+	"voice.h"
+
+1488650846 /home/skarab/prog/raspberry/raspberry-sampler/src/includes.h
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+	<poll.h>
+	<alsa/asoundlib.h>
+	<sys/soundcard.h>
+	<fcntl.h>
+	<pthread.h>
+	<string>
+	"error.h"
+	"config.h"
+	"voice.h"
+	"wav.h"
+	"midi.h"
+
+1488648153 /home/skarab/prog/raspberry/raspberry-sampler/src/channel.h
+	"includes.h"
+
+1488648631 source:/home/skarab/prog/raspberry/raspberry-sampler/src/channel.cpp
+	"channel.h"
+
+1488648612 /home/skarab/prog/raspberry/raspberry-sampler/src/error.h
+	"includes.h"
+
+1488647412 source:/home/skarab/prog/raspberry/raspberry-sampler/src/wav.cpp
+
+1488648675 source:/home/skarab/prog/raspberry/raspberry-sampler/src/error.cpp
+	"error.h"
+
+1488649081 /home/skarab/prog/raspberry/raspberry-sampler/src/voice.h
+	"includes.h"
+
+1488649139 source:/home/skarab/prog/raspberry/raspberry-sampler/src/voice.cpp
+	"voice.h"
+
+1488649270 /home/skarab/prog/raspberry/raspberry-sampler/src/config.h
+
+1488650818 source:/home/skarab/prog/raspberry/raspberry-sampler/src/main.cpp
+	"includes.h"
+
+1488647496 /home/skarab/prog/raspberry/raspberry-sampler/src/wav.h
+	"includes.h"
+
+1488632685 /home/skarab/prog/raspberry/raspberry-sampler/src/midi.h
+

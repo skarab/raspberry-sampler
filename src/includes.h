@@ -1,5 +1,5 @@
-#ifndef __SYNTH_INCLUDES__
-#define __SYNTH_INCLUDES__
+#ifndef __SAMPLER_INCLUDES__
+#define __SAMPLER_INCLUDES__
 
     #include <stdio.h>
     #include <stdlib.h>
@@ -12,6 +12,12 @@
     #include <string>
 
     using namespace std;
+
+    #include "error.h"
+    #include "config.h"
+    #include "voice.h"
+    #include "wav.h"
+    #include "midi.h"
 
 #endif
 
