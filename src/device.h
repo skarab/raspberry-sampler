@@ -11,6 +11,8 @@ public:
     Device(string path, unsigned int rate, unsigned int channels, unsigned int buffer_size, unsigned int voices);
     ~Device();
 
+    static Device& Get() { return *_Instance; }
+
 private:
 
     static void* _RunThreaded(void* data);
@@ -19,6 +21,8 @@ private:
     void _Create();
     void _Destroy();
     void _Update(snd_pcm_uframes_t frames);
+
+    static Device* _Instance;
 
     string _Path;
     unsigned int _Rate;

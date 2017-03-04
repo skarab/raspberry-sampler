@@ -1,7 +1,8 @@
 #include "wav.h"
 
 Wav::Wav(string path) :
-    _Data(NULL)
+    _Data(NULL),
+    _Length(0)
 {
     _Path = path;
     _Valid = _Load(path);

@@ -1,5 +1,7 @@
 #include "device.h"
 
+Device* Device::_Instance = NULL;
+
 Device::Device(string path, unsigned int rate, unsigned int channels, unsigned int buffer_size, unsigned int voices) :
     _Path(path),
     _Rate(rate),
@@ -8,6 +10,8 @@ Device::Device(string path, unsigned int rate, unsigned int channels, unsigned i
     _VoicesCount(voices),
     _Quit(false)
 {
+    _Instance = this;
+
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 }
