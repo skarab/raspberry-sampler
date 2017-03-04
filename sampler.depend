@@ -34,7 +34,7 @@
 1488653385 /home/skarab/prog/raspberry/raspberry-sampler/src/voice.h
 	"includes.h"
 
-1488649139 source:/home/skarab/prog/raspberry/raspberry-sampler/src/voice.cpp
+1488653403 source:/home/skarab/prog/raspberry/raspberry-sampler/src/voice.cpp
 	"voice.h"
 
 1488652571 /home/skarab/prog/raspberry/raspberry-sampler/src/config.h
@@ -52,6 +52,6 @@
 	"includes.h"
 	"voice.h"
 
-1488652782 source:/home/skarab/prog/raspberry/raspberry-sampler/src/device.cpp
+1488653711 source:/home/skarab/prog/raspberry/raspberry-sampler/src/device.cpp
 	"device.h"
 

@@ -32,7 +32,6 @@ void Device::_Run()
 
     while (!_Quit)
     {
-
         if (snd_pcm_wait(_PlaybackHandle, 1000)<0)
             ERROR("snd_pcm_wait failed");
 
@@ -48,6 +47,8 @@ void Device::_Run()
 
             _Update(frames_to_deliver);
         }
+
+        usleep(10);
     }
 
     _Destroy();
@@ -123,8 +124,8 @@ void Device::_Update(snd_pcm_uframes_t frames)
         if (right>32767) right = 32767;
         else if (right<-32768) right = -32768;
 
-        _Buffer[i*2] = left;
-        _Buffer[i*2+1] = right;
+        _Buffer[i*2] = (short)left;
+        _Buffer[i*2+1] = (short)right;
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)
