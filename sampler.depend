@@ -26,7 +26,8 @@
 1488652483 /home/skarab/prog/raspberry/raspberry-sampler/src/error.h
 	"includes.h"
 
-1488647412 source:/home/skarab/prog/raspberry/raspberry-sampler/src/wav.cpp
+1488655625 source:/home/skarab/prog/raspberry/raspberry-sampler/src/wav.cpp
+	"wav.h"
 
 1488648675 source:/home/skarab/prog/raspberry/raspberry-sampler/src/error.cpp
 	"error.h"
@@ -34,16 +35,16 @@
 1488653385 /home/skarab/prog/raspberry/raspberry-sampler/src/voice.h
 	"includes.h"
 
-1488653403 source:/home/skarab/prog/raspberry/raspberry-sampler/src/voice.cpp
+1488653787 source:/home/skarab/prog/raspberry/raspberry-sampler/src/voice.cpp
 	"voice.h"
 
 1488652571 /home/skarab/prog/raspberry/raspberry-sampler/src/config.h
 
-1488652872 source:/home/skarab/prog/raspberry/raspberry-sampler/src/main.cpp
+1488653891 source:/home/skarab/prog/raspberry/raspberry-sampler/src/main.cpp
 	"includes.h"
 	"device.h"
 
-1488647496 /home/skarab/prog/raspberry/raspberry-sampler/src/wav.h
+1488655680 /home/skarab/prog/raspberry/raspberry-sampler/src/wav.h
 	"includes.h"
 
 1488632685 /home/skarab/prog/raspberry/raspberry-sampler/src/midi.h
@@ -52,6 +53,6 @@
 	"includes.h"
 	"voice.h"
 
-1488653711 source:/home/skarab/prog/raspberry/raspberry-sampler/src/device.cpp
+1488653877 source:/home/skarab/prog/raspberry/raspberry-sampler/src/device.cpp
 	"device.h"
 
