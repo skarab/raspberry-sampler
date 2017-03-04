@@ -16,9 +16,6 @@ using namespace std;
 
 #include "error.h"
 #include "config.h"
-#include "device.h"
-#include "wav.h"
-#include "midi.h"
 
 #endif
 

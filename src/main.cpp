@@ -1,4 +1,5 @@
 #include "includes.h"
+#include "device.h"
 
 int main(int argc, char *argv[])
 {

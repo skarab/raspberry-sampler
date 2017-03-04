@@ -2,6 +2,7 @@
 #define __SAMPLER_DEVICE__
 
 #include "includes.h"
+#include "voice.h"
 
 class Device
 {
@@ -27,6 +28,8 @@ private:
     pthread_t _Thread;
     snd_pcm_t* _PlaybackHandle;
     short* _Buffer;
+    unsigned int _VoicesCount;
+    vector<Voice*> _Voices;
 };
 
 #endif

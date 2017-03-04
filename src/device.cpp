@@ -5,6 +5,7 @@ Device::Device(string path, unsigned int rate, unsigned int channels, unsigned i
     _Rate(rate),
     _Channels(channels),
     _BufferSize(buffer_size),
+    _VoicesCount(voices),
     _Quit(false)
 {
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
@@ -82,10 +83,16 @@ void Device::_Create()
     _Buffer = (short*)malloc(sizeof(short)*_BufferSize*_Channels);
     if (_Buffer==NULL)
         ERROR("failed to alloc buffer");
+
+    for (int i=0 ; i<_VoicesCount ; ++i)
+        _Voices.push_back(new Voice());
 }
 
 void Device::_Destroy()
 {
+    for (int i=0 ; i<_Voices.size() ; ++i)
+        delete _Voices[i];
+
     if (_Buffer!=NULL)
         free(_Buffer);
 
@@ -96,8 +103,25 @@ void Device::_Update(snd_pcm_uframes_t frames)
 {
     for (int i=0 ; i<frames ; ++i)
     {
-        short left = 0;
-        short right = 0;
+        int left = 0;
+        int right = 0;
+
+        for (int j=0 ; j<_Voices.size() ; ++j)
+        {
+            Voice* voice = _Voices[j];
+            if (voice->IsPlaying())
+            {
+                int l, r;
+                voice->Compute(l, r);
+                left += l;
+                right += r;
+            }
+        }
+
+        if (left>32767) left = 32767;
+        else if (left<-32768) left = -32768;
+        if (right>32767) right = 32767;
+        else if (right<-32768) right = -32768;
 
         _Buffer[i*2] = left;
         _Buffer[i*2+1] = right;
