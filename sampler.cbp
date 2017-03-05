@@ -33,6 +33,8 @@
 			<Add directory="h" />
 		</Compiler>
 		<Unit filename="Makefile" />
+		<Unit filename="src/bank.cpp" />
+		<Unit filename="src/bank.h" />
 		<Unit filename="src/config.h" />
 		<Unit filename="src/device.cpp" />
 		<Unit filename="src/device.h" />
@@ -40,6 +42,7 @@
 		<Unit filename="src/error.h" />
 		<Unit filename="src/includes.h" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/midi.cpp" />
 		<Unit filename="src/midi.h" />
 		<Unit filename="src/sample.cpp" />
 		<Unit filename="src/sample.h" />
