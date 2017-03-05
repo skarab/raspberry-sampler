@@ -13,6 +13,8 @@ public:
 
     static Device& Get() { return *_Instance; }
 
+    void Play(Sample* sample);
+
 private:
 
     static void* _RunThreaded(void* data);
@@ -24,6 +26,7 @@ private:
 
     static Device* _Instance;
 
+    bool _Ready;
     string _Path;
     unsigned int _Rate;
     unsigned int _Channels;
@@ -34,6 +37,7 @@ private:
     short* _Buffer;
     unsigned int _VoicesCount;
     vector<Voice*> _Voices;
+    pthread_mutex_t _Lock;
 };
 
 #endif

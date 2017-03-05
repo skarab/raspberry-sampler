@@ -91,9 +91,9 @@ bool Wav::_Load(string path)
     }
     memcpy(_Data, wav_data+44, sample_size);
 
-    _Length = sample_size/2;
+    _Length = sample_size/4;
 
     free(wav_data);
-    return true;
+    return _Length>0;
 }
 

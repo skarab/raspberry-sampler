@@ -11,15 +11,37 @@ Device::Device(string path, unsigned int rate, unsigned int channels, unsigned i
     _Quit(false)
 {
     _Instance = this;
+    _Ready = false;
+
+    if (pthread_mutex_init(&_Lock, NULL)!=0)
+        ERROR("failed to create mutex");
 
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
+
+    while (!_Ready)
+        usleep(10);
 }
 
 Device::~Device()
 {
     _Quit = true;
     pthread_join(_Thread, NULL);
+    pthread_mutex_destroy(&_Lock);
+}
+
+void Device::Play(Sample* sample)
+{
+    for (int i=0 ; i<_Voices.size() ; ++i)
+    {
+        if (!_Voices[i]->IsPlaying())
+        {
+            //pthread_mutex_lock(&_Lock);
+            _Voices[i]->Play(sample);
+            //pthread_mutex_unlock(&_Lock);
+            return;
+        }
+    }
 }
 
 void* Device::_RunThreaded(void* data)
@@ -31,12 +53,13 @@ void* Device::_RunThreaded(void* data)
 void Device::_Run()
 {
     _Create();
+    _Ready = true;
 
     snd_pcm_sframes_t frames_to_deliver;
 
     while (!_Quit)
     {
-        if (snd_pcm_wait(_PlaybackHandle, 1000)<0)
+        if (snd_pcm_wait(_PlaybackHandle, 10)<0)
             ERROR("snd_pcm_wait failed");
 
         frames_to_deliver = snd_pcm_avail_update(_PlaybackHandle);
@@ -52,7 +75,7 @@ void Device::_Run()
             _Update(frames_to_deliver);
         }
 
-        usleep(10);
+        //usleep(10);
     }
 
     _Destroy();
@@ -71,6 +94,12 @@ void Device::_Create()
     int dir = 0;
     if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &_Rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
     if (snd_pcm_hw_params_set_channels(_PlaybackHandle, hw_params, _Channels)<0) ERROR("snd_pcm_hw_params_set_channels");
+
+    snd_pcm_uframes_t buffer_size = 1024;
+    snd_pcm_uframes_t period_size = 64;
+    snd_pcm_hw_params_set_buffer_size_near(_PlaybackHandle, hw_params, &buffer_size);
+    snd_pcm_hw_params_set_period_size_near(_PlaybackHandle, hw_params, &period_size, NULL);
+
     if (snd_pcm_hw_params(_PlaybackHandle, hw_params)<0) ERROR("snd_pcm_hw_params");
     snd_pcm_hw_params_free(hw_params);
 
@@ -117,7 +146,9 @@ void Device::_Update(snd_pcm_uframes_t frames)
             if (voice->IsPlaying())
             {
                 int l, r;
-                voice->Compute(l, r);
+                //pthread_mutex_lock(&_Lock);
+                voice->Update(l, r);
+                //pthread_mutex_unlock(&_Lock);
                 left += l;
                 right += r;
             }
@@ -132,7 +163,7 @@ void Device::_Update(snd_pcm_uframes_t frames)
         _Buffer[i*2+1] = (short)right;
     }
 
-    if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)
+    if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)!=frames)
         ERROR("update voice failed");
 }
 
