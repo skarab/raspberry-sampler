@@ -21,6 +21,7 @@
 				<Linker>
 					<Add library="libasound" />
 					<Add library="libpthread" />
+					<Add library="libncurses" />
 				</Linker>
 			</Target>
 		</Build>
@@ -31,6 +32,7 @@
 			<Add directory="src" />
 			<Add directory="h" />
 		</Compiler>
+		<Unit filename="Makefile" />
 		<Unit filename="src/config.h" />
 		<Unit filename="src/device.cpp" />
 		<Unit filename="src/device.h" />
