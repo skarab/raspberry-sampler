@@ -1,3 +1,21 @@
+#ifndef __SAMPLER_MIDI__
+#define __SAMPLER_MIDI__
+
+#include "includes.h"
+
+class MidiKey
+{
+public:
+
+
+private:
+
+};
+
+#endif
+
+
+
 
 
 /*
