@@ -91,7 +91,7 @@ void Midi::_Run()
                 }
                 else
                 {
-                    device.Note = value-21;
+                    device.Note = value;
                 }
             }
             else

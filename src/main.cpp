@@ -10,18 +10,13 @@ int main(int argc, char *argv[])
     Midi* midi = new Midi();
     Controller* controller = new Controller();
 
-    Sample* sample = new Sample("data/sample.wav");
-
     while(1)
     {
         char c = getchar();
         if (c==27) break;
 
-        device->Play(sample);
         usleep(10);
     }
-
-    delete sample;
 
     delete controller;
     delete midi;

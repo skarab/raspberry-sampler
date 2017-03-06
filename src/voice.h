@@ -11,15 +11,22 @@ public:
     Voice();
     ~Voice();
 
-    bool IsPlaying();
+    bool IsBusy() const;
+    bool IsPlaying(int device_id, int channel, int note) const;
+
     void Update(int& left, int& right);
 
-    void Play(Sample* sample);
+    void OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity);
+    void OnNoteOff(int velocity);
 
 private:
 
     Sample* _Sample;
     float _Position;
+    int _DeviceID;
+    int _Channel;
+    int _Note;
+    int _Velocity;
 };
 
 #endif

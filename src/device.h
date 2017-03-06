@@ -16,8 +16,6 @@ public:
     void OnNoteOn(int device_id, int channel, int note, int velocity);
     void OnNoteOff(int device_id, int channel, int note, int velocity);
 
-    void Play(Sample* sample);
-
 private:
 
     static void* _RunThreaded(void* data);
@@ -36,6 +34,8 @@ private:
     short* _Buffer;
     vector<Voice*> _Voices;
     pthread_mutex_t _Lock;
+
+    Sample* _Sample;
 };
 
 #endif

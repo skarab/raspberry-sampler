@@ -4,7 +4,8 @@ Device* Device::_Instance = NULL;
 
 Device::Device() :
     _Ready(false),
-    _Quit(false)
+    _Quit(false),
+    _Sample(NULL)
 {
     _Instance = this;
 
@@ -16,6 +17,10 @@ Device::Device() :
 
     while (!_Ready)
         usleep(10);
+
+    pthread_mutex_lock(&_Lock);
+    _Sample = new Sample("data/sample.wav");
+    pthread_mutex_unlock(&_Lock);
 }
 
 Device::~Device()
@@ -23,26 +28,40 @@ Device::~Device()
     _Quit = true;
     pthread_join(_Thread, NULL);
     pthread_mutex_destroy(&_Lock);
+
+    delete _Sample;
 }
 
 void Device::OnNoteOn(int device_id, int channel, int note, int velocity)
 {
+    if (_Sample!=NULL)
+    {
+        for (int i=0 ; i<_Voices.size() ; ++i)
+        {
+            if (!_Voices[i]->IsBusy())
+            {
+                pthread_mutex_lock(&_Lock);
+                _Voices[i]->OnNoteOn(_Sample, device_id, channel, note, velocity);
+                pthread_mutex_unlock(&_Lock);
+                return;
+            }
+        }
+    }
 }
 
 void Device::OnNoteOff(int device_id, int channel, int note, int velocity)
 {
-}
-
-void Device::Play(Sample* sample)
-{
-    for (int i=0 ; i<_Voices.size() ; ++i)
+    if (_Sample!=NULL)
     {
-        if (!_Voices[i]->IsPlaying())
+        for (int i=0 ; i<_Voices.size() ; ++i)
         {
-            pthread_mutex_lock(&_Lock);
-            _Voices[i]->Play(sample);
-            pthread_mutex_unlock(&_Lock);
-            return;
+            if (_Voices[i]->IsPlaying(device_id, channel, note))
+            {
+                pthread_mutex_lock(&_Lock);
+                _Voices[i]->OnNoteOff(velocity);
+                pthread_mutex_unlock(&_Lock);
+                return;
+            }
         }
     }
 }
@@ -151,7 +170,7 @@ void Device::_Update(snd_pcm_uframes_t frames)
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
             Voice* voice = _Voices[j];
-            if (voice->IsPlaying())
+            if (voice->IsBusy())
             {
                 int l, r;
                 voice->Update(l, r);
