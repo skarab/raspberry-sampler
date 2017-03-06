@@ -30,7 +30,11 @@
 			<Add option="-g" />
 			<Add directory="src" />
 		</Compiler>
+		<Unit filename=".gitignore" />
 		<Unit filename="Makefile" />
+		<Unit filename="README.md" />
+		<Unit filename="run-pc.sh" />
+		<Unit filename="run-raspberry.sh" />
 		<Unit filename="src/config.h" />
 		<Unit filename="src/controller.cpp" />
 		<Unit filename="src/controller.h" />
@@ -48,6 +52,8 @@
 		<Unit filename="src/preset.h" />
 		<Unit filename="src/sample.cpp" />
 		<Unit filename="src/sample.h" />
+		<Unit filename="src/tinyxml/tinyxml2.cpp" />
+		<Unit filename="src/tinyxml/tinyxml2.h" />
 		<Unit filename="src/voice.cpp" />
 		<Unit filename="src/voice.h" />
 		<Unit filename="src/wav.cpp" />
