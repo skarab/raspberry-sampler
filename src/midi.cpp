@@ -1,4 +1,5 @@
 #include "midi.h"
+#include "device.h"
 
 struct MidiDevice
 {
@@ -84,7 +85,7 @@ void Midi::_Run()
             {
                 if (value<21 || value>108)
                 {
-                    LOG("MIDI skipped message");
+                    LOG("midi skipped message");
                     device.NoteOn = false;
                     device.NoteOff = false;
                 }
@@ -97,7 +98,7 @@ void Midi::_Run()
             {
                 if (value>127)
                 {
-                    LOG("MIDI skipped message");
+                    LOG("midi skipped message");
                 }
                 else
                 {
@@ -105,11 +106,11 @@ void Midi::_Run()
 
                     if (device.NoteOn)
                     {
-                        LOG("NOTE ON [device %d] [channel %d] [note %d] [velocity %d]", device_id, device.Channel, device.Note, velocity);
+                        Device::Get().OnNoteOn(device_id, device.Channel, device.Note, velocity);
                     }
                     else if (device.NoteOff)
                     {
-                        LOG("NOTE OFF [device %d] [channel %d] [note %d] [velocity %d]", device_id, device.Channel, device.Note, velocity);
+                        Device::Get().OnNoteOff(device_id, device.Channel, device.Note, velocity);
                     }
                 }
 

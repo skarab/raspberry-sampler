@@ -25,6 +25,14 @@ Device::~Device()
     pthread_mutex_destroy(&_Lock);
 }
 
+void Device::OnNoteOn(int device_id, int channel, int note, int velocity)
+{
+}
+
+void Device::OnNoteOff(int device_id, int channel, int note, int velocity)
+{
+}
+
 void Device::Play(Sample* sample)
 {
     for (int i=0 ; i<_Voices.size() ; ++i)
