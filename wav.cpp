@@ -17,7 +17,7 @@ Wav::~Wav()
 
 bool Wav::_Load(string path)
 {
-    LOG("loading %s", path.c_str());
+    LOG("load %s", path.c_str());
 
     FILE* file = fopen(path.c_str(), "rb");
     if (file==NULL)
