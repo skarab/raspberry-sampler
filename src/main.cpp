@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     Log* log = new Log();
-    Device* device = new Device(SAMPLER_DEVICE, SAMPLER_RATE, SAMPLER_CHANNELS, SAMPLER_BUFFER_SIZE, SAMPLER_VOICES);
+    Device* device = new Device();
     Midi* midi = new Midi();
 
     Sample* sample = new Sample("data/sample.wav");

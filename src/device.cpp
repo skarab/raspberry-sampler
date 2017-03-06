@@ -2,16 +2,11 @@
 
 Device* Device::_Instance = NULL;
 
-Device::Device(string path, unsigned int rate, unsigned int channels, unsigned int buffer_size, unsigned int voices) :
-    _Path(path),
-    _Rate(rate),
-    _Channels(channels),
-    _BufferSize(buffer_size),
-    _VoicesCount(voices),
+Device::Device() :
+    _Ready(false),
     _Quit(false)
 {
     _Instance = this;
-    _Ready = false;
 
     if (pthread_mutex_init(&_Lock, NULL)!=0)
         ERROR("failed to create mutex");
@@ -70,8 +65,8 @@ void Device::_Run()
 
         if (frames_to_deliver>0)
         {
-            if (frames_to_deliver>_BufferSize)
-                frames_to_deliver = _BufferSize;
+            if (frames_to_deliver>SAMPLER_BUFFER_SIZE)
+                frames_to_deliver = SAMPLER_BUFFER_SIZE;
 
             pthread_mutex_lock(&_Lock);
             _Update(frames_to_deliver);
@@ -87,7 +82,7 @@ void Device::_Run()
 
 void Device::_Create()
 {
-    if (snd_pcm_open(&_PlaybackHandle, _Path.c_str(), SND_PCM_STREAM_PLAYBACK, 0)<0)
+    if (snd_pcm_open(&_PlaybackHandle, SAMPLER_DEVICE, SND_PCM_STREAM_PLAYBACK, 0)<0)
         ERROR("device is not available");
 
     snd_pcm_hw_params_t* hw_params;
@@ -96,8 +91,9 @@ void Device::_Create()
     if (snd_pcm_hw_params_set_access(_PlaybackHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)<0) ERROR("SND_PCM_ACCESS_RW_INTERLEAVED");
     if (snd_pcm_hw_params_set_format(_PlaybackHandle, hw_params, SND_PCM_FORMAT_S16_LE)<0) ERROR("SND_PCM_FORMAT_S16_LE");
     int dir = 0;
-    if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &_Rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
-    if (snd_pcm_hw_params_set_channels(_PlaybackHandle, hw_params, _Channels)<0) ERROR("snd_pcm_hw_params_set_channels");
+    unsigned int rate = SAMPLER_RATE;
+    if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
+    if (snd_pcm_hw_params_set_channels(_PlaybackHandle, hw_params, SAMPLER_CHANNELS)<0) ERROR("snd_pcm_hw_params_set_channels");
 
     snd_pcm_uframes_t buffer_size = SAMPLER_BUFFER_SIZE;
     snd_pcm_uframes_t period_size = SAMPLER_PERIOD_SIZE;
@@ -110,7 +106,7 @@ void Device::_Create()
     snd_pcm_sw_params_t* sw_params;
     if (snd_pcm_sw_params_malloc(&sw_params)<0) ERROR("failed to alloc sw_params");
     if (snd_pcm_sw_params_current(_PlaybackHandle, sw_params)<0) ERROR("snd_pcm_sw_params_current");
-    if (snd_pcm_sw_params_set_avail_min(_PlaybackHandle, sw_params, _BufferSize)<0) ERROR("snd_pcm_sw_params_set_avail_min");
+    if (snd_pcm_sw_params_set_avail_min(_PlaybackHandle, sw_params, SAMPLER_BUFFER_SIZE)<0) ERROR("snd_pcm_sw_params_set_avail_min");
     if (snd_pcm_sw_params_set_start_threshold(_PlaybackHandle, sw_params, 0U)<0) ERROR("snd_pcm_sw_params_set_start_threshold");
     if (snd_pcm_sw_params(_PlaybackHandle, sw_params)<0) ERROR("snd_pcm_sw_params");
     snd_pcm_sw_params_free(sw_params);
@@ -118,11 +114,11 @@ void Device::_Create()
     if (snd_pcm_prepare(_PlaybackHandle)<0)
         ERROR("snd_pcm_prepare");
 
-    _Buffer = (short*)malloc(sizeof(short)*_BufferSize*_Channels);
+    _Buffer = (short*)malloc(sizeof(short)*SAMPLER_BUFFER_SIZE*SAMPLER_CHANNELS);
     if (_Buffer==NULL)
         ERROR("failed to alloc buffer");
 
-    for (int i=0 ; i<_VoicesCount ; ++i)
+    for (int i=0 ; i<SAMPLER_VOICES ; ++i)
         _Voices.push_back(new Voice());
 }
 

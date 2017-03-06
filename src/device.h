@@ -8,7 +8,7 @@ class Device
 {
 public:
 
-    Device(string path, unsigned int rate, unsigned int channels, unsigned int buffer_size, unsigned int voices);
+    Device();
     ~Device();
 
     static Device& Get() { return *_Instance; }
@@ -27,15 +27,10 @@ private:
     static Device* _Instance;
 
     bool _Ready;
-    string _Path;
-    unsigned int _Rate;
-    unsigned int _Channels;
-    unsigned int _BufferSize;
     bool _Quit;
     pthread_t _Thread;
     snd_pcm_t* _PlaybackHandle;
     short* _Buffer;
-    unsigned int _VoicesCount;
     vector<Voice*> _Voices;
     pthread_mutex_t _Lock;
 };
