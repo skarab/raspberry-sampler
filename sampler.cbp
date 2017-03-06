@@ -6,6 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -35,29 +36,75 @@
 		<Unit filename="README.md" />
 		<Unit filename="run-pc.sh" />
 		<Unit filename="run-raspberry.sh" />
-		<Unit filename="src/config.h" />
-		<Unit filename="src/controller.cpp" />
-		<Unit filename="src/controller.h" />
-		<Unit filename="src/device.cpp" />
-		<Unit filename="src/device.h" />
-		<Unit filename="src/error.cpp" />
-		<Unit filename="src/error.h" />
-		<Unit filename="src/includes.h" />
-		<Unit filename="src/log.cpp" />
-		<Unit filename="src/log.h" />
-		<Unit filename="src/main.cpp" />
-		<Unit filename="src/midi.cpp" />
-		<Unit filename="src/midi.h" />
-		<Unit filename="src/preset.cpp" />
-		<Unit filename="src/preset.h" />
-		<Unit filename="src/sample.cpp" />
-		<Unit filename="src/sample.h" />
-		<Unit filename="src/tinyxml/tinyxml2.cpp" />
-		<Unit filename="src/tinyxml/tinyxml2.h" />
-		<Unit filename="src/voice.cpp" />
-		<Unit filename="src/voice.h" />
-		<Unit filename="src/wav.cpp" />
-		<Unit filename="src/wav.h" />
+		<Unit filename="src/config.h">
+			<Option virtualFolder="application/" />
+		</Unit>
+		<Unit filename="src/controller.cpp">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/controller.h">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/device.cpp">
+			<Option virtualFolder="device/" />
+		</Unit>
+		<Unit filename="src/device.h">
+			<Option virtualFolder="device/" />
+		</Unit>
+		<Unit filename="src/error.cpp">
+			<Option virtualFolder="helpers/" />
+		</Unit>
+		<Unit filename="src/error.h">
+			<Option virtualFolder="helpers/" />
+		</Unit>
+		<Unit filename="src/includes.h">
+			<Option virtualFolder="application/" />
+		</Unit>
+		<Unit filename="src/log.cpp">
+			<Option virtualFolder="helpers/" />
+		</Unit>
+		<Unit filename="src/log.h">
+			<Option virtualFolder="helpers/" />
+		</Unit>
+		<Unit filename="src/main.cpp">
+			<Option virtualFolder="application/" />
+		</Unit>
+		<Unit filename="src/midi.cpp">
+			<Option virtualFolder="midi/" />
+		</Unit>
+		<Unit filename="src/midi.h">
+			<Option virtualFolder="midi/" />
+		</Unit>
+		<Unit filename="src/preset.cpp">
+			<Option virtualFolder="sample/" />
+		</Unit>
+		<Unit filename="src/preset.h">
+			<Option virtualFolder="sample/" />
+		</Unit>
+		<Unit filename="src/sample.cpp">
+			<Option virtualFolder="sample/" />
+		</Unit>
+		<Unit filename="src/sample.h">
+			<Option virtualFolder="sample/" />
+		</Unit>
+		<Unit filename="src/tinyxml/tinyxml2.cpp">
+			<Option virtualFolder="externals/" />
+		</Unit>
+		<Unit filename="src/tinyxml/tinyxml2.h">
+			<Option virtualFolder="externals/" />
+		</Unit>
+		<Unit filename="src/voice.cpp">
+			<Option virtualFolder="device/" />
+		</Unit>
+		<Unit filename="src/voice.h">
+			<Option virtualFolder="device/" />
+		</Unit>
+		<Unit filename="src/wav.cpp">
+			<Option virtualFolder="sample/" />
+		</Unit>
+		<Unit filename="src/wav.h">
+			<Option virtualFolder="sample/" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />
