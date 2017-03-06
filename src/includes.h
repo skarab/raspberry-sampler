@@ -7,6 +7,7 @@
 #include <poll.h>
 #include <alsa/asoundlib.h>
 #include <sys/soundcard.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 #include <pthread.h>
 #include <string>

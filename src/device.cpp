@@ -54,6 +54,7 @@ void Device::_Run()
 {
     _Create();
     _Ready = true;
+    printf("device ready.\n");
 
     snd_pcm_sframes_t frames_to_deliver;
 
@@ -81,6 +82,7 @@ void Device::_Run()
     }
 
     _Destroy();
+    printf("device destroyed.\n");
 }
 
 void Device::_Create()
