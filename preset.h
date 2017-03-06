@@ -1,11 +1,11 @@
-#ifndef __SAMPLER_BANK__
-#define __SAMPLER_BANK__
+#ifndef __SAMPLER_PRESET__
+#define __SAMPLER_PRESET__
 
 #include "includes.h"
 #include "midi.h"
 #include "sample.h"
 
-class Bank
+class Preset
 {
 public:
 

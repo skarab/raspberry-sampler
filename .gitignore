@@ -1,4 +1,5 @@
 .objs
+.o
 sampler.depend
 sampler.layout
 

@@ -20,6 +20,7 @@ private:
 
     string _Path;
     bool _Valid;
+    char* _FileContent;
     unsigned int _Length;
     short* _Data;
 };

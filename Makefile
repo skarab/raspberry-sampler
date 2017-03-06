@@ -5,8 +5,9 @@ CPPFLAGS=-O3 -s -D ENABLE_GPIO=1
 LDFLAGS=
 LDLIBS=-L/usr/lib -lasound -lpthread -lbcm2835
 
-HEADERS=src/config.h src/controller.h src/bank.h src/device.h src/error.h src/includes.h src/log.h src/midi.h src/sample.h src/voice.h src/wav.h
-SRCS=src/main.cpp src/config.cpp src/controller.cpp src/bank.cpp src/device.cpp src/error.cpp src/log.cpp src/midi.cpp src/sample.cpp src/voice.cpp src/wav.cpp
+FILES=controller.cpp preset.cpp device.cpp error.cpp log.cpp midi.cpp sample.cpp voice.cpp wav.cpp
+SRCS=main.cpp  $(FILES)
+HEADERS=config.h includes.h $(subst .cpp,.h,$(FILES))
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: sampler

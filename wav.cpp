@@ -1,6 +1,7 @@
 #include "wav.h"
 
 Wav::Wav(string path) :
+    _FileContent(NULL),
     _Data(NULL),
     _Length(0)
 {
@@ -10,8 +11,8 @@ Wav::Wav(string path) :
 
 Wav::~Wav()
 {
-    if (_Data!=NULL)
-        free(_Data);
+    if (_FileContent!=NULL)
+        free(_FileContent);
 }
 
 bool Wav::_Load(string path)
@@ -29,40 +30,40 @@ bool Wav::_Load(string path)
     long size = ftell(file);
     rewind(file);
 
-    char* wav_data = (char*)malloc(size);
-    if (wav_data==NULL)
+    _FileContent = (char*)malloc(size);
+    if (_FileContent==NULL)
     {
         fclose(file);
         LOG("wav is too big");
         return false;
     }
 
-    long result = fread(wav_data, 1, size, file);
+    long result = fread(_FileContent, 1, size, file);
     fclose(file);
     if (result!=size)
     {
-        free(wav_data);
+        free(_FileContent);
         LOG("wav is corrupted");
         return false;
     }
 
-    unsigned int s = ((int*)wav_data)[1];
-    if ((memcmp(wav_data, "RIFF", 4)!=0)
+    unsigned int s = ((int*)_FileContent)[1];
+    if ((memcmp(_FileContent, "RIFF", 4)!=0)
         || (s+8!=size)
-        || (memcmp(wav_data+8, "WAVE", 4)!=0)
-        || (memcmp(wav_data+12, "fmt ", 4)!=0))
+        || (memcmp(_FileContent+8, "WAVE", 4)!=0)
+        || (memcmp(_FileContent+12, "fmt ", 4)!=0))
     {
-        free(wav_data);
+        free(_FileContent);
         LOG("wav is corrupted");
         return false;
     }
 
-    unsigned int format_size = *(int*)(wav_data+16);
-    short format = *(short*)(wav_data+20);
-    short channel = *(short*)(wav_data+22);
-    unsigned int sample_rate = *(int*)(wav_data+24);
-    unsigned int k = *(int*)(wav_data+28);
-    short byte_size = *(short*)(wav_data+34);
+    unsigned int format_size = *(int*)(_FileContent+16);
+    short format = *(short*)(_FileContent+20);
+    short channel = *(short*)(_FileContent+22);
+    unsigned int sample_rate = *(int*)(_FileContent+24);
+    unsigned int k = *(int*)(_FileContent+28);
+    short byte_size = *(short*)(_FileContent+34);
     if ((format_size!=16)
         || (format!=1)              // raw
         || (channel!=2)             // stereo
@@ -70,32 +71,23 @@ bool Wav::_Load(string path)
         || (k!=44100*16*2/8)
         || (byte_size!=16))         // 16bits
     {
-        free(wav_data);
+        free(_FileContent);
         LOG("wav is unsupported");
         return false;
     }
 
-    unsigned int sample_size = *(unsigned int*)(wav_data+40);
-    if ((memcmp(wav_data+36, "data", 4)!=0)
+    unsigned int sample_size = *(unsigned int*)(_FileContent+40);
+    if ((memcmp(_FileContent+36, "data", 4)!=0)
         || (sample_size+44!=size))
     {
-        free(wav_data);
+        free(_FileContent);
         LOG("wav is corrupted");
         return false;
     }
 
-    _Data = (short*)malloc(sample_size);
-    if (_Data==NULL)
-    {
-        free(wav_data);
-        LOG("wav is too big");
-        return false;
-    }
-    memcpy(_Data, wav_data+44, sample_size);
-
+    _Data = (short*)(_FileContent+44);
     _Length = sample_size/4;
 
-    free(wav_data);
     return _Length>0;
 }
 

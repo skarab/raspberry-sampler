@@ -21,7 +21,6 @@
 				<Linker>
 					<Add library="libasound" />
 					<Add library="libpthread" />
-					<Add library="libncurses" />
 				</Linker>
 			</Target>
 		</Build>
@@ -36,11 +35,15 @@
 		<Unit filename="src/bank.cpp" />
 		<Unit filename="src/bank.h" />
 		<Unit filename="src/config.h" />
+		<Unit filename="src/controller.cpp" />
+		<Unit filename="src/controller.h" />
 		<Unit filename="src/device.cpp" />
 		<Unit filename="src/device.h" />
 		<Unit filename="src/error.cpp" />
 		<Unit filename="src/error.h" />
 		<Unit filename="src/includes.h" />
+		<Unit filename="src/log.cpp" />
+		<Unit filename="src/log.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/midi.cpp" />
 		<Unit filename="src/midi.h" />
