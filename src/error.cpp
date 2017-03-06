@@ -8,5 +8,5 @@ Error::Error(string message) :
 
 void Error::Log() const
 {
-    printf("%s\n", _Message.c_str());
+    LOG("ERROR: %s", _Message.c_str());
 }

@@ -16,10 +16,12 @@ Wav::~Wav()
 
 bool Wav::_Load(string path)
 {
+    LOG("loading %s", path.c_str());
+
     FILE* file = fopen(path.c_str(), "rb");
     if (file==NULL)
     {
-        printf("wav not found\n");
+        LOG("wav not found");
         return false;
     }
 
@@ -31,7 +33,7 @@ bool Wav::_Load(string path)
     if (wav_data==NULL)
     {
         fclose(file);
-        printf("wav is too big\n");
+        LOG("wav is too big");
         return false;
     }
 
@@ -40,7 +42,7 @@ bool Wav::_Load(string path)
     if (result!=size)
     {
         free(wav_data);
-        printf("wav is corrupted\n");
+        LOG("wav is corrupted");
         return false;
     }
 
@@ -51,7 +53,7 @@ bool Wav::_Load(string path)
         || (memcmp(wav_data+12, "fmt ", 4)!=0))
     {
         free(wav_data);
-        printf("wav is corrupted\n");
+        LOG("wav is corrupted");
         return false;
     }
 
@@ -69,7 +71,7 @@ bool Wav::_Load(string path)
         || (byte_size!=16))         // 16bits
     {
         free(wav_data);
-        printf("wav is unsupported\n");
+        LOG("wav is unsupported");
         return false;
     }
 
@@ -78,7 +80,7 @@ bool Wav::_Load(string path)
         || (sample_size+44!=size))
     {
         free(wav_data);
-        printf("wav is corrupted\n");
+        LOG("wav is corrupted");
         return false;
     }
 
@@ -86,7 +88,7 @@ bool Wav::_Load(string path)
     if (_Data==NULL)
     {
         free(wav_data);
-        printf("wav is too big\n");
+        LOG("wav is too big");
         return false;
     }
     memcpy(_Data, wav_data+44, sample_size);

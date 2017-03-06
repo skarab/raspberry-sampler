@@ -16,8 +16,9 @@
 
 using namespace std;
 
-#include "error.h"
 #include "config.h"
+#include "log.h"
+#include "error.h"
 
 #endif
 

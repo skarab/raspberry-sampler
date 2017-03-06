@@ -31,7 +31,7 @@ void Midi::_Run()
 
     _Ready = true;
     _List();
-    printf("midi ready.\n");
+    LOG("midi ready");
 
     unsigned char p[8];
     while (!_Quit)
@@ -50,25 +50,25 @@ void Midi::_Run()
         {
             case SEQ_MIDIPUTC:
                 if (p[1]!=SEQ_PRIVATE)// && p[1]!=0 && p[1]!=248 && p[1]!=42)
-                    printf("MIDIPUTC: %d %d %d %d\n", p[0], p[1], p[2], p[3]);
+                    LOG("MIDIPUTC: %d %d %d %d", p[0], p[1], p[2], p[3]);
                 break;
 
-            case SEQ_NOTEOFF: printf("NOTEOFF: %d %d %d %d\n", p[0], p[1], p[2], p[3]); break;
-            case SEQ_NOTEON: printf("NOTEON: %d %d %d %d\n", p[0], p[1], p[2], p[3]); break;
+            case SEQ_NOTEOFF: LOG("NOTEOFF: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
+            case SEQ_NOTEON: LOG("NOTEON: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
             case SEQ_WAIT: break;
-            case SEQ_PGMCHANGE: printf("PGMCHANGE\n");
-            case SEQ_SYNCTIMER: printf("SYNCTIMER\n");
-            case SEQ_AFTERTOUCH: printf("AFTERTOUCH: %d %d %d %d\n", p[0], p[1], p[2], p[3]); break;
-            case SEQ_CONTROLLER: printf("CONTROLLER\n");
+            case SEQ_PGMCHANGE: LOG("PGMCHANGE");
+            case SEQ_SYNCTIMER: LOG("SYNCTIMER");
+            case SEQ_AFTERTOUCH: LOG("AFTERTOUCH: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
+            case SEQ_CONTROLLER: LOG("CONTROLLER");
             default:
-                printf("%d %d %d %d\n", p[0], p[1], p[2], p[3]);
+                LOG("%d %d %d %d", p[0], p[1], p[2], p[3]);
         }
 
         usleep(10);
     }
 
     close(_Sequencer);
-    printf("midi destroyed.\n");
+    LOG("midi destroyed");
 }
 
 /*
