@@ -14,6 +14,10 @@
 #include <vector>
 #include <map>
 
+#if ENABLE_GPIO
+    #include <bcm2835.h>
+#endif
+
 using namespace std;
 
 #include "config.h"
