@@ -61,7 +61,7 @@ void Midi::_Run()
             case SEQ_AFTERTOUCH: LOG("AFTERTOUCH: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
             case SEQ_CONTROLLER: LOG("CONTROLLER");
             default:
-                LOG("%d %d %d %d", p[0], p[1], p[2], p[3]);
+                LOG("UNKNOWN: %d %d %d %d", p[0], p[1], p[2], p[3]);
         }
 
         usleep(10);
