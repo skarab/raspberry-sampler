@@ -9,7 +9,7 @@
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
-				<Option output="sampler.elf" prefix_auto="0" extension_auto="0" />
+				<Option output="bin/sampler.elf" prefix_auto="0" extension_auto="0" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option projectCompilerOptionsRelation="1" />
@@ -29,11 +29,8 @@
 			<Add option="-std=c++11" />
 			<Add option="-g" />
 			<Add directory="src" />
-			<Add directory="h" />
 		</Compiler>
 		<Unit filename="Makefile" />
-		<Unit filename="src/bank.cpp" />
-		<Unit filename="src/bank.h" />
 		<Unit filename="src/config.h" />
 		<Unit filename="src/controller.cpp" />
 		<Unit filename="src/controller.h" />
@@ -47,6 +44,8 @@
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/midi.cpp" />
 		<Unit filename="src/midi.h" />
+		<Unit filename="src/preset.cpp" />
+		<Unit filename="src/preset.h" />
 		<Unit filename="src/sample.cpp" />
 		<Unit filename="src/sample.h" />
 		<Unit filename="src/voice.cpp" />
