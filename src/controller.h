@@ -1,31 +1,26 @@
-/*
+#ifndef __SAMPLER_CONTROLLER__
+#define __SAMPLER_CONTROLLER__
 
-#include <stdio.h>
-#include <bcm2835.h>
-#include <stdlib.h>
+#include "includes.h"
 
-#define PIN RPI_GPIO_P1_15
-
-int main(void)
+class Controller
 {
-    if (!bcm2835_init())
-        return 1;
+public:
 
-    bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT);
-    bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
+    Controller();
+    ~Controller();
 
-    while (1)
-    {
-        uint8_t value = bcm2835_gpio_lev(PIN);
-        printf("%d\n", value);
-        delay(500);
-    }
+private:
 
-    bcm2835_close();
-    return 0;
-}
+    static void* _RunThreaded(void* data);
 
+    void _Run();
+    void _List();
 
+    bool _Ready;
+    bool _Quit;
+    pthread_t _Thread;
+};
 
 
-*/
+#endif
