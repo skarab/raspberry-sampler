@@ -7,7 +7,8 @@ LDLIBS=-L/usr/lib -lasound -lpthread -lbcm2835
 
 FILES=src/controller.cpp src/preset.cpp src/device.cpp src/error.cpp src/log.cpp src/midi.cpp src/sample.cpp src/voice.cpp src/wav.cpp src/tinyxml/tinyxml2.cpp
 SRCS=src/main.cpp  $(FILES)
-HEADERS=src/config.h src/includes.h $(subst .cpp,.h,$(FILES))
+#HEADERS=src/config.h src/includes.h $(subst .cpp,.h,$(FILES))
+HEADERS=
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: sampler

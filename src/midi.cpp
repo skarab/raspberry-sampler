@@ -1,5 +1,13 @@
 #include "midi.h"
 
+struct MidiDevice
+{
+    bool NoteOn = false;
+    bool NoteOff = false;
+    int Channel = -1;
+    int Note = -1;
+};
+
 Midi::Midi() :
     _Ready(false),
     _Quit(false)
@@ -33,35 +41,77 @@ void Midi::_Run()
     _List();
     LOG("midi ready");
 
-    unsigned char p[8];
+    vector<MidiDevice> devices;
+
     while (!_Quit)
     {
-        unsigned char old[8];
-        memcpy(old, p, 8);
-        read(_Sequencer, p, 4);
+        unsigned char buffer[8];
+        read(_Sequencer, buffer, 4);
 
-        if (p[0]>=128)
-            read(_Sequencer, p+4, 4);
+        if (buffer[0]>=128)
+            read(_Sequencer, buffer+4, 4);
 
-        if (memcmp(old, p, 8)==0)
-            continue;
-
-        switch (p[0])
+        if (buffer[0]==SEQ_MIDIPUTC && buffer[1]!=SEQ_PRIVATE)
         {
-            case SEQ_MIDIPUTC:
-                if (p[1]!=SEQ_PRIVATE)// && p[1]!=0 && p[1]!=248 && p[1]!=42)
-                    LOG("MIDIPUTC: %d %d %d %d", p[0], p[1], p[2], p[3]);
-                break;
+            int value = buffer[1];
+            int device_id = buffer[2];
 
-            case SEQ_NOTEOFF: LOG("NOTEOFF: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
-            case SEQ_NOTEON: LOG("NOTEON: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
-            case SEQ_WAIT: break;
-            case SEQ_PGMCHANGE: LOG("PGMCHANGE");
-            case SEQ_SYNCTIMER: LOG("SYNCTIMER");
-            case SEQ_AFTERTOUCH: LOG("AFTERTOUCH: %d %d %d %d", p[0], p[1], p[2], p[3]); break;
-            case SEQ_CONTROLLER: LOG("CONTROLLER");
-            default:
-                LOG("UNKNOWN: %d %d %d %d", p[0], p[1], p[2], p[3]);
+            while (device_id>=devices.size())
+                devices.push_back(MidiDevice());
+
+            MidiDevice& device = devices[device_id];
+            if (!device.NoteOn && !device.NoteOff)
+            {
+                if (value>=0x90 && value<=0x9F)
+                {
+                    device.NoteOn = true;
+                    device.Channel = value-0x90+1;
+                    device.Note = -1;
+                }
+                else if (value>=0x80 && value<=0x8F)
+                {
+                    device.NoteOff = true;
+                    device.Channel = value-0x90+1;
+                    device.Note = -1;
+                }
+            }
+            else if (device.Note==-1)
+            {
+                if (value<21 || value>108)
+                {
+                    LOG("MIDI skipped message");
+                    device.NoteOn = false;
+                    device.NoteOff = false;
+                }
+                else
+                {
+                    device.Note = value-21;
+                }
+            }
+            else
+            {
+                if (value>127)
+                {
+                    LOG("MIDI skipped message");
+                }
+                else
+                {
+                    int velocity = value;
+
+                    // got full note message
+                    if (device.NoteOn)
+                    {
+                        LOG("NOTE ON [device %d] [channel %d] [note %d] [velocity %d]", device_id, device.Channel, device.Note, velocity);
+                    }
+                    else if (device.NoteOff)
+                    {
+                        LOG("NOTE OFF [device %d] [channel %d] [note %d] [velocity %d]", device_id, device.Channel, device.Note, velocity);
+                    }
+                }
+
+                device.NoteOn = false;
+                device.NoteOff = false;
+            }
         }
 
         usleep(10);
