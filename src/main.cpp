@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
         char c = getchar();
         if (c==27) break;
 
+        device->OnNoteOn(0, 0, 0, 0);
+
         usleep(10);
     }
 

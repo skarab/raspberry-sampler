@@ -183,9 +183,9 @@ void Device::_Update(snd_pcm_uframes_t frames)
         else if (left<-32768) left = -32768;
         if (right>32767) right = 32767;
         else if (right<-32768) right = -32768;
-
-        _Buffer[i*2] = (short)left;
-        _Buffer[i*2+1] = (short)right;
+        
+        _Buffer[i*2] = (short)(left-1);
+        _Buffer[i*2+1] = (short)(right-1);
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)!=frames)
