@@ -37,6 +37,12 @@
 		<Unit filename="README.md" />
 		<Unit filename="run-pc.sh" />
 		<Unit filename="run-raspberry.sh" />
+		<Unit filename="src/bank.cpp">
+			<Option virtualFolder="sample/" />
+		</Unit>
+		<Unit filename="src/bank.h">
+			<Option virtualFolder="sample/" />
+		</Unit>
 		<Unit filename="src/button.cpp">
 			<Option virtualFolder="controller/" />
 		</Unit>
@@ -96,12 +102,6 @@
 		</Unit>
 		<Unit filename="src/midi.h">
 			<Option virtualFolder="midi/" />
-		</Unit>
-		<Unit filename="src/preset.cpp">
-			<Option virtualFolder="sample/" />
-		</Unit>
-		<Unit filename="src/preset.h">
-			<Option virtualFolder="sample/" />
 		</Unit>
 		<Unit filename="src/sample.cpp">
 			<Option virtualFolder="sample/" />

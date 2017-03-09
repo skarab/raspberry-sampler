@@ -5,7 +5,7 @@ CPPFLAGS=-O3 -s -DENABLE_HARDWARE=1
 LDFLAGS=
 LDLIBS=-L/usr/lib -lasound -lpthread -lbcm2835
 
-FILES=src/display.cpp src/button.cpp src/knob.cpp src/controller.cpp src/preset.cpp src/device.cpp src/error.cpp src/log.cpp src/midi.cpp src/sample.cpp src/voice.cpp src/wav.cpp
+FILES=src/display.cpp src/button.cpp src/knob.cpp src/controller.cpp src/bank.cpp src/device.cpp src/error.cpp src/log.cpp src/midi.cpp src/sample.cpp src/voice.cpp src/wav.cpp
 SRCS=src/main.cpp  $(FILES)
 #HEADERS=src/config.h src/includes.h $(subst .cpp,.h,$(FILES))
 HEADERS=
