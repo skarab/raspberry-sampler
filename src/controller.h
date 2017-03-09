@@ -2,6 +2,8 @@
 #define __SAMPLER_CONTROLLER__
 
 #include "includes.h"
+#include "button.h"
+#include "knob.h"
 
 class Controller
 {
@@ -20,6 +22,5 @@ private:
     bool _Quit;
     pthread_t _Thread;
 };
-
 
 #endif

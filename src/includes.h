@@ -20,15 +20,12 @@
 #include <iostream>
 #include <sstream>
 
-#if ENABLE_HARDWARE
-    #include <bcm2835.h>
-#endif
-
 using namespace std;
 
 #include "config.h"
 #include "log.h"
 #include "error.h"
+#include "pins.h"
 
 #endif
 

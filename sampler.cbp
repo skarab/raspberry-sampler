@@ -37,6 +37,12 @@
 		<Unit filename="README.md" />
 		<Unit filename="run-pc.sh" />
 		<Unit filename="run-raspberry.sh" />
+		<Unit filename="src/button.cpp">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/button.h">
+			<Option virtualFolder="controller/" />
+		</Unit>
 		<Unit filename="src/config.h">
 			<Option virtualFolder="application/" />
 		</Unit>
@@ -69,6 +75,12 @@
 		</Unit>
 		<Unit filename="src/includes.h">
 			<Option virtualFolder="application/" />
+		</Unit>
+		<Unit filename="src/knob.cpp">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/knob.h">
+			<Option virtualFolder="controller/" />
 		</Unit>
 		<Unit filename="src/log.cpp">
 			<Option virtualFolder="helpers/" />
