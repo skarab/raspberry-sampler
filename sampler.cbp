@@ -6,7 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;display/;" />
+		<Option virtualFolders="controls/;externals/;sample/;midi/;application/;helpers/;device/;display/;" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -44,19 +44,13 @@
 			<Option virtualFolder="sample/" />
 		</Unit>
 		<Unit filename="src/button.cpp">
-			<Option virtualFolder="controller/" />
+			<Option virtualFolder="controls/" />
 		</Unit>
 		<Unit filename="src/button.h">
-			<Option virtualFolder="controller/" />
+			<Option virtualFolder="controls/" />
 		</Unit>
 		<Unit filename="src/config.h">
 			<Option virtualFolder="application/" />
-		</Unit>
-		<Unit filename="src/controller.cpp">
-			<Option virtualFolder="controller/" />
-		</Unit>
-		<Unit filename="src/controller.h">
-			<Option virtualFolder="controller/" />
 		</Unit>
 		<Unit filename="src/device.cpp">
 			<Option virtualFolder="device/" />
@@ -83,10 +77,10 @@
 			<Option virtualFolder="application/" />
 		</Unit>
 		<Unit filename="src/knob.cpp">
-			<Option virtualFolder="controller/" />
+			<Option virtualFolder="controls/" />
 		</Unit>
 		<Unit filename="src/knob.h">
-			<Option virtualFolder="controller/" />
+			<Option virtualFolder="controls/" />
 		</Unit>
 		<Unit filename="src/log.cpp">
 			<Option virtualFolder="helpers/" />
