@@ -15,7 +15,6 @@ private:
     static void* _RunThreaded(void* data);
 
     void _Run();
-    void _List();
 
     bool _Ready;
     bool _Quit;

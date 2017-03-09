@@ -1,4 +1,5 @@
 #include "includes.h"
+#include "display.h"
 #include "device.h"
 #include "midi.h"
 #include "controller.h"
@@ -6,6 +7,7 @@
 int main(int argc, char *argv[])
 {
     Log* log = new Log();
+    Display* display = new Display();
     Device* device = new Device();
     Midi* midi = new Midi();
     Controller* controller = new Controller();
@@ -23,6 +25,7 @@ int main(int argc, char *argv[])
     delete controller;
     delete midi;
     delete device;
+    delete display;
     delete log;
 
     return 0;

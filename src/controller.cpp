@@ -34,8 +34,8 @@ void Controller::_Run()
     //bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
 #endif
 
-    _Ready = true;
     LOG("controller ready");
+    _Ready = true;
 
     while (!_Quit)
     {

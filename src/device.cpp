@@ -75,8 +75,8 @@ void* Device::_RunThreaded(void* data)
 void Device::_Run()
 {
     _Create();
-    _Ready = true;
     LOG("device ready");
+    _Ready = true;
 
     snd_pcm_sframes_t frames_to_deliver;
 

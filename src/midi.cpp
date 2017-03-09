@@ -38,9 +38,9 @@ void Midi::_Run()
     if (_Sequencer==-1)
         ERROR("failed to open /dev/sequencer");
 
-    _Ready = true;
     _List();
     LOG("midi ready");
+    _Ready = true;
 
     vector<MidiDevice> devices;
 

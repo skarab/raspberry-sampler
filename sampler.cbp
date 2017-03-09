@@ -6,7 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;" />
+		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;display/;" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -51,6 +51,15 @@
 		</Unit>
 		<Unit filename="src/device.h">
 			<Option virtualFolder="device/" />
+		</Unit>
+		<Unit filename="src/display.cpp">
+			<Option virtualFolder="display/" />
+		</Unit>
+		<Unit filename="src/display.h">
+			<Option virtualFolder="display/" />
+		</Unit>
+		<Unit filename="src/display.py">
+			<Option virtualFolder="display/" />
 		</Unit>
 		<Unit filename="src/error.cpp">
 			<Option virtualFolder="helpers/" />
