@@ -13,6 +13,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <iostream>
+#include <sstream>
 
 #if ENABLE_GPIO
     #include <bcm2835.h>

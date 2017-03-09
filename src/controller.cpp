@@ -29,25 +29,33 @@ void Controller::_Run()
     if (!bcm2835_init())
         ERROR("failed to initialize GPIO");
 
-    // PIN RPI_GPIO_P1_15 (#22)
+    int PIN = RPI_GPIO_P1_15; // #22
     bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
-    bcm2835_gpio_len(PIN);
+
 #endif
 
     LOG("controller ready");
     _Ready = true;
 
+    bool pressed = false;
+    bool was_pressed = false;
+
     while (!_Quit)
     {
 #if ENABLE_GPIO
-        if (bcm2835_gpio_eds(PIN))
+        uint8_t value = bcm2835_gpio_lev(PIN);
+
+        pressed = value==0;
+
+        if (pressed!=was_pressed)
         {
-            bcm2835_gpio_set_eds(PIN);
-            LOG("button pressed");
+            was_pressed = pressed;
+            if (pressed) LOG("press");
+            else LOG("release");
         }
 #endif
-        
+
         usleep(100);
     }
 

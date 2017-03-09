@@ -19,6 +19,8 @@ private:
 
     void _Run();
     void _Print(string str);
+    void _PrintIP(string device);
+    string _GetIP(string device);
 
     bool _Ready;
     bool _Quit;
