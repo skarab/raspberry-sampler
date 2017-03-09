@@ -20,7 +20,7 @@
 #include <iostream>
 #include <sstream>
 
-#if ENABLE_GPIO
+#if ENABLE_HARDWARE
     #include <bcm2835.h>
 #endif
 

@@ -1,10 +1,14 @@
 #include "display.h"
 
+Display* Display::_Instance = NULL;
+
 Display::Display() :
     _Ready(false),
     _Quit(false),
     _Pipe(NULL)
 {
+    _Instance = this;
+
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 
@@ -15,6 +19,7 @@ Display::Display() :
         usleep(10);
 
     _PrintIP(SAMPLER_NETWORK_DEVICE);
+    Print(-2);
 }
 
 Display::~Display()
@@ -34,9 +39,13 @@ void Display::Print(int value)
 {
     pthread_mutex_lock(&_Lock);
 
-    if (value<0)
+    if (value==-1)
     {
         _Value = "";
+    }
+    else if (value<0)
+    {
+        _Value = "----";
     }
     else
     {
@@ -59,7 +68,7 @@ void* Display::_RunThreaded(void* data)
 
 void Display::_Run()
 {
-#if ENABLE_GPIO
+#if ENABLE_HARDWARE
     _Pipe = popen(SAMPLER_DISPLAY_PIPE, "w");
 #endif
 

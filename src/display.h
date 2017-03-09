@@ -10,6 +10,8 @@ public:
     Display();
     ~Display();
 
+    static Display& Get() { return *_Instance; }
+
     void Clear();
     void Print(int value);
 
@@ -21,6 +23,8 @@ private:
     void _Print(string str);
     void _PrintIP(string device);
     string _GetIP(string device);
+
+    static Display* _Instance;
 
     bool _Ready;
     bool _Quit;
