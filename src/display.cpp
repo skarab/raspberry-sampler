@@ -2,7 +2,8 @@
 
 Display::Display() :
     _Ready(false),
-    _Quit(false)
+    _Quit(false),
+    _Pipe(NULL)
 {
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
@@ -13,9 +14,7 @@ Display::Display() :
     while (!_Ready)
         usleep(10);
 
-#if ENABLE_GPIO
     _PrintIP(SAMPLER_NETWORK_DEVICE);
-#endif
 }
 
 Display::~Display()
@@ -60,6 +59,10 @@ void* Display::_RunThreaded(void* data)
 
 void Display::_Run()
 {
+#if ENABLE_GPIO
+    _Pipe = popen(SAMPLER_DISPLAY_PIPE, "w");
+#endif
+
     LOG("display ready");
     _Ready = true;
 
@@ -77,18 +80,20 @@ void Display::_Run()
     }
 
     _Print("");
+
+    if (_Pipe!=NULL)
+        pclose(_Pipe);
+
     LOG("display destroyed");
 }
 
 void Display::_Print(string str)
 {
-#if ENABLE_GPIO
-    string cmd = "python sources/src/display.py";
-    if (str.size()>0)
-        cmd += " "+str;
-    system(cmd.c_str());
-
-#endif
+    if (_Pipe!=NULL)
+    {
+        fprintf(_Pipe, "%s\n", str.c_str());
+        fflush(_Pipe);
+    }
 
     pthread_mutex_lock(&_Lock);
     _OldValue = str;
@@ -111,14 +116,7 @@ void Display::_PrintIP(string device)
             _Value = item;
             pthread_mutex_unlock(&_Lock);
 
-            bool ok = false;
-            while (!ok)
-            {
-                pthread_mutex_lock(&_Lock);
-                ok = _OldValue==item;
-                pthread_mutex_unlock(&_Lock);
-                usleep(10);
-            }
+            usleep(1000000);
         }
     }
 }

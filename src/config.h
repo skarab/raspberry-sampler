@@ -7,6 +7,7 @@
 #define SAMPLER_PERIOD_SIZE     16
 
 #define SAMPLER_NETWORK_DEVICE  "eth0"
+#define SAMPLER_DISPLAY_PIPE    "python sources/src/display.py"
 
 // hard-fixed
 

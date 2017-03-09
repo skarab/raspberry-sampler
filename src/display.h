@@ -28,6 +28,7 @@ private:
     pthread_mutex_t _Lock;
     string _Value;
     string _OldValue;
+    FILE* _Pipe;
 };
 
 
