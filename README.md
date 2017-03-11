@@ -1,5 +1,5 @@
 # raspberry-sampler
-Sampler for the Raspberry 2
+Sampler for the Raspberry 2 & 3
 
 Key concept is to have hardware knobs to live-edit a single sample,
 envelop, start-end / looping points, filtering a bit...
