@@ -19,7 +19,7 @@ Device::Device() :
         usleep(10);
 
     pthread_mutex_lock(&_Lock);
-    _Sample = new Sample("data/sample.wav");
+    _Sample = new Sample("../samples/sample.wav");
     pthread_mutex_unlock(&_Lock);
 }
 
@@ -183,7 +183,7 @@ void Device::_Update(snd_pcm_uframes_t frames)
         else if (left<-32768) left = -32768;
         if (right>32767) right = 32767;
         else if (right<-32768) right = -32768;
-        
+
         _Buffer[i*2] = (short)(left-1);
         _Buffer[i*2+1] = (short)(right-1);
     }

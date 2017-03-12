@@ -14,7 +14,7 @@ OBJS=$(subst .cpp,.o,$(SRCS))
 all: sampler
 
 sampler: $(OBJS)
-	$(CXX) $(LDFLAGS) -o bin/sampler $(OBJS) $(LDLIBS)
+	$(CXX) $(LDFLAGS) -o ../sampler $(OBJS) $(LDLIBS)
 
 %.o : %.cpp
 	$(CXX) -c $< $(HEADERS) -o $@

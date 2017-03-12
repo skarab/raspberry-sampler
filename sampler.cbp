@@ -10,7 +10,8 @@
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
-				<Option output="bin/sampler.elf" prefix_auto="0" extension_auto="0" />
+				<Option output="../sampler.elf" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option projectCompilerOptionsRelation="1" />
@@ -86,12 +87,6 @@
 		</Unit>
 		<Unit filename="src/sample.h">
 			<Option virtualFolder="sample/" />
-		</Unit>
-		<Unit filename="src/tinyxml/tinyxml2.cpp">
-			<Option virtualFolder="externals/" />
-		</Unit>
-		<Unit filename="src/tinyxml/tinyxml2.h">
-			<Option virtualFolder="externals/" />
 		</Unit>
 		<Unit filename="src/voice.cpp">
 			<Option virtualFolder="device/" />
