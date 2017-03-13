@@ -23,6 +23,8 @@
 
 using namespace std;
 
+#include "pugixml/src/pugixml.hpp"
+
 #include "config.h"
 #include "log.h"
 #include "error.h"

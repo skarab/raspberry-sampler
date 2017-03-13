@@ -97,6 +97,15 @@
 		<Unit filename="src/midi.h">
 			<Option virtualFolder="midi/" />
 		</Unit>
+		<Unit filename="src/pugixml/src/pugiconfig.hpp">
+			<Option virtualFolder="externals/" />
+		</Unit>
+		<Unit filename="src/pugixml/src/pugixml.cpp">
+			<Option virtualFolder="externals/" />
+		</Unit>
+		<Unit filename="src/pugixml/src/pugixml.hpp">
+			<Option virtualFolder="externals/" />
+		</Unit>
 		<Unit filename="src/sample.cpp">
 			<Option virtualFolder="sample/" />
 		</Unit>
