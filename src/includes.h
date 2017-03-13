@@ -19,6 +19,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <sstream>
+#include <dirent.h>
 
 using namespace std;
 

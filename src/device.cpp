@@ -17,10 +17,6 @@ Device::Device() :
 
     while (!_Ready)
         usleep(10);
-
-    pthread_mutex_lock(&_Lock);
-    _Sample = new Sample("../samples/sample.wav");
-    pthread_mutex_unlock(&_Lock);
 }
 
 Device::~Device()

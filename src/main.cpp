@@ -4,6 +4,7 @@
 #include "midi.h"
 #include "button.h"
 #include "knob.h"
+#include "bank.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,8 @@ int main(int argc, char *argv[])
     Button* test_button = new Button(RPI_PIN_22);
     Knob* test_knob = new Knob(255, 200, 280, RPI_PIN_20, RPI_PIN_21);
 
+    vector<Bank*> banks = Bank::List();
+
     while(1)
     {
         test_button->Update();
@@ -27,6 +30,8 @@ int main(int argc, char *argv[])
 
         usleep(100);
     }
+
+    Bank::Destroy(banks);
 
     delete test_knob;
     delete test_button;
