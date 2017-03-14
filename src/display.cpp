@@ -5,7 +5,8 @@ Display* Display::_Instance = NULL;
 Display::Display() :
     _Ready(false),
     _Quit(false),
-    _Pipe(NULL)
+    _Pipe(NULL),
+    _Loading(false)
 {
     _Instance = this;
 
@@ -37,27 +38,35 @@ void Display::Clear()
 
 void Display::Print(int value)
 {
-    pthread_mutex_lock(&_Lock);
-
-    if (value==-1)
+    if (!_Loading)
     {
-        _Value = "";
-    }
-    else if (value<0)
-    {
-        _Value = "----";
-    }
-    else
-    {
-        if (value>9999)
-            value = 9999;
+        pthread_mutex_lock(&_Lock);
 
-        char str[5];
-        sprintf(str, "%d", value);
-        _Value = str;
-    }
+        if (value==-1)
+        {
+            _Value = "";
+        }
+        else if (value<0)
+        {
+            _Value = "----";
+        }
+        else
+        {
+            if (value>9999)
+                value = 9999;
 
-    pthread_mutex_unlock(&_Lock);
+            char str[5];
+            sprintf(str, "%d", value);
+            _Value = str;
+        }
+
+        pthread_mutex_unlock(&_Lock);
+    }
+}
+
+void Display::SetLoading(bool loading)
+{
+    _Loading = loading;
 }
 
 void* Display::_RunThreaded(void* data)
@@ -75,10 +84,21 @@ void Display::_Run()
     LOG("display ready");
     _Ready = true;
 
+    int load_id = 0;
+
     while (!_Quit)
     {
         string new_value;
         pthread_mutex_lock(&_Lock);
+
+        if (_Loading)
+        {
+            _Value = "    ";
+            _Value[load_id] = '-';
+            load_id = (load_id+1)%4;
+            usleep(100000);
+        }
+
         new_value = _Value;
         pthread_mutex_unlock(&_Lock);
 

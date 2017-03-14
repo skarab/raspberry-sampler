@@ -29,6 +29,7 @@ using namespace std;
 #include "log.h"
 #include "error.h"
 #include "pins.h"
+#include "helpers.h"
 
 #endif
 

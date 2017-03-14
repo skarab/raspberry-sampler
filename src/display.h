@@ -14,6 +14,7 @@ public:
 
     void Clear();
     void Print(int value);
+    void SetLoading(bool loading);
 
 private:
 
@@ -33,6 +34,7 @@ private:
     string _Value;
     string _OldValue;
     FILE* _Pipe;
+    bool _Loading;
 };
 
 

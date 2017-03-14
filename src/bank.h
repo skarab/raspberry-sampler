@@ -15,10 +15,15 @@ public:
     Bank(string path);
     ~Bank();
 
+    void Unload();
+    bool Load();
+    bool Save();
+
 private:
 
     string _Path;
-    map<MidiKey, Sample*> _Samples;
+    vector<Sample*> _Samples;
+    map<MidiKey, Sample*> _Links;
 };
 
 #endif

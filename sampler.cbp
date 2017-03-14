@@ -73,6 +73,12 @@
 		<Unit filename="src/error.h">
 			<Option virtualFolder="helpers/" />
 		</Unit>
+		<Unit filename="src/helpers.cpp">
+			<Option virtualFolder="helpers/" />
+		</Unit>
+		<Unit filename="src/helpers.h">
+			<Option virtualFolder="helpers/" />
+		</Unit>
 		<Unit filename="src/includes.h">
 			<Option virtualFolder="application/" />
 		</Unit>

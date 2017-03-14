@@ -23,12 +23,20 @@ int main(int argc, char *argv[])
 
     vector<Bank*> banks = Bank::List();
 
-    while(1)
+    if (banks.size()>0)
     {
-        test_button->Update();
-        test_knob->Update();
+        int bank_id = 0;
+        Bank* bank = banks[bank_id];
+        bank->Load();
+        Display::Get().Print(0);
 
-        usleep(100);
+        while(1)
+        {
+            test_button->Update();
+            test_knob->Update();
+
+            usleep(100);
+        }
     }
 
     Bank::Destroy(banks);

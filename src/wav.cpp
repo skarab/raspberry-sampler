@@ -17,12 +17,10 @@ Wav::~Wav()
 
 bool Wav::_Load(string path)
 {
-    LOG("load %s", path.c_str());
-
     FILE* file = fopen(path.c_str(), "rb");
     if (file==NULL)
     {
-        LOG("wav not found");
+        LOG("wav not found : %s", path.c_str());
         return false;
     }
 
@@ -34,16 +32,15 @@ bool Wav::_Load(string path)
     if (_FileContent==NULL)
     {
         fclose(file);
-        LOG("wav is too big");
+        LOG("wav is too big : %s", path.c_str());
         return false;
     }
 
     long result = fread(_FileContent, 1, size, file);
     fclose(file);
-    if (result!=size)
+    if (result!=size || size<44)
     {
-        free(_FileContent);
-        LOG("wav is corrupted");
+        LOG("wav is corrupted : %s", path.c_str());
         return false;
     }
 
@@ -53,8 +50,7 @@ bool Wav::_Load(string path)
         || (memcmp(_FileContent+8, "WAVE", 4)!=0)
         || (memcmp(_FileContent+12, "fmt ", 4)!=0))
     {
-        free(_FileContent);
-        LOG("wav is corrupted");
+        LOG("wav is corrupted : %s", path.c_str());
         return false;
     }
 
@@ -71,8 +67,7 @@ bool Wav::_Load(string path)
         || (k!=44100*16*2/8)
         || (byte_size!=16))         // 16bits
     {
-        free(_FileContent);
-        LOG("wav is unsupported");
+        LOG("wav is unsupported : %s", path.c_str());
         return false;
     }
 
@@ -80,8 +75,7 @@ bool Wav::_Load(string path)
     if ((memcmp(_FileContent+36, "data", 4)!=0)
         || (sample_size+44!=size))
     {
-        free(_FileContent);
-        LOG("wav is corrupted");
+        LOG("wav is corrupted : %s", path.c_str());
         return false;
     }
 
