@@ -5,7 +5,7 @@ Key concept is to have a box full of knobs to live-edit samples, linked to other
 
 Features:
 - live edit the sample with knobs (start, end, looping points, envelop, pitch, ...)
-- manage banks of samples (folders) using LAN / shared samba folder
+- import/edit banks of samples (folders) using LAN / shared samba folder
 - load/save bank parameters to xml
 - usb midi input, with multiple channels support
 - easy attach a sample to a midi note, velocity may be defined in the xml to create instruments (piano, organ, ...)
