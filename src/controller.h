@@ -19,6 +19,17 @@ private:
 
     vector<Bank*> _Banks;
     int _BankID;
+
+    Knob* _BankSelect;
+    Button* _BankLoadSave;
+
+    int _SampleID;
+
+    Knob* _SampleSelect;
+    Button* _SampleMode;
+    Button* _SampleMidi;
+
+    Button* _SamplePlay;
 };
 
 #endif
