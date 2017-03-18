@@ -119,6 +119,9 @@
 		<Unit filename="src/raspberry.h">
 			<Option virtualFolder="application/" />
 		</Unit>
+		<Unit filename="src/raspberry_pins.h">
+			<Option virtualFolder="application/" />
+		</Unit>
 		<Unit filename="src/sample.cpp">
 			<Option virtualFolder="sample/" />
 		</Unit>
