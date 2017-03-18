@@ -28,8 +28,8 @@ using namespace std;
 #include "config.h"
 #include "log.h"
 #include "error.h"
-#include "pins.h"
 #include "helpers.h"
+#include "raspberry.h"
 
 #endif
 

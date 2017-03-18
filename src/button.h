@@ -18,5 +18,4 @@ private:
     bool _Pressed;
 };
 
-
 #endif
