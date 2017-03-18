@@ -1,13 +1,14 @@
 #include "knob.h"
 #include "display.h"
 
-Knob::Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool notched) :
+Knob::Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool notched, bool loop) :
     _Value(value),
     _Minimum(minimum),
     _Maximum(maximum),
     _PinLeft(pin_left),
     _PinRight(pin_right),
     _Notched(notched),
+    _Loop(loop),
     _Encoded(0)
 {
 #if ENABLE_HARDWARE
@@ -41,7 +42,18 @@ void Knob::Update()
         _Value += _Notched?0.5f:1.0f;
 
         if (_Value>_Maximum)
-            _Value = _Maximum;
+        {
+            if (_Loop)
+            {
+                _Value = _Minimum+_Value-_Maximum;
+                if (_Value>_Maximum)
+                    _Value = _Maximum;
+            }
+            else
+            {
+                _Value = _Maximum;
+            }
+        }
 
         Display::Get().Print((int)_Value);
     }
@@ -50,7 +62,18 @@ void Knob::Update()
         _Value -= _Notched?0.5f:1.0f;
 
         if (_Value<_Minimum)
-            _Value = _Minimum;
+        {
+            if (_Loop)
+            {
+                _Value = _Maximum+_Value-_Minimum;
+                if (_Value<_Minimum)
+                    _Value = _Minimum;
+            }
+            else
+            {
+                _Value = _Minimum;
+            }
+        }
 
         Display::Get().Print((int)_Value);
     }

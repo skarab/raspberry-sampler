@@ -7,7 +7,7 @@ class Knob
 {
 public:
 
-    Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool notched);
+    Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool notched, bool loop);
     ~Knob();
 
     void Update();
@@ -20,6 +20,7 @@ private:
     int _Minimum;
     int _Maximum;
     bool _Notched;
+    bool _Loop;
     int _Encoded;
 };
 
