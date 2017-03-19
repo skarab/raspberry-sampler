@@ -2,15 +2,7 @@
 #define __SAMPLER_MIDI__
 
 #include "includes.h"
-
-class MidiKey
-{
-public:
-
-
-private:
-
-};
+#include "midi_key.h"
 
 class Midi
 {

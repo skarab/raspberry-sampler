@@ -13,6 +13,7 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/error.cpp \
 	src/log.cpp \
 	src/midi.cpp \
+	src/midi_key.cpp \
 	src/sample.cpp \
 	src/voice.cpp \
 	src/wav.cpp \

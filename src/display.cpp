@@ -66,6 +66,9 @@ void Display::Print(int value)
 
 void Display::SetLoading(bool loading)
 {
+    if (!loading)
+        usleep(500000);
+
     _Loading = loading;
 }
 
@@ -94,8 +97,9 @@ void Display::_Run()
         if (_Loading)
         {
             _Value = "    ";
-            _Value[load_id] = '-';
-            load_id = (load_id+1)%4;
+            if (load_id<4)
+                _Value[load_id] = '-';
+            load_id = (load_id+1)%5;
             usleep(100000);
         }
 

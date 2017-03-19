@@ -14,9 +14,11 @@ Sample::~Sample()
 
 void Sample::Load(const pugi::xml_node& node)
 {
+    _MidiKey.Load(node);
 }
 
 void Sample::Save(pugi::xml_node& node)
 {
     XML_Write(node, "Name", _Name);
+    _MidiKey.Save(node);
 }

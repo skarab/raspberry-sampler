@@ -21,6 +21,7 @@
 #include <sstream>
 #include <dirent.h>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 

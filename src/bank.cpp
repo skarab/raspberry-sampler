@@ -1,6 +1,22 @@
 #include "bank.h"
 #include "display.h"
 
+struct bank_sort
+{
+    inline bool operator() (const Bank* b1, const Bank* b2)
+    {
+        return strcmp(b1->GetName().c_str(), b2->GetName().c_str())<0;
+    }
+};
+
+struct sample_sort
+{
+    inline bool operator() (const Sample* s1, const Sample* s2)
+    {
+        return strcmp(s1->GetName().c_str(), s2->GetName().c_str())<0;
+    }
+};
+
 vector<Bank*> Bank::List()
 {
     vector<Bank*> banks;
@@ -14,7 +30,7 @@ vector<Bank*> Bank::List()
         {
             if (entry->d_type==DT_DIR && entry->d_name[0]!='.')
             {
-                Bank* bank = new Bank(string(SAMPLER_BANKS)+entry->d_name+"/");
+                Bank* bank = new Bank(entry->d_name, string(SAMPLER_BANKS)+entry->d_name+"/");
                 banks.push_back(bank);
             }
 
@@ -27,6 +43,7 @@ vector<Bank*> Bank::List()
     if (banks.size()==0)
         LOG("no banks!");
 
+    sort(banks.begin(), banks.end(), bank_sort());
     return banks;
 }
 
@@ -37,7 +54,8 @@ void Bank::Destroy(vector<Bank*>& banks)
     banks.clear();
 }
 
-Bank::Bank(string path) :
+Bank::Bank(string name, string path) :
+    _Name(name),
     _Path(path)
 {
 }
@@ -126,6 +144,8 @@ bool Bank::Load()
     if (iss.is_open())
         iss.close();
 
+    sort(_Samples.begin(), _Samples.end(), sample_sort());
+
     Display::Get().SetLoading(false);
     LOG("ok!");
 
@@ -135,6 +155,7 @@ bool Bank::Load()
 bool Bank::Save()
 {
     LOG("save bank %s", _Path.c_str());
+    Display::Get().SetLoading(true);
 
     string xml_path = _Path+"bank.xml";
     ofstream oss(xml_path.c_str());
@@ -150,5 +171,9 @@ bool Bank::Save()
     }
 
     document.save(oss);
+
+    Display::Get().SetLoading(false);
+    LOG("ok!");
+
     return true;
 }
