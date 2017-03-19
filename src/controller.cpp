@@ -96,22 +96,19 @@ void Controller::_OnLoadBank(int id)
     if (id<0 || id>=_Banks.size())
         ERROR("_OnLoadBank id");
 
-    if (id!=_BankID)
-    {
-        Device::Get().Stop();
+    Device::Get().Stop();
 
-        if (_BankID>=0)
-            _Banks[_BankID]->Unload();
+    if (_BankID>=0)
+        _Banks[_BankID]->Unload();
 
-        _Banks[id]->Load();
-        _BankID = id;
-        _Bank = _Banks[_BankID];
+    _Banks[id]->Load();
+    _BankID = id;
+    _Bank = _Banks[_BankID];
 
-        _SampleSelect->SetRange(0, _Bank->GetSampleCount()-1);
-        _SampleSelect->SetValue(0);
-        _SampleID = 0;
-        _Sample = _Bank->GetSample(_SampleID);
-    }
+    _SampleSelect->SetRange(0, _Bank->GetSampleCount()-1);
+    _SampleSelect->SetValue(0);
+    _SampleID = 0;
+    _Sample = _Bank->GetSample(_SampleID);
 
     Display::Get().Print(_BankID);
 }

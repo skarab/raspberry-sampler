@@ -74,6 +74,28 @@ bool Bank::Load()
 
     _Samples.clear();
 
+    map<string, pugi::xml_node> samples;
+    string xml_path = _Path+"bank.xml";
+    ifstream iss(xml_path.c_str());
+    pugi::xml_document document;
+    if (iss.is_open() && document.load(iss))
+    {
+        pugi::xml_node xml_root = document.child("Bank");
+        if (xml_root)
+        {
+            pugi::xml_node xml_samples = xml_root.child("Samples");
+            pugi::xml_node xml_sample = xml_samples.first_child();
+            while (xml_sample)
+            {
+                string sample_name;
+                if (XML_Read(xml_sample, "Name", sample_name))
+                    samples[sample_name] = xml_sample;
+
+                xml_sample = xml_sample.next_sibling();
+            }
+        }
+    }
+
     string wav_extension = ".wav";
     DIR* dir = opendir(_Path.c_str());
     if (dir!=NULL)
@@ -84,9 +106,15 @@ bool Bank::Load()
         {
             if (entry->d_type==DT_REG && entry->d_name[0]!='.' && has_suffix(entry->d_name, wav_extension))
             {
-                Sample* sample = new Sample(_Path+entry->d_name);
-                if (sample->IsValid()) _Samples.push_back(sample);
-                else delete sample;
+                string sample_name = string(entry->d_name);
+                sample_name.erase(sample_name.end()-4, sample_name.end());
+
+                Sample* sample = new Sample(sample_name, _Path+entry->d_name);
+                pugi::xml_node xml_sample = samples[sample_name];
+                if (xml_sample)
+                    sample->Load(xml_sample);
+
+                _Samples.push_back(sample);
             }
 
             entry = readdir(dir);
@@ -94,6 +122,9 @@ bool Bank::Load()
 
         closedir(dir);
     }
+
+    if (iss.is_open())
+        iss.close();
 
     Display::Get().SetLoading(false);
     LOG("ok!");
@@ -105,7 +136,19 @@ bool Bank::Save()
 {
     LOG("save bank %s", _Path.c_str());
 
+    string xml_path = _Path+"bank.xml";
+    ofstream oss(xml_path.c_str());
+    pugi::xml_document document;
 
+    pugi::xml_node xml_root = document.append_child("Bank");
 
+    pugi::xml_node xml_samples = xml_root.append_child("Samples");
+    for (int i=0 ; i<_Samples.size() ; ++i)
+    {
+        pugi::xml_node xml_sample = xml_samples.append_child("Sample");
+        _Samples[i]->Save(xml_sample);
+    }
+
+    document.save(oss);
     return true;
 }
