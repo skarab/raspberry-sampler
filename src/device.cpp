@@ -4,8 +4,7 @@ Device* Device::_Instance = NULL;
 
 Device::Device() :
     _Ready(false),
-    _Quit(false),
-    _Sample(NULL)
+    _Quit(false)
 {
     _Instance = this;
 
@@ -24,42 +23,42 @@ Device::~Device()
     _Quit = true;
     pthread_join(_Thread, NULL);
     pthread_mutex_destroy(&_Lock);
-
-    delete _Sample;
 }
 
-void Device::OnNoteOn(int device_id, int channel, int note, int velocity)
+void Device::OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity)
 {
-    if (_Sample!=NULL)
+    for (int i=0 ; i<_Voices.size() ; ++i)
     {
-        for (int i=0 ; i<_Voices.size() ; ++i)
+        if (!_Voices[i]->IsBusy())
         {
-            if (!_Voices[i]->IsBusy())
-            {
-                pthread_mutex_lock(&_Lock);
-                _Voices[i]->OnNoteOn(_Sample, device_id, channel, note, velocity);
-                pthread_mutex_unlock(&_Lock);
-                return;
-            }
+            pthread_mutex_lock(&_Lock);
+            _Voices[i]->OnNoteOn(sample, device_id, channel, note, velocity);
+            pthread_mutex_unlock(&_Lock);
+            return;
         }
     }
 }
 
 void Device::OnNoteOff(int device_id, int channel, int note, int velocity)
 {
-    if (_Sample!=NULL)
+    for (int i=0 ; i<_Voices.size() ; ++i)
     {
-        for (int i=0 ; i<_Voices.size() ; ++i)
+        if (_Voices[i]->IsPlaying(device_id, channel, note))
         {
-            if (_Voices[i]->IsPlaying(device_id, channel, note))
-            {
-                pthread_mutex_lock(&_Lock);
-                _Voices[i]->OnNoteOff(velocity);
-                pthread_mutex_unlock(&_Lock);
-                return;
-            }
+            pthread_mutex_lock(&_Lock);
+            _Voices[i]->OnNoteOff(velocity);
+            pthread_mutex_unlock(&_Lock);
+            return;
         }
     }
+}
+
+void Device::Stop()
+{
+    pthread_mutex_lock(&_Lock);
+    for (int i=0 ; i<_Voices.size() ; ++i)
+        _Voices[i]->Stop();
+    pthread_mutex_unlock(&_Lock);
 }
 
 void* Device::_RunThreaded(void* data)

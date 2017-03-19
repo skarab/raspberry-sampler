@@ -13,8 +13,9 @@ public:
 
     static Device& Get() { return *_Instance; }
 
-    void OnNoteOn(int device_id, int channel, int note, int velocity);
+    void OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity);
     void OnNoteOff(int device_id, int channel, int note, int velocity);
+    void Stop();
 
 private:
 
@@ -34,8 +35,6 @@ private:
     short* _Buffer;
     vector<Voice*> _Voices;
     pthread_mutex_t _Lock;
-
-    Sample* _Sample;
 };
 
 #endif

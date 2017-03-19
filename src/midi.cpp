@@ -1,5 +1,5 @@
 #include "midi.h"
-#include "device.h"
+#include "controller.h"
 
 struct MidiDevice
 {
@@ -106,11 +106,11 @@ void Midi::_Run()
 
                     if (device.NoteOn)
                     {
-                        Device::Get().OnNoteOn(device_id, device.Channel, device.Note, velocity);
+                        Controller::Get().OnNoteOn(device_id, device.Channel, device.Note, velocity);
                     }
                     else if (device.NoteOff)
                     {
-                        Device::Get().OnNoteOff(device_id, device.Channel, device.Note, velocity);
+                        Controller::Get().OnNoteOff(device_id, device.Channel, device.Note, velocity);
                     }
                 }
 

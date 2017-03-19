@@ -18,6 +18,7 @@ public:
 
     void OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity);
     void OnNoteOff(int velocity);
+    void Stop();
 
 private:
 

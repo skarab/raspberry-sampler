@@ -10,12 +10,18 @@ public:
     Button(int pin);
     ~Button();
 
+    bool IsPressed() const { return _Pressed; }
+    bool IsJustPressed() const { return _OnPressed; }
+    bool IsJustReleased() const { return _OnReleased; }
+
     void Update();
 
 private:
 
     int _Pin;
     bool _Pressed;
+    bool _OnPressed;
+    bool _OnReleased;
 };
 
 #endif

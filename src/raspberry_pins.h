@@ -5,7 +5,7 @@
 
     #include <bcm2835.h>
 
-    #define RPI_PIN_01      RPI_V2_GPIO_P1_28   // EEC
+    //#define RPI_PIN_01      RPI_V2_GPIO_P1_28   // EEC
     #define RPI_PIN_04      RPI_V2_GPIO_P1_07   // . GPCLK0
     #define RPI_PIN_05      RPI_V2_GPIO_P1_29
     #define RPI_PIN_06      RPI_V2_GPIO_P1_31
@@ -33,7 +33,7 @@
 
 #else
 
-    #define RPI_PIN_01      1
+    //#define RPI_PIN_01      1
     #define RPI_PIN_04      4
     #define RPI_PIN_05      5
     #define RPI_PIN_06      6

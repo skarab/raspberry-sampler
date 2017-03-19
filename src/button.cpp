@@ -2,7 +2,9 @@
 
 Button::Button(int pin) :
     _Pin(pin),
-    _Pressed(false)
+    _Pressed(false),
+    _OnPressed(false),
+    _OnReleased(false)
 {
 #if ENABLE_HARDWARE
     bcm2835_gpio_fsel(_Pin, BCM2835_GPIO_FSEL_INPT);
@@ -22,16 +24,19 @@ void Button::Update()
     pressed = bcm2835_gpio_lev(_Pin)==0;
 #endif
 
+    _OnPressed = false;
+    _OnReleased = false;
+
     if (pressed!=_Pressed)
     {
         _Pressed = pressed;
         if (pressed)
         {
-            LOG("press %d", _Pin);
+            _OnPressed = true;
         }
         else
         {
-            LOG("release %d", _Pin);
+            _OnReleased = true;
         }
     }
 }

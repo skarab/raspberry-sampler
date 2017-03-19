@@ -53,3 +53,8 @@ void Voice::OnNoteOn(Sample* sample, int device_id, int channel, int note, int v
 void Voice::OnNoteOff(int velocity)
 {
 }
+
+void Voice::Stop()
+{
+    _Sample = NULL;
+}

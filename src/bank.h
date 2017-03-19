@@ -15,6 +15,9 @@ public:
     Bank(string path);
     ~Bank();
 
+    int GetSampleCount();
+    Sample* GetSample(int id);
+
     void Unload();
     bool Load();
     bool Save();

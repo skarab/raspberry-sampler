@@ -47,6 +47,18 @@ Bank::~Bank()
     Unload();
 }
 
+int Bank::GetSampleCount()
+{
+    return _Samples.size();
+}
+
+Sample* Bank::GetSample(int id)
+{
+    if (id>=0 && id<_Samples.size())
+        return _Samples[id];
+    return NULL;
+}
+
 void Bank::Unload()
 {
     LOG("unload bank %s", _Path.c_str());
