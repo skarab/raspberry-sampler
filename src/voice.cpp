@@ -15,9 +15,9 @@ bool Voice::IsBusy() const
     return _Sample!=NULL;
 }
 
-bool Voice::IsPlaying(int device_id, int channel, int note) const
+bool Voice::IsPlaying(Sample* sample, int note) const
 {
-    return IsBusy() && _DeviceID==device_id && _Channel==channel && _Note==note;
+    return _Sample==sample && _Note==note;
 }
 
 void Voice::Update(int& left, int& right)
@@ -37,21 +37,17 @@ void Voice::Update(int& left, int& right)
     }
 }
 
-void Voice::OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity)
+void Voice::Play(Sample* sample, int note, int velocity)
 {
-    if (!IsBusy() && sample->IsValid())
-    {
-        _Position = 0.0f;
-        _Sample = sample;
-        _DeviceID = device_id;
-        _Channel = channel;
-        _Note = note;
-        _Velocity = velocity;
-    }
+    _Position = 0.0f;
+    _Sample = sample;
+    _Note = note;
+    _Velocity = velocity;
 }
 
-void Voice::OnNoteOff(int velocity)
+void Voice::Stop(Sample* sample, int note)
 {
+    Stop();
 }
 
 void Voice::Stop()

@@ -46,8 +46,10 @@ void Knob::SetRange(int minimum, int maximum)
     SetValue(GetValue());
 }
 
-void Knob::Update()
+bool Knob::Update()
 {
+    bool changed = false;
+
     int msb = 0;
     int lsb = 0;
 
@@ -64,6 +66,7 @@ void Knob::Update()
     if (sum==0b1101 || sum==0b0100 || sum==0b0010 || sum==0b1011)
     {
         ++_Value;
+        changed = true;
 
         if (_Value>maximum)
         {
@@ -83,6 +86,7 @@ void Knob::Update()
     else if (sum==0b1110 || sum==0b0111 || sum==0b0001 || sum==0b1000)
     {
         --_Value;
+        changed = true;
 
         if (_Value<0)
         {
@@ -101,4 +105,5 @@ void Knob::Update()
     }
 
     _Encoded = encoded;
+    return changed;
 }

@@ -13,9 +13,9 @@ public:
 
     static Device& Get() { return *_Instance; }
 
-    void OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity);
-    void OnNoteOff(int device_id, int channel, int note, int velocity);
-    void Stop();
+    void Play(Sample* sample, int note, int velocity);
+    void Stop(Sample* sample, int note);
+    void StopAll();
 
 private:
 

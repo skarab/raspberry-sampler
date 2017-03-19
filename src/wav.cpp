@@ -25,10 +25,10 @@ bool Wav::_Load(string path)
     }
 
     fseek(file, 0, SEEK_END);
-    long size = ftell(file);
+    long file_size = ftell(file);
     rewind(file);
 
-    _FileContent = (char*)malloc(size);
+    _FileContent = (char*)malloc(file_size);
     if (_FileContent==NULL)
     {
         fclose(file);
@@ -36,9 +36,9 @@ bool Wav::_Load(string path)
         return false;
     }
 
-    long result = fread(_FileContent, 1, size, file);
+    long result = fread(_FileContent, 1, file_size, file);
     fclose(file);
-    if (result!=size || size<44)
+    if (result!=file_size || file_size<44)
     {
         LOG("wav is corrupted : %s", path.c_str());
         return false;
@@ -46,11 +46,11 @@ bool Wav::_Load(string path)
 
     unsigned int s = ((int*)_FileContent)[1];
     if ((memcmp(_FileContent, "RIFF", 4)!=0)
-        || (s+8!=size)
+        || (s+8!=file_size)
         || (memcmp(_FileContent+8, "WAVE", 4)!=0)
         || (memcmp(_FileContent+12, "fmt ", 4)!=0))
     {
-        LOG("wav is corrupted : %s", path.c_str());
+        LOG("wav is corrupted (2): %s", path.c_str());
         return false;
     }
 
@@ -73,9 +73,9 @@ bool Wav::_Load(string path)
 
     unsigned int sample_size = *(unsigned int*)(_FileContent+40);
     if ((memcmp(_FileContent+36, "data", 4)!=0)
-        || (sample_size+44!=size))
+        || (sample_size+44>file_size))
     {
-        LOG("wav is corrupted : %s", path.c_str());
+        LOG("wav is corrupted (3): %s", path.c_str());
         return false;
     }
 

@@ -16,8 +16,9 @@ Button::~Button()
 {
 }
 
-void Button::Update()
+bool Button::Update()
 {
+    bool used = false;
     bool pressed = false;
 
 #if ENABLE_HARDWARE
@@ -38,5 +39,9 @@ void Button::Update()
         {
             _OnReleased = true;
         }
+        used = true;
     }
+
+    used |= pressed;
+    return used;
 }

@@ -25,35 +25,36 @@ Device::~Device()
     pthread_mutex_destroy(&_Lock);
 }
 
-void Device::OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity)
+void Device::Play(Sample* sample, int note, int velocity)
 {
+    if (sample->IsValid())
     for (int i=0 ; i<_Voices.size() ; ++i)
     {
-        if (!_Voices[i]->IsBusy())
+        if (!_Voices[i]->IsBusy() || _Voices[i]->IsPlaying(sample, note))
         {
             pthread_mutex_lock(&_Lock);
-            _Voices[i]->OnNoteOn(sample, device_id, channel, note, velocity);
+            _Voices[i]->Play(sample, note, velocity);
             pthread_mutex_unlock(&_Lock);
             return;
         }
     }
 }
 
-void Device::OnNoteOff(int device_id, int channel, int note, int velocity)
+void Device::Stop(Sample* sample, int note)
 {
     for (int i=0 ; i<_Voices.size() ; ++i)
     {
-        if (_Voices[i]->IsPlaying(device_id, channel, note))
+        if (_Voices[i]->IsPlaying(sample, note))
         {
             pthread_mutex_lock(&_Lock);
-            _Voices[i]->OnNoteOff(velocity);
+            _Voices[i]->Stop(sample, note);
             pthread_mutex_unlock(&_Lock);
             return;
         }
     }
 }
 
-void Device::Stop()
+void Device::StopAll()
 {
     pthread_mutex_lock(&_Lock);
     for (int i=0 ; i<_Voices.size() ; ++i)

@@ -14,7 +14,7 @@ public:
     int GetValue() const;
     void SetRange(int minimum, int maximum);
 
-    void Update();
+    bool Update();
 
 private:
 

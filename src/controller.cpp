@@ -4,9 +4,17 @@
 
 Controller* Controller::_Instance = NULL;
 
-Controller::Controller()
+Controller::Controller() :
+    _BankID(-1),
+    _Bank(NULL),
+    _SampleID(-1),
+    _Sample(NULL),
+    _AttachMidi(false)
 {
     _Instance = this;
+
+    if (pthread_mutex_init(&_Lock, NULL)!=0)
+        ERROR("failed to create mutex");
 
 #if ENABLE_HARDWARE
     if (!bcm2835_init())
@@ -18,15 +26,9 @@ Controller::Controller()
     if (_Banks.size()==0)
         ERROR("no bank!");
 
-    _BankID = -1;
-    _Bank = NULL;
-
     _BankSelect = new Knob(0, 0, _Banks.size()-1, PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT, 2, true);
     _BankLoad = new Button(PIN_BANK_LOAD);
     _BankSave = new Button(PIN_BANK_SAVE);
-
-    _SampleID = -1;
-    _Sample = NULL;
 
     _SampleSelect = new Knob(0, 0, 0, PIN_SAMPLE_SELECT_LEFT, PIN_SAMPLE_SELECT_RIGHT, 2, true);
     _SampleMode = new Button(PIN_SAMPLE_MODE);
@@ -56,47 +58,83 @@ Controller::~Controller()
 #if ENABLE_HARDWARE
     bcm2835_close();
 #endif
+
+    pthread_mutex_destroy(&_Lock);
 }
 
-void Controller::OnNoteOn(int device_id, int channel, int note, int velocity)
+void Controller::OnNoteOn(const MidiKey& key, int velocity)
 {
+    pthread_mutex_lock(&_Lock);
+    Sample* sample = _Bank->GetSample(key);
+
+    if (_AttachMidi)
+    {
+        if (sample!=NULL)
+            sample->GetMidiKey().SetNull();
+
+        _Sample->GetMidiKey() = key;
+        sample = _Sample;
+        _AttachMidi = false;
+    }
+
+    if (sample!=NULL)
+        Device::Get().Play(sample, key.Note, velocity);
+    pthread_mutex_unlock(&_Lock);
 }
 
-void Controller::OnNoteOff(int device_id, int channel, int note, int velocity)
+void Controller::OnNoteOff(const MidiKey& key)
 {
+    pthread_mutex_lock(&_Lock);
+    Sample* sample = _Bank->GetSample(key);
+    if (sample!=NULL)
+        Device::Get().Stop(sample, key.Note);
+    pthread_mutex_unlock(&_Lock);
 }
 
 void Controller::Update()
 {
-    _BankSelect->Update();
+    bool changed = false;
 
-    _BankLoad->Update();
+    changed |= _BankSelect->Update();
+
+    changed |= _BankLoad->Update();
     if (_BankLoad->IsJustPressed())
         _OnLoadBank(_BankSelect->GetValue());
 
-    _BankSave->Update();
+    changed |= _BankSave->Update();
     if (_BankSave->IsJustPressed())
         _OnSaveBank();
 
-    _SampleSelect->Update();
+    changed |= _SampleSelect->Update();
     _SampleID = _SampleSelect->GetValue();
     _Sample = _Bank->GetSample(_SampleID);
 
-    _SampleMode->Update();
+    changed |= _SampleMode->Update();
     _SampleMidiSet->Update();
     _SampleMidiUnset->Update();
+    if (_SampleMidiSet->IsJustPressed())
+        _OnMidiAttach();
+    if (_SampleMidiUnset->IsJustPressed())
+        _OnMidiDetach();
 
-    _SamplePlay->Update();
+    changed |= _SamplePlay->Update();
     if (_SamplePlay->IsJustPressed())
-        _OnPlaySample();
+        _OnStartSample();
+    if (_SamplePlay->IsJustReleased())
+        _OnStopSample();
+
+    if (changed)
+        _AttachMidi = false;
 }
 
 void Controller::_OnLoadBank(int id)
 {
+    pthread_mutex_lock(&_Lock);
+
     if (id<0 || id>=_Banks.size())
         ERROR("_OnLoadBank id");
 
-    Device::Get().Stop();
+    Device::Get().StopAll();
 
     if (_BankID>=0)
         _Banks[_BankID]->Unload();
@@ -110,6 +148,8 @@ void Controller::_OnLoadBank(int id)
     _SampleID = 0;
     _Sample = _Bank->GetSample(_SampleID);
 
+    pthread_mutex_unlock(&_Lock);
+
     Display::Get().Print(_BankID);
 }
 
@@ -120,11 +160,28 @@ void Controller::_OnSaveBank()
 
 }
 
-void Controller::_OnPlaySample()
+void Controller::_OnMidiAttach()
 {
-    if (_Sample!=NULL)
-    {
-        Device::Get().OnNoteOn(_Sample, 0, 0, 0, 0);
-        Display::Get().Print(_SampleID);
-    }
+    pthread_mutex_lock(&_Lock);
+    _AttachMidi = true;
+    pthread_mutex_unlock(&_Lock);
+}
+
+void Controller::_OnMidiDetach()
+{
+    pthread_mutex_lock(&_Lock);
+    _AttachMidi = false;
+    _Sample->GetMidiKey().SetNull();
+    pthread_mutex_unlock(&_Lock);
+}
+
+void Controller::_OnStartSample()
+{
+    Device::Get().Play(_Sample, -1, 64);
+    Display::Get().Print(_SampleID);
+}
+
+void Controller::_OnStopSample()
+{
+    Device::Get().Stop(_Sample, -1);
 }

@@ -6,6 +6,9 @@
 struct MidiKey
 {
     MidiKey();
+    MidiKey(int device, int channel, int note);
+
+    bool operator==(const MidiKey& key) const;
 
     void SetNull();
     bool IsNull() const;
@@ -16,7 +19,6 @@ struct MidiKey
     int DeviceID;
     int Channel;
     int Note;
-    int Velocity;
 };
 
 

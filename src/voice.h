@@ -12,20 +12,18 @@ public:
     ~Voice();
 
     bool IsBusy() const;
-    bool IsPlaying(int device_id, int channel, int note) const;
+    bool IsPlaying(Sample* sample, int note) const;
 
     void Update(int& left, int& right);
 
-    void OnNoteOn(Sample* sample, int device_id, int channel, int note, int velocity);
-    void OnNoteOff(int velocity);
+    void Play(Sample* sample, int note, int velocity);
+    void Stop(Sample* sample, int note);
     void Stop();
 
 private:
 
     Sample* _Sample;
     float _Position;
-    int _DeviceID;
-    int _Channel;
     int _Note;
     int _Velocity;
 };

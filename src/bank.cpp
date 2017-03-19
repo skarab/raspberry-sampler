@@ -77,6 +77,16 @@ Sample* Bank::GetSample(int id)
     return NULL;
 }
 
+Sample* Bank::GetSample(const MidiKey& key)
+{
+    for (int i=0 ; i<_Samples.size() ; ++i)
+    {
+        if (_Samples[i]->GetMidiKey()==key)
+            return _Samples[i];
+    }
+    return NULL;
+}
+
 void Bank::Unload()
 {
     LOG("unload bank %s", _Path.c_str());

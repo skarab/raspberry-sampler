@@ -96,22 +96,24 @@ void Midi::_Run()
             }
             else
             {
-                if (value>127)
+                int velocity = value;
+                if (velocity>127)
+                    velocity = 127;
+                if (velocity==0)
                 {
-                    LOG("midi skipped message");
+                    device.NoteOff = true;
+                    device.NoteOn = false;
                 }
-                else
-                {
-                    int velocity = value;
 
-                    if (device.NoteOn)
-                    {
-                        Controller::Get().OnNoteOn(device_id, device.Channel, device.Note, velocity);
-                    }
-                    else if (device.NoteOff)
-                    {
-                        Controller::Get().OnNoteOff(device_id, device.Channel, device.Note, velocity);
-                    }
+                MidiKey key(device_id, device.Channel, device.Note);
+
+                if (device.NoteOn)
+                {
+                    Controller::Get().OnNoteOn(key, velocity);
+                }
+                else if (device.NoteOff)
+                {
+                    Controller::Get().OnNoteOff(key);
                 }
 
                 device.NoteOn = false;

@@ -18,6 +18,7 @@ public:
     const string& GetName() const { return _Name; }
     int GetSampleCount();
     Sample* GetSample(int id);
+    Sample* GetSample(const MidiKey& key);
 
     void Unload();
     bool Load();

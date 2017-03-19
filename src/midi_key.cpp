@@ -5,20 +5,32 @@ MidiKey::MidiKey()
     SetNull();
 }
 
+MidiKey::MidiKey(int device, int channel, int note) :
+    DeviceID(device),
+    Channel(channel),
+    Note(note)
+{
+}
+
+bool MidiKey::operator==(const MidiKey& key) const
+{
+    return DeviceID==key.DeviceID
+        && Channel==key.Channel
+        && Note==key.Note;
+}
+
 void MidiKey::SetNull()
 {
     DeviceID = -1;
     Channel = -1;
     Note = -1;
-    Velocity = -1;
 }
 
 bool MidiKey::IsNull() const
 {
     return DeviceID==-1
         && Channel==-1
-        && Note==-1
-        && Velocity==-1;
+        && Note==-1;
 }
 
 void MidiKey::Load(const pugi::xml_node& node)
@@ -31,7 +43,6 @@ void MidiKey::Load(const pugi::xml_node& node)
         XML_Read(xml_midi, "Device", DeviceID);
         XML_Read(xml_midi, "Channel", Channel);
         XML_Read(xml_midi, "Note", Note);
-        XML_Read(xml_midi, "Velocity", Velocity);
     }
 }
 
@@ -44,6 +55,5 @@ void MidiKey::Save(pugi::xml_node& node)
         if (DeviceID!=-1) XML_Write(xml_midi, "Device", DeviceID);
         if (Channel!=-1) XML_Write(xml_midi, "Channel", Channel);
         if (Note!=-1) XML_Write(xml_midi, "Note", Note);
-        if (Velocity!=-1) XML_Write(xml_midi, "Velocity", Velocity);
     }
 }

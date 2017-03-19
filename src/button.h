@@ -14,7 +14,7 @@ public:
     bool IsJustPressed() const { return _OnPressed; }
     bool IsJustReleased() const { return _OnReleased; }
 
-    void Update();
+    bool Update();
 
 private:
 
