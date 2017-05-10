@@ -92,6 +92,12 @@
 		<Unit filename="src/knob.h">
 			<Option virtualFolder="controller/" />
 		</Unit>
+		<Unit filename="src/led.cpp">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/led.h">
+			<Option virtualFolder="controller/" />
+		</Unit>
 		<Unit filename="src/log.cpp">
 			<Option virtualFolder="helpers/" />
 		</Unit>
