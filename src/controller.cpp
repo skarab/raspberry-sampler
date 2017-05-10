@@ -5,9 +5,6 @@
 Controller* Controller::_Instance = NULL;
 
 Controller::Controller() :
-    _BankID(-1),
-    _Bank(NULL),
-    _SampleID(-1),
     _Sample(NULL),
     _AttachMidi(false)
 {
@@ -27,6 +24,7 @@ Controller::Controller() :
         ERROR("no bank!");
 
     _BankSelect = new Knob(0, 0, _Banks.size()-1, PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT, 2, true);
+    _BankStatus = new Led(PIN_BANK_STATUS);
     _BankLoad = new Button(PIN_BANK_LOAD);
     _BankSave = new Button(PIN_BANK_SAVE);
 
@@ -37,7 +35,7 @@ Controller::Controller() :
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
 
-    _OnLoadBank(0);
+    _OnLoadBank();
 }
 
 Controller::~Controller()
@@ -51,6 +49,7 @@ Controller::~Controller()
 
     delete _BankSave;
     delete _BankLoad;
+    delete _BankStatus;
     delete _BankSelect;
 
     Bank::Destroy(_Banks);
@@ -65,14 +64,16 @@ Controller::~Controller()
 void Controller::OnNoteOn(const MidiKey& key, int velocity)
 {
     pthread_mutex_lock(&_Lock);
-    Sample* sample = _Bank->GetSample(key);
+    Sample* sample = _FindSample(key);
 
     if (_AttachMidi)
     {
         if (sample!=NULL)
             sample->GetMidiKey().SetNull();
 
-        _Sample->GetMidiKey() = key;
+        if (_Sample!=NULL)
+            _Sample->GetMidiKey() = key;
+
         sample = _Sample;
         _AttachMidi = false;
     }
@@ -85,7 +86,7 @@ void Controller::OnNoteOn(const MidiKey& key, int velocity)
 void Controller::OnNoteOff(const MidiKey& key)
 {
     pthread_mutex_lock(&_Lock);
-    Sample* sample = _Bank->GetSample(key);
+    Sample* sample = _FindSample(key);
     if (sample!=NULL)
         Device::Get().Stop(sample, key.Note);
     pthread_mutex_unlock(&_Lock);
@@ -95,19 +96,35 @@ void Controller::Update()
 {
     bool changed = false;
 
-    changed |= _BankSelect->Update();
+    if (_BankSelect->Update())
+    {
+        changed = true;
+        _BankStatus->SetOn(_GetBank()->IsLoaded());
+
+        if (_GetBank()->IsLoaded())
+        {
+            _Sample = _GetBank()->GetSample(0);
+            _SampleSelect->SetRange(0, _GetBank()->GetSampleCount()-1);
+        }
+        else
+        {
+            _Sample = NULL;
+        }
+    }
 
     changed |= _BankLoad->Update();
     if (_BankLoad->IsJustPressed())
-        _OnLoadBank(_BankSelect->GetValue());
+        _OnLoadBank();
 
     changed |= _BankSave->Update();
     if (_BankSave->IsJustPressed())
         _OnSaveBank();
 
-    changed |= _SampleSelect->Update();
-    _SampleID = _SampleSelect->GetValue();
-    _Sample = _Bank->GetSample(_SampleID);
+    if (_Sample!=NULL && _SampleSelect->Update())
+    {
+        changed = true;
+        _Sample = _GetBank()->GetSample(_SampleSelect->GetValue());
+    }
 
     changed |= _SampleMode->Update();
     _SampleMidiSet->Update();
@@ -127,37 +144,58 @@ void Controller::Update()
         _AttachMidi = false;
 }
 
-void Controller::_OnLoadBank(int id)
+Bank* Controller::_GetBank()
+{
+    return _Banks[_BankSelect->GetValue()];
+}
+
+Sample* Controller::_FindSample(const MidiKey& key)
+{
+    for (int i=0 ; i<_Banks.size() ; ++i)
+    {
+        if (_Banks[i]->IsLoaded())
+        {
+            Sample* sample = _Banks[i]->GetSample(key);
+            if (sample!=NULL)
+                return sample;
+        }
+    }
+    return NULL;
+}
+
+void Controller::_OnLoadBank()
 {
     pthread_mutex_lock(&_Lock);
 
-    if (id<0 || id>=_Banks.size())
-        ERROR("_OnLoadBank id");
-
     Device::Get().StopAll();
 
-    if (_BankID>=0)
-        _Banks[_BankID]->Unload();
+    Bank* bank = _GetBank();
 
-    _Banks[id]->Load();
-    _BankID = id;
-    _Bank = _Banks[_BankID];
+    if (bank->IsLoaded())
+    {
+        bank->Unload();
+        _Sample = NULL;
+    }
+    else
+    {
+        bank->Load();
 
-    _SampleSelect->SetRange(0, _Bank->GetSampleCount()-1);
-    _SampleSelect->SetValue(0);
-    _SampleID = 0;
-    _Sample = _Bank->GetSample(_SampleID);
+        _SampleSelect->SetRange(0, bank->GetSampleCount()-1);
+        _SampleSelect->SetValue(0);
+        _Sample = bank->GetSample(0);
+    }
 
     pthread_mutex_unlock(&_Lock);
 
-    Display::Get().Print(_BankID);
+    _BankStatus->SetOn(bank->IsLoaded());
+
+    Display::Get().Print(_BankSelect->GetValue());
 }
 
 void Controller::_OnSaveBank()
 {
-    _Banks[_BankID]->Save();
-    Display::Get().Print(_BankID);
-
+    _GetBank()->Save();
+    Display::Get().Print(_BankSelect->GetValue());
 }
 
 void Controller::_OnMidiAttach()
@@ -171,17 +209,19 @@ void Controller::_OnMidiDetach()
 {
     pthread_mutex_lock(&_Lock);
     _AttachMidi = false;
-    _Sample->GetMidiKey().SetNull();
+    if (_Sample!=NULL)
+        _Sample->GetMidiKey().SetNull();
     pthread_mutex_unlock(&_Lock);
 }
 
 void Controller::_OnStartSample()
 {
-    Device::Get().Play(_Sample, -1, 64);
-    Display::Get().Print(_SampleID);
+    if (_Sample!=NULL)
+        Device::Get().Play(_Sample, -1, 64);
 }
 
 void Controller::_OnStopSample()
 {
-    Device::Get().Stop(_Sample, -1);
+    if (_Sample!=NULL)
+        Device::Get().Stop(_Sample, -1);
 }

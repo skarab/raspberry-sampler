@@ -3,6 +3,7 @@
 
 #include "includes.h"
 #include "button.h"
+#include "led.h"
 #include "knob.h"
 #include "bank.h"
 #include "midi_key.h"
@@ -23,25 +24,25 @@ public:
 
 private:
 
-    void _OnLoadBank(int id);
+    Bank* _GetBank();
+    Sample* _FindSample(const MidiKey& key);
+
+    void _OnLoadBank();
     void _OnSaveBank();
     void _OnMidiAttach();
     void _OnMidiDetach();
     void _OnStartSample();
     void _OnStopSample();
 
-
     static Controller* _Instance;
 
     vector<Bank*> _Banks;
-    int _BankID;
-    Bank* _Bank;
 
     Knob* _BankSelect;
+    Led* _BankStatus;
     Button* _BankLoad;
     Button* _BankSave;
 
-    int _SampleID;
     Sample* _Sample;
 
     Knob* _SampleSelect;

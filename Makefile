@@ -18,6 +18,7 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/voice.cpp \
 	src/wav.cpp \
 	src/button.cpp \
+	src/led.cpp \
 	src/knob.cpp \
 	src/controller.cpp
 

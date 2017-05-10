@@ -56,18 +56,14 @@ void Bank::Destroy(vector<Bank*>& banks)
 
 Bank::Bank(string name, string path) :
     _Name(name),
-    _Path(path)
+    _Path(path),
+    _Loaded(false)
 {
 }
 
 Bank::~Bank()
 {
     Unload();
-}
-
-int Bank::GetSampleCount()
-{
-    return _Samples.size();
 }
 
 Sample* Bank::GetSample(int id)
@@ -89,18 +85,24 @@ Sample* Bank::GetSample(const MidiKey& key)
 
 void Bank::Unload()
 {
-    LOG("unload bank %s", _Path.c_str());
+    if (_Loaded)
+    {
+        LOG("unload bank %s", _Path.c_str());
 
-    for (int i=0 ; i<_Samples.size() ; ++i)
-        delete _Samples[i];
+        for (int i=0 ; i<_Samples.size() ; ++i)
+            delete _Samples[i];
+
+        _Samples.clear();
+        _Loaded = false;
+    }
 }
 
 bool Bank::Load()
 {
+    Unload();
+
     LOG("load bank %s", _Path.c_str());
     Display::Get().SetLoading(true);
-
-    _Samples.clear();
 
     map<string, pugi::xml_node> samples;
     string xml_path = _Path+"bank.xml";
@@ -155,6 +157,8 @@ bool Bank::Load()
         iss.close();
 
     sort(_Samples.begin(), _Samples.end(), sample_sort());
+
+    _Loaded = true;
 
     Display::Get().SetLoading(false);
     LOG("ok!");
