@@ -29,8 +29,7 @@ private:
 
     void _OnLoadBank();
     void _OnSaveBank();
-    void _OnMidiAttach();
-    void _OnMidiDetach();
+    void _OnMidiSet();
     void _OnStartSample();
     void _OnStopSample();
 
@@ -48,7 +47,6 @@ private:
     Knob* _SampleSelect;
     Button* _SampleMode;
     Button* _SampleMidiSet;
-    Button* _SampleMidiUnset;
 
     Button* _SamplePlay;
 

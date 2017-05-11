@@ -31,7 +31,6 @@ Controller::Controller() :
     _SampleSelect = new Knob(0, 0, 0, PIN_SAMPLE_SELECT_LEFT, PIN_SAMPLE_SELECT_RIGHT, 2, true);
     _SampleMode = new Button(PIN_SAMPLE_MODE);
     _SampleMidiSet = new Button(PIN_SAMPLE_MIDI_SET);
-    _SampleMidiUnset = new Button(PIN_SAMPLE_MIDI_UNSET);
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
 
@@ -42,7 +41,6 @@ Controller::~Controller()
 {
     delete _SamplePlay;
 
-    delete _SampleMidiUnset;
     delete _SampleMidiSet;
     delete _SampleMode;
     delete _SampleSelect;
@@ -128,11 +126,8 @@ void Controller::Update()
 
     changed |= _SampleMode->Update();
     _SampleMidiSet->Update();
-    _SampleMidiUnset->Update();
     if (_SampleMidiSet->IsJustPressed())
-        _OnMidiAttach();
-    if (_SampleMidiUnset->IsJustPressed())
-        _OnMidiDetach();
+        _OnMidiSet();
 
     changed |= _SamplePlay->Update();
     if (_SamplePlay->IsJustPressed())
@@ -198,19 +193,19 @@ void Controller::_OnSaveBank()
     Display::Get().Print(_BankSelect->GetValue());
 }
 
-void Controller::_OnMidiAttach()
+void Controller::_OnMidiSet()
 {
     pthread_mutex_lock(&_Lock);
-    _AttachMidi = true;
-    pthread_mutex_unlock(&_Lock);
-}
-
-void Controller::_OnMidiDetach()
-{
-    pthread_mutex_lock(&_Lock);
-    _AttachMidi = false;
-    if (_Sample!=NULL)
-        _Sample->GetMidiKey().SetNull();
+    if (_AttachMidi)
+    {
+        _AttachMidi = false;
+        if (_Sample!=NULL)
+            _Sample->GetMidiKey().SetNull();
+    }
+    else
+    {
+        _AttachMidi = true;
+    }
     pthread_mutex_unlock(&_Lock);
 }
 
