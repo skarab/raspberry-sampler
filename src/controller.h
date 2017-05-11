@@ -32,6 +32,7 @@ private:
     void _OnMidiSet();
     void _OnStartSample();
     void _OnStopSample();
+    void _OnControlChanged(int id);
 
     static Controller* _Instance;
 
@@ -49,8 +50,15 @@ private:
     Button* _SampleMidiSet;
 
     Button* _SamplePlay;
-
     bool _AttachMidi;
+
+    Knob* _ControlSelect;
+    Knob* _Control01;
+    Knob* _Control02;
+    Knob* _Control03;
+    Knob* _Control04;
+    Knob* _Control05;
+    Knob* _Control06;
 
     pthread_mutex_t _Lock;
 };

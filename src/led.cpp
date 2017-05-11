@@ -22,7 +22,9 @@ void Led::SetOn(bool on)
     if (on!=_On)
     {
         _On = on;
+#if ENABLE_HARDWARE
         bcm2835_gpio_write(_Pin, _On?HIGH:LOW);
+#endif
     }
 }
 

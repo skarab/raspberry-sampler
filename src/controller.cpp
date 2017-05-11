@@ -34,11 +34,27 @@ Controller::Controller() :
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
 
+    _ControlSelect = new Knob(0, 0, 12, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT, 2, false);
+    _Control01 = new Knob(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, 2, false);
+    _Control02 = new Knob(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, 2, false);
+    _Control03 = new Knob(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, 2, false);
+    _Control04 = new Knob(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, 2, false);
+    _Control05 = new Knob(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, 2, false);
+    _Control06 = new Knob(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, 2, false);
+
     _OnLoadBank();
 }
 
 Controller::~Controller()
 {
+    delete _Control06;
+    delete _Control05;
+    delete _Control04;
+    delete _Control03;
+    delete _Control02;
+    delete _Control01;
+    delete _ControlSelect;
+
     delete _SamplePlay;
 
     delete _SampleMidiSet;
@@ -135,6 +151,21 @@ void Controller::Update()
     if (_SamplePlay->IsJustReleased())
         _OnStopSample();
 
+    if (_Sample!=NULL)
+    {
+        if (_ControlSelect->Update())
+        {
+            changed = true;
+        }
+
+        if (_Control01->Update()) { changed = true; _OnControlChanged(0); }
+        if (_Control02->Update()) { changed = true; _OnControlChanged(1); }
+        if (_Control03->Update()) { changed = true; _OnControlChanged(2); }
+        if (_Control04->Update()) { changed = true; _OnControlChanged(3); }
+        if (_Control05->Update()) { changed = true; _OnControlChanged(4); }
+        if (_Control06->Update()) { changed = true; _OnControlChanged(5); }
+    }
+
     if (changed)
         _AttachMidi = false;
 }
@@ -219,4 +250,8 @@ void Controller::_OnStopSample()
 {
     if (_Sample!=NULL)
         Device::Get().Stop(_Sample, -1);
+}
+
+void Controller::_OnControlChanged(int id)
+{
 }
