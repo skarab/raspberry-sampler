@@ -23,24 +23,24 @@ Controller::Controller() :
     if (_Banks.size()==0)
         ERROR("no bank!");
 
-    _BankSelect = new Knob(0, 0, _Banks.size()-1, PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT, 2, true);
+    _BankSelect = new Knob(0, 0, _Banks.size()-1, PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT, true);
     _BankStatus = new Led(PIN_BANK_STATUS);
     _BankLoad = new Button(PIN_BANK_LOAD);
     _BankSave = new Button(PIN_BANK_SAVE);
 
-    _SampleSelect = new Knob(0, 0, 0, PIN_SAMPLE_SELECT_LEFT, PIN_SAMPLE_SELECT_RIGHT, 2, true);
+    _SampleSelect = new Knob(0, 0, 0, PIN_SAMPLE_SELECT_LEFT, PIN_SAMPLE_SELECT_RIGHT, true);
     _SampleMode = new Button(PIN_SAMPLE_MODE);
     _SampleMidiSet = new Button(PIN_SAMPLE_MIDI_SET);
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
 
-    _ControlSelect = new Knob(0, 0, 12, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT, 2, false);
-    _Control01 = new Knob(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, 2, false);
-    _Control02 = new Knob(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, 2, false);
-    _Control03 = new Knob(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, 2, false);
-    _Control04 = new Knob(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, 2, false);
-    _Control05 = new Knob(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, 2, false);
-    _Control06 = new Knob(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, 2, false);
+    _ControlSelect = new Knob(0, 0, 12, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT, false);
+    _Control01 = new Knob(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, false);
+    _Control02 = new Knob(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, false);
+    _Control03 = new Knob(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, false);
+    _Control04 = new Knob(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, false);
+    _Control05 = new Knob(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, false);
+    _Control06 = new Knob(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, false);
 
     _OnLoadBank();
 }

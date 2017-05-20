@@ -7,7 +7,7 @@ class Knob
 {
 public:
 
-    Knob(int value, int minimum, int maximum, int pin_left, int pin_right, int multiplier, bool loop);
+    Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop);
     ~Knob();
 
     void SetValue(int value);
@@ -23,7 +23,6 @@ private:
     int _Value;
     int _Minimum;
     int _Maximum;
-    int _Multiplier;
     bool _Loop;
     int _Encoded;
 };

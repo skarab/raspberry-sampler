@@ -1,12 +1,11 @@
 #include "knob.h"
 #include "display.h"
 
-Knob::Knob(int value, int minimum, int maximum, int pin_left, int pin_right, int multiplier, bool loop) :
+Knob::Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop) :
     _Minimum(minimum),
     _Maximum(maximum),
     _PinLeft(pin_left),
     _PinRight(pin_right),
-    _Multiplier(multiplier),
     _Loop(loop),
     _Encoded(0)
 {
@@ -27,16 +26,16 @@ Knob::~Knob()
 
 void Knob::SetValue(int value)
 {
-    _Value = (value-_Minimum)*_Multiplier;
+    _Value = (value-_Minimum)*2;
 
-    int maximum = (_Maximum-_Minimum)*_Multiplier+_Multiplier-1;
+    int maximum = (_Maximum-_Minimum)*2+1;
     if (_Value<0) _Value = 0;
     else if (_Value>maximum) _Value = maximum;
 }
 
 int Knob::GetValue() const
 {
-    return _Value/_Multiplier+_Minimum;
+    return _Value/2+_Minimum;
 }
 
 void Knob::SetRange(int minimum, int maximum)
@@ -61,7 +60,7 @@ bool Knob::Update()
     int encoded = (msb<<1)|lsb;
     int sum = (_Encoded<<2)|encoded;
 
-    int maximum = (_Maximum-_Minimum)*_Multiplier+_Multiplier-1;
+    int maximum = (_Maximum-_Minimum)*2+1;
 
     if (sum==0b1101 || sum==0b0100 || sum==0b0010 || sum==0b1011)
     {
