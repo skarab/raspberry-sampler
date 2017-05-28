@@ -89,6 +89,7 @@ void Device::Stop(Sample* sample, int note)
     if (!sample->IsValid()
         || (sample->GetMode()==MODE_LoopOnOff)
         || (sample->GetMode()==MODE_OneShotAdd)
+        || (sample->GetMode()==MODE_InstruAdd)
         || (sample->GetMode()==MODE_InstruLegato))
     {
         return;
@@ -218,13 +219,10 @@ void Device::_Update(snd_pcm_uframes_t frames)
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
             Voice* voice = _Voices[j];
-            if (voice->IsBusy())
-            {
-                int l, r;
-                voice->Update(l, r);
-                left += l;
-                right += r;
-            }
+            int l=0, r=0;
+            voice->Update(l, r);
+            left += l;
+            right += r;
         }
 
         --left;

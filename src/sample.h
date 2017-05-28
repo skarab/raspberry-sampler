@@ -12,6 +12,7 @@ enum MODE
     MODE_Loop,
     MODE_LoopOnOff,
     MODE_Instru,
+    MODE_InstruAdd,
     MODE_InstruLegato,
     MODE_Count
 };
@@ -20,6 +21,8 @@ enum PARAM
 {
     PARAM_Volume = 0,
     PARAM_Pitch,
+    PARAM_Pan,
+    PARAM_Legato,
     PARAM_Count
 };
 
@@ -52,7 +55,7 @@ public:
     int GetParam(PARAM param) const { return _Params[(int)param]; }
 
     bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_LoopOnOff); }
-    bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruLegato); }
+    bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruAdd) || (_Mode==MODE_InstruLegato); }
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);

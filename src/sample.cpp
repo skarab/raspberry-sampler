@@ -1,12 +1,15 @@
 #include "sample.h"
 
 Param PARAM_Values[PARAM_Count] = {
-    { 0, 255, 128, "Volume" },
-    { 0, 255, 64, "Pitch" }
+    { 0, 64, 50, "Volume" },
+    { 0, 64, 32, "Pitch" },
+    { 0, 64, 32, "Pan" },
+    { 0, 64, 32, "Legato" }
 };
 
 Sample::Sample(string name, string path) :
-    _Name(name)
+    _Name(name),
+    _Mode(MODE_OneShot)
 {
     _Wav = new Wav(path);
 

@@ -28,6 +28,9 @@ private:
     int _Note;
     int _Velocity;
     float _Pitch;
+    float _LegatoPitch;
+    float _Left;
+    float _Right;
 };
 
 #endif
