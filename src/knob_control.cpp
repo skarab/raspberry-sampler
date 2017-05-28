@@ -1,12 +1,12 @@
 #include "knob_control.h"
 #include "display.h"
 
-KnobControl::KnobControl(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop) :
-    _Minimum(minimum),
-    _Maximum(maximum),
+KnobControl::KnobControl(int pin_left, int pin_right) :
+    _Value(0),
+    _Minimum(0),
+    _Maximum(0),
     _PinLeft(pin_left),
     _PinRight(pin_right),
-    _Loop(loop),
     _Encoded(0)
 {
 #if ENABLE_HARDWARE
@@ -16,8 +16,6 @@ KnobControl::KnobControl(int value, int minimum, int maximum, int pin_left, int 
     bcm2835_gpio_fsel(_PinRight, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(_PinRight, BCM2835_GPIO_PUD_UP);
 #endif
-
-    SetValue(value);
 }
 
 KnobControl::~KnobControl()
@@ -26,16 +24,15 @@ KnobControl::~KnobControl()
 
 void KnobControl::SetValue(int value)
 {
-    _Value = (value-_Minimum)*2;
+    _Value = value;
 
-    int maximum = (_Maximum-_Minimum)*2+1;
-    if (_Value<0) _Value = 0;
-    else if (_Value>maximum) _Value = maximum;
+    if (_Value<_Minimum) _Value = _Minimum;
+    else if (_Value>_Maximum) _Value = _Maximum;
 }
 
 int KnobControl::GetValue() const
 {
-    return _Value/2+_Minimum;
+    return _Value;
 }
 
 void KnobControl::SetRange(int minimum, int maximum)
@@ -60,25 +57,13 @@ bool KnobControl::Update()
     int encoded = (msb<<1)|lsb;
     int sum = (_Encoded<<2)|encoded;
 
-    int maximum = (_Maximum-_Minimum)*2+1;
-
     if (sum==0b1101 || sum==0b0100 || sum==0b0010 || sum==0b1011)
     {
         ++_Value;
         changed = true;
 
-        if (_Value>maximum)
-        {
-            if (_Loop)
-            {
-                while (_Value>maximum)
-                    _Value -= maximum+1;
-            }
-            else
-            {
-                _Value = maximum;
-            }
-        }
+        if (_Value>_Maximum)
+            _Value = _Maximum;
 
         Display::Get().Print(GetValue());
     }
@@ -87,18 +72,8 @@ bool KnobControl::Update()
         --_Value;
         changed = true;
 
-        if (_Value<0)
-        {
-            if (_Loop)
-            {
-                while (_Value<0)
-                    _Value += maximum+1;
-            }
-            else
-            {
-                _Value = 0;
-            }
-        }
+        if (_Value<_Minimum)
+            _Value = _Minimum;
 
         Display::Get().Print(GetValue());
     }

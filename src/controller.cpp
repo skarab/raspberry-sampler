@@ -36,12 +36,12 @@ Controller::Controller() :
 
     _ControlSelect = new KnobSelect((PARAM_Count-1)/6+1, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT);
     _Controls.resize(6);
-    _Controls[0] = new KnobControl(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, false);
-    _Controls[1] = new KnobControl(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, false);
-    _Controls[2] = new KnobControl(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, false);
-    _Controls[3] = new KnobControl(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, false);
-    _Controls[4] = new KnobControl(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, false);
-    _Controls[5] = new KnobControl(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, false);
+    _Controls[0] = new KnobControl(PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT);
+    _Controls[1] = new KnobControl(PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT);
+    _Controls[2] = new KnobControl(PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT);
+    _Controls[3] = new KnobControl(PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT);
+    _Controls[4] = new KnobControl(PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT);
+    _Controls[5] = new KnobControl(PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT);
 
     _OnLoadBank();
 }

@@ -7,7 +7,7 @@ class KnobControl
 {
 public:
 
-    KnobControl(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop);
+    KnobControl(int pin_left, int pin_right);
     ~KnobControl();
 
     void SetValue(int value);
@@ -23,7 +23,6 @@ private:
     int _Value;
     int _Minimum;
     int _Maximum;
-    bool _Loop;
     int _Encoded;
 };
 
