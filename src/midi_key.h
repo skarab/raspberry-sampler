@@ -9,6 +9,7 @@ struct MidiKey
     MidiKey(int device, int channel, int note);
 
     bool operator==(const MidiKey& key) const;
+    bool IsOnDevice(const MidiKey& key) const;
 
     void SetNull();
     bool IsNull() const;

@@ -34,25 +34,22 @@ Controller::Controller() :
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
 
-    _ControlSelect = new Knob(0, 0, 12, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT, false);
-    _Control01 = new Knob(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, false);
-    _Control02 = new Knob(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, false);
-    _Control03 = new Knob(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, false);
-    _Control04 = new Knob(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, false);
-    _Control05 = new Knob(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, false);
-    _Control06 = new Knob(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, false);
+    _ControlSelect = new Knob(0, 0, (PARAM_Count-1)/6, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT, false);
+    _Controls.resize(6);
+    _Controls[0] = new Knob(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, false);
+    _Controls[1] = new Knob(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, false);
+    _Controls[2] = new Knob(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, false);
+    _Controls[3] = new Knob(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, false);
+    _Controls[4] = new Knob(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, false);
+    _Controls[5] = new Knob(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, false);
 
     _OnLoadBank();
 }
 
 Controller::~Controller()
 {
-    delete _Control06;
-    delete _Control05;
-    delete _Control04;
-    delete _Control03;
-    delete _Control02;
-    delete _Control01;
+    for (int i=0 ; i<_Controls.size() ; ++i)
+        delete _Controls[i];
     delete _ControlSelect;
 
     delete _SamplePlay;
@@ -119,11 +116,13 @@ void Controller::Update()
         {
             _Sample = _GetBank()->GetSample(0);
             _SampleSelect->SetRange(0, _GetBank()->GetSampleCount()-1);
+            _SampleSelect->SetValue(0);
         }
         else
         {
             _Sample = NULL;
         }
+        _UpdateControls();
     }
 
     changed |= _BankLoad->Update();
@@ -138,9 +137,13 @@ void Controller::Update()
     {
         changed = true;
         _Sample = _GetBank()->GetSample(_SampleSelect->GetValue());
+        _UpdateControls();
     }
 
     changed |= _SampleMode->Update();
+    if (_SampleMode->IsJustPressed())
+        _OnChangeMode();
+
     _SampleMidiSet->Update();
     if (_SampleMidiSet->IsJustPressed())
         _OnMidiSet();
@@ -156,14 +159,17 @@ void Controller::Update()
         if (_ControlSelect->Update())
         {
             changed = true;
+            _UpdateControls();
         }
 
-        if (_Control01->Update()) { changed = true; _OnControlChanged(0); }
-        if (_Control02->Update()) { changed = true; _OnControlChanged(1); }
-        if (_Control03->Update()) { changed = true; _OnControlChanged(2); }
-        if (_Control04->Update()) { changed = true; _OnControlChanged(3); }
-        if (_Control05->Update()) { changed = true; _OnControlChanged(4); }
-        if (_Control06->Update()) { changed = true; _OnControlChanged(5); }
+        for (int i=0 ; i<_Controls.size() ; ++i)
+        {
+            if (_Controls[i]->Update())
+            {
+                changed = true;
+                _OnControlChanged(i);
+            }
+        }
     }
 
     if (changed)
@@ -211,6 +217,8 @@ void Controller::_OnLoadBank()
         _Sample = bank->GetSample(0);
     }
 
+    _UpdateControls();
+
     pthread_mutex_unlock(&_Lock);
 
     _BankStatus->SetOn(bank->IsLoaded());
@@ -222,6 +230,22 @@ void Controller::_OnSaveBank()
 {
     _GetBank()->Save();
     Display::Get().Print(_BankSelect->GetValue());
+}
+
+void Controller::_OnChangeMode()
+{
+    pthread_mutex_lock(&_Lock);
+    if (_Sample!=NULL)
+    {
+        int mode = (int)_Sample->GetMode();
+        ++mode;
+        if (mode>=(int)MODE_Count)
+            mode = 0;
+
+        _Sample->SetMode((MODE)mode);
+        Display::Get().Print(mode);
+    }
+    pthread_mutex_unlock(&_Lock);
 }
 
 void Controller::_OnMidiSet()
@@ -252,6 +276,32 @@ void Controller::_OnStopSample()
         Device::Get().Stop(_Sample, -1);
 }
 
-void Controller::_OnControlChanged(int id)
+void Controller::_UpdateControls()
 {
+    for (int i=0 ; i<_Controls.size() ; ++i)
+    {
+        int id = _ControlSelect->GetValue()*6+i;
+        if (id<(int)PARAM_Count && _Sample!=NULL)
+        {
+            _Controls[i]->SetRange(PARAM_Values[id].Min, PARAM_Values[id].Max);
+            _Controls[i]->SetValue(_Sample->GetParam((PARAM)id));
+        }
+        else
+        {
+            _Controls[i]->SetRange(0, 0);
+            _Controls[i]->SetValue(0);
+        }
+    }
+}
+
+void Controller::_OnControlChanged(int i)
+{
+    int id = _ControlSelect->GetValue()*6+i;
+    if (id<(int)PARAM_Count && _Sample!=NULL)
+    {
+        int value = _Controls[i]->GetValue();
+        if (value<PARAM_Values[id].Min) value = PARAM_Values[id].Min;
+        if (value>PARAM_Values[id].Max) value = PARAM_Values[id].Max;
+        _Sample->SetParam((PARAM)id, value);
+    }
 }

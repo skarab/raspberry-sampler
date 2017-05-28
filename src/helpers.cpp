@@ -20,7 +20,7 @@ void XML_Write(pugi::xml_node& node, string name, int value)
     xml_data.set_value(TO_STRING(value).c_str());
 }
 
-bool XML_Read(pugi::xml_node& node, string name, string& value)
+bool XML_Read(const pugi::xml_node& node, string name, string& value)
 {
     pugi::xml_node xml_node = node.child(name.c_str()).first_child();
     if (xml_node)
@@ -31,7 +31,7 @@ bool XML_Read(pugi::xml_node& node, string name, string& value)
     return false;
 }
 
-bool XML_Read(pugi::xml_node& node, string name, int& value)
+bool XML_Read(const pugi::xml_node& node, string name, int& value)
 {
     pugi::xml_node xml_node = node.child(name.c_str()).first_child();
     if (xml_node)

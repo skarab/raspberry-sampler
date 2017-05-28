@@ -19,6 +19,12 @@ bool MidiKey::operator==(const MidiKey& key) const
         && Note==key.Note;
 }
 
+bool MidiKey::IsOnDevice(const MidiKey& key) const
+{
+    return DeviceID==key.DeviceID
+        && Channel==key.Channel;
+}
+
 void MidiKey::SetNull()
 {
     DeviceID = -1;

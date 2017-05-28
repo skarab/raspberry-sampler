@@ -9,8 +9,8 @@ bool has_suffix(const std::string &str, const std::string &suffix);
 
 void XML_Write(pugi::xml_node& node, string name, string value);
 void XML_Write(pugi::xml_node& node, string name, int value);
-bool XML_Read(pugi::xml_node& node, string name, string& value);
-bool XML_Read(pugi::xml_node& node, string name, int& value);
+bool XML_Read(const pugi::xml_node& node, string name, string& value);
+bool XML_Read(const pugi::xml_node& node, string name, int& value);
 
 #endif
 

@@ -27,21 +27,73 @@ Device::~Device()
 
 void Device::Play(Sample* sample, int note, int velocity)
 {
-    if (sample->IsValid())
-    for (int i=0 ; i<_Voices.size() ; ++i)
+    if (!sample->IsValid())
+        return;
+
+    Voice* voice = NULL;
+
+    if (sample->GetMode()==MODE_InstruLegato)
     {
-        if (!_Voices[i]->IsBusy() || _Voices[i]->IsPlaying(sample, note))
+        for (int i=0 ; i<_Voices.size() ; ++i)
         {
-            pthread_mutex_lock(&_Lock);
-            _Voices[i]->Play(sample, note, velocity);
-            pthread_mutex_unlock(&_Lock);
-            return;
+            if (_Voices[i]->IsBusy() && _Voices[i]->IsPlaying(sample))
+            {
+                voice = _Voices[i];
+                break;
+            }
         }
+    }
+    else if (sample->GetMode()!=MODE_OneShotAdd)
+    {
+        for (int i=0 ; i<_Voices.size() ; ++i)
+        {
+            if (_Voices[i]->IsBusy() && _Voices[i]->IsPlaying(sample, note))
+            {
+                voice = _Voices[i];
+                break;
+            }
+        }
+    }
+
+    if (voice==NULL)
+    {
+        for (int i=0 ; i<_Voices.size() ; ++i)
+        {
+            if (!_Voices[i]->IsBusy())
+            {
+                voice = _Voices[i];
+                break;
+            }
+        }
+    }
+
+    if (voice!=NULL)
+    {
+        pthread_mutex_lock(&_Lock);
+
+        if (sample->GetMode()==MODE_LoopOnOff)
+        {
+            if (voice->IsBusy()) voice->Stop(sample, note);
+            else voice->Play(sample, note, velocity);
+        }
+        else
+        {
+            voice->Play(sample, note, velocity);
+        }
+        pthread_mutex_unlock(&_Lock);
     }
 }
 
 void Device::Stop(Sample* sample, int note)
 {
+    if (!sample->IsValid()
+        || (sample->GetMode()==MODE_LoopOnOff)
+        || (sample->GetMode()==MODE_OneShotAdd)
+        || (sample->GetMode()==MODE_InstruLegato))
+    {
+        return;
+    }
+
     for (int i=0 ; i<_Voices.size() ; ++i)
     {
         if (_Voices[i]->IsPlaying(sample, note))

@@ -77,8 +77,15 @@ Sample* Bank::GetSample(const MidiKey& key)
 {
     for (int i=0 ; i<_Samples.size() ; ++i)
     {
-        if (_Samples[i]->GetMidiKey()==key)
+        if ((int)_Samples[i]->IsInstru())
+        {
+            if (_Samples[i]->GetMidiKey().IsOnDevice(key))
+                return _Samples[i];
+        }
+        else if (_Samples[i]->GetMidiKey()==key)
+        {
             return _Samples[i];
+        }
     }
     return NULL;
 }

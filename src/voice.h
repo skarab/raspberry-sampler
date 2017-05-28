@@ -12,6 +12,7 @@ public:
     ~Voice();
 
     bool IsBusy() const;
+    bool IsPlaying(Sample* sample) const;
     bool IsPlaying(Sample* sample, int note) const;
 
     void Update(int& left, int& right);
@@ -26,6 +27,7 @@ private:
     float _Position;
     int _Note;
     int _Velocity;
+    float _Pitch;
 };
 
 #endif

@@ -29,9 +29,11 @@ private:
 
     void _OnLoadBank();
     void _OnSaveBank();
+    void _OnChangeMode();
     void _OnMidiSet();
     void _OnStartSample();
     void _OnStopSample();
+    void _UpdateControls();
     void _OnControlChanged(int id);
 
     static Controller* _Instance;
@@ -53,12 +55,7 @@ private:
     bool _AttachMidi;
 
     Knob* _ControlSelect;
-    Knob* _Control01;
-    Knob* _Control02;
-    Knob* _Control03;
-    Knob* _Control04;
-    Knob* _Control05;
-    Knob* _Control06;
+    vector<Knob*> _Controls;
 
     pthread_mutex_t _Lock;
 };
