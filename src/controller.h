@@ -4,7 +4,8 @@
 #include "includes.h"
 #include "button.h"
 #include "led.h"
-#include "knob.h"
+#include "knob_select.h"
+#include "knob_control.h"
 #include "bank.h"
 #include "midi_key.h"
 
@@ -40,22 +41,22 @@ private:
 
     vector<Bank*> _Banks;
 
-    Knob* _BankSelect;
+    KnobSelect* _BankSelect;
     Led* _BankStatus;
     Button* _BankLoad;
     Button* _BankSave;
 
     Sample* _Sample;
 
-    Knob* _SampleSelect;
+    KnobSelect* _SampleSelect;
     Button* _SampleMode;
     Button* _SampleMidiSet;
 
     Button* _SamplePlay;
     bool _AttachMidi;
 
-    Knob* _ControlSelect;
-    vector<Knob*> _Controls;
+    KnobSelect* _ControlSelect;
+    vector<KnobControl*> _Controls;
 
     pthread_mutex_t _Lock;
 };

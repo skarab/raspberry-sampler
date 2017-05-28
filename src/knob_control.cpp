@@ -1,7 +1,7 @@
-#include "knob.h"
+#include "knob_control.h"
 #include "display.h"
 
-Knob::Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop) :
+KnobControl::KnobControl(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop) :
     _Minimum(minimum),
     _Maximum(maximum),
     _PinLeft(pin_left),
@@ -20,11 +20,11 @@ Knob::Knob(int value, int minimum, int maximum, int pin_left, int pin_right, boo
     SetValue(value);
 }
 
-Knob::~Knob()
+KnobControl::~KnobControl()
 {
 }
 
-void Knob::SetValue(int value)
+void KnobControl::SetValue(int value)
 {
     _Value = (value-_Minimum)*2;
 
@@ -33,19 +33,19 @@ void Knob::SetValue(int value)
     else if (_Value>maximum) _Value = maximum;
 }
 
-int Knob::GetValue() const
+int KnobControl::GetValue() const
 {
     return _Value/2+_Minimum;
 }
 
-void Knob::SetRange(int minimum, int maximum)
+void KnobControl::SetRange(int minimum, int maximum)
 {
     _Minimum = minimum;
     _Maximum = maximum;
     SetValue(GetValue());
 }
 
-bool Knob::Update()
+bool KnobControl::Update()
 {
     bool changed = false;
 

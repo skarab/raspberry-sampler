@@ -23,25 +23,25 @@ Controller::Controller() :
     if (_Banks.size()==0)
         ERROR("no bank!");
 
-    _BankSelect = new Knob(0, 0, _Banks.size()-1, PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT, true);
+    _BankSelect = new KnobSelect(_Banks.size(), PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT);
     _BankStatus = new Led(PIN_BANK_STATUS);
     _BankLoad = new Button(PIN_BANK_LOAD);
     _BankSave = new Button(PIN_BANK_SAVE);
 
-    _SampleSelect = new Knob(0, 0, 0, PIN_SAMPLE_SELECT_LEFT, PIN_SAMPLE_SELECT_RIGHT, true);
+    _SampleSelect = new KnobSelect(0, PIN_SAMPLE_SELECT_LEFT, PIN_SAMPLE_SELECT_RIGHT);
     _SampleMode = new Button(PIN_SAMPLE_MODE);
     _SampleMidiSet = new Button(PIN_SAMPLE_MIDI_SET);
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
 
-    _ControlSelect = new Knob(0, 0, (PARAM_Count-1)/6, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT, false);
+    _ControlSelect = new KnobSelect((PARAM_Count-1)/6+1, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT);
     _Controls.resize(6);
-    _Controls[0] = new Knob(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, false);
-    _Controls[1] = new Knob(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, false);
-    _Controls[2] = new Knob(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, false);
-    _Controls[3] = new Knob(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, false);
-    _Controls[4] = new Knob(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, false);
-    _Controls[5] = new Knob(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, false);
+    _Controls[0] = new KnobControl(0, 0, 255, PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT, false);
+    _Controls[1] = new KnobControl(0, 0, 255, PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT, false);
+    _Controls[2] = new KnobControl(0, 0, 255, PIN_CONTROL_03_LEFT, PIN_CONTROL_03_RIGHT, false);
+    _Controls[3] = new KnobControl(0, 0, 255, PIN_CONTROL_04_LEFT, PIN_CONTROL_04_RIGHT, false);
+    _Controls[4] = new KnobControl(0, 0, 255, PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT, false);
+    _Controls[5] = new KnobControl(0, 0, 255, PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT, false);
 
     _OnLoadBank();
 }
@@ -115,8 +115,8 @@ void Controller::Update()
         if (_GetBank()->IsLoaded())
         {
             _Sample = _GetBank()->GetSample(0);
-            _SampleSelect->SetRange(0, _GetBank()->GetSampleCount()-1);
-            _SampleSelect->SetValue(0);
+            _SampleSelect->SetCount(_GetBank()->GetSampleCount());
+            _SampleSelect->SetID(0);
         }
         else
         {
@@ -136,7 +136,7 @@ void Controller::Update()
     if (_Sample!=NULL && _SampleSelect->Update())
     {
         changed = true;
-        _Sample = _GetBank()->GetSample(_SampleSelect->GetValue());
+        _Sample = _GetBank()->GetSample(_SampleSelect->GetID());
         _UpdateControls();
     }
 
@@ -178,7 +178,7 @@ void Controller::Update()
 
 Bank* Controller::_GetBank()
 {
-    return _Banks[_BankSelect->GetValue()];
+    return _Banks[_BankSelect->GetID()];
 }
 
 Sample* Controller::_FindSample(const MidiKey& key)
@@ -212,8 +212,8 @@ void Controller::_OnLoadBank()
     {
         bank->Load();
 
-        _SampleSelect->SetRange(0, bank->GetSampleCount()-1);
-        _SampleSelect->SetValue(0);
+        _SampleSelect->SetCount(bank->GetSampleCount());
+        _SampleSelect->SetID(0);
         _Sample = bank->GetSample(0);
     }
 
@@ -223,13 +223,13 @@ void Controller::_OnLoadBank()
 
     _BankStatus->SetOn(bank->IsLoaded());
 
-    Display::Get().Print(_BankSelect->GetValue());
+    Display::Get().Print(_BankSelect->GetID());
 }
 
 void Controller::_OnSaveBank()
 {
     _GetBank()->Save();
-    Display::Get().Print(_BankSelect->GetValue());
+    Display::Get().Print(_BankSelect->GetID());
 }
 
 void Controller::_OnChangeMode()
@@ -280,7 +280,7 @@ void Controller::_UpdateControls()
 {
     for (int i=0 ; i<_Controls.size() ; ++i)
     {
-        int id = _ControlSelect->GetValue()*6+i;
+        int id = _ControlSelect->GetID()*6+i;
         if (id<(int)PARAM_Count && _Sample!=NULL)
         {
             _Controls[i]->SetRange(PARAM_Values[id].Min, PARAM_Values[id].Max);
@@ -296,7 +296,7 @@ void Controller::_UpdateControls()
 
 void Controller::_OnControlChanged(int i)
 {
-    int id = _ControlSelect->GetValue()*6+i;
+    int id = _ControlSelect->GetID()*6+i;
     if (id<(int)PARAM_Count && _Sample!=NULL)
     {
         int value = _Controls[i]->GetValue();

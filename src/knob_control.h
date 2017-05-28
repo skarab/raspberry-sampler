@@ -1,14 +1,14 @@
-#ifndef __SAMPLER_KNOB__
-#define __SAMPLER_KNOB__
+#ifndef __SAMPLER_KNOB_CONTROL__
+#define __SAMPLER_KNOB_CONTROL__
 
 #include "includes.h"
 
-class Knob
+class KnobControl
 {
 public:
 
-    Knob(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop);
-    ~Knob();
+    KnobControl(int value, int minimum, int maximum, int pin_left, int pin_right, bool loop);
+    ~KnobControl();
 
     void SetValue(int value);
     int GetValue() const;
