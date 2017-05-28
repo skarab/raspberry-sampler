@@ -24,6 +24,7 @@ public:
 private:
 
     Sample* _Sample;
+    vector<float> _Params;
     float _Position;
     int _Note;
     int _Velocity;

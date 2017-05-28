@@ -33,6 +33,9 @@ void Voice::Update(int& left, int& right)
 
     if (_Sample!=NULL)
     {
+        for (int i=0 ; i<(int)PARAM_Count ; ++i)
+            _Params[i] = _Params[i]*0.9f+_Sample->GetParam((PARAM)i)*0.1f;
+
         if (p<0.0f || p>=_Sample->GetLength())
         {
             if (_Sample->IsLooping())
@@ -65,15 +68,15 @@ void Voice::Update(int& left, int& right)
         {
             left = (int)_Sample->GetData()[p*2];
             right = (int)_Sample->GetData()[p*2+1];
-            _Position += _Pitch*pow(_Sample->GetParam(PARAM_Pitch)/32.0f, 2.0f);
+            _Position += _Pitch*pow(_Params[(int)PARAM_Pitch]/32.0f, 3.0f);
 
             if (_Sample->GetMode()==MODE_InstruLegato)
             {
-                float legato = 0.999f+_Sample->GetParam(PARAM_Legato)*0.0009/64.0f;
+                float legato = 0.999f+_Params[(int)PARAM_Legato]*0.0009/64.0f;
                 _Pitch = _Pitch*legato+_LegatoPitch*(1.0f-legato);
             }
 
-            float pan = (_Sample->GetParam(PARAM_Pan)-32.0f)/32.0f;
+            float pan = _Params[(int)PARAM_Pan]/32.0f;
             if (pan<0)
             {
                 right = (int)(right*(1.0f+pan));
@@ -83,7 +86,7 @@ void Voice::Update(int& left, int& right)
                 left = (int)(left*(1.0f-pan));
             }
 
-            float volume = _Sample->GetParam(PARAM_Volume)/64.0f;
+            float volume = _Params[(int)PARAM_Volume]/64.0f;
             left = (int)(left*volume);
             right = (int)(right*volume);
         }
@@ -98,6 +101,10 @@ void Voice::Update(int& left, int& right)
 void Voice::Play(Sample* sample, int note, int velocity)
 {
     _Position = 0.0f;
+
+    if (sample->GetParam(PARAM_Pitch)<0)
+        _Position = sample->GetLength()-1;
+
     _Note = note;
     _Velocity = velocity;
     _LegatoPitch = 1.0f;
@@ -106,7 +113,13 @@ void Voice::Play(Sample* sample, int note, int velocity)
         _LegatoPitch = pow(2.0f, (note-sample->GetMidiKey().Note)/12.0f);
 
     if (_Sample==NULL || (sample->GetMode()!=MODE_InstruLegato))
+    {
         _Pitch = _LegatoPitch;
+
+        _Params.resize((int)PARAM_Count);
+        for (int i=0 ; i<(int)PARAM_Count ; ++i)
+            _Params[i] = sample->GetParam((PARAM)i);
+    }
 
     _Sample = sample;
 }

@@ -20,7 +20,7 @@ Display::Display() :
         usleep(10);
 
     _PrintIP(SAMPLER_NETWORK_DEVICE);
-    Print(-2);
+    Clear();
 }
 
 Display::~Display()
@@ -33,7 +33,7 @@ Display::~Display()
 
 void Display::Clear()
 {
-    Print(-1);
+    Print(10000);
 }
 
 void Display::Print(int value)
@@ -42,19 +42,12 @@ void Display::Print(int value)
     {
         pthread_mutex_lock(&_Lock);
 
-        if (value==-1)
+        if (value>9999)
         {
-            _Value = "";
-        }
-        else if (value<0)
-        {
-            _Value = "----";
+          _Value = "----";
         }
         else
         {
-            if (value>9999)
-                value = 9999;
-
             char str[5];
             sprintf(str, "%d", value);
             _Value = str;

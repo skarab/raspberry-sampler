@@ -2,8 +2,8 @@
 
 Param PARAM_Values[PARAM_Count] = {
     { 0, 64, 50, "Volume" },
-    { 0, 64, 32, "Pitch" },
-    { 0, 64, 32, "Pan" },
+    { -64, 64, 32, "Pitch" },
+    { -32, 32, 0, "Pan" },
     { 0, 64, 32, "Legato" }
 };
 
