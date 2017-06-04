@@ -1,8 +1,9 @@
 #include "sample.h"
 
 Param PARAM_Values[PARAM_Count] = {
-    { 0, 64, 50, "Volume" },
-    { -64, 64, 32, "Pitch" },
+    { 0, 64, 20, "Volume" },
+    { -32, 32, 0, "PitchSemiTone" },
+    { -256, 512, 256, "PitchFineTune" },
     { -32, 32, 0, "Pan" },
     { 0, 64, 32, "Legato" }
 };
@@ -32,13 +33,14 @@ void Sample::Load(const pugi::xml_node& node)
     XML_Read(node, "Mode", mode);
     _Mode = (MODE)mode;
 
+    /*
     for (int i=0 ; i<PARAM_Count ; ++i)
     {
         XML_Read(node, PARAM_Values[i].Name, _Params[i]);
 
         if (_Params[i]<PARAM_Values[i].Min) _Params[i] = PARAM_Values[i].Min;
         if (_Params[i]>PARAM_Values[i].Max) _Params[i] = PARAM_Values[i].Max;
-    }
+    }*/
 }
 
 void Sample::Save(pugi::xml_node& node)

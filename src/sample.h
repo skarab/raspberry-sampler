@@ -20,7 +20,8 @@ enum MODE
 enum PARAM
 {
     PARAM_Volume = 0,
-    PARAM_Pitch,
+    PARAM_PitchSemiTone,
+    PARAM_PitchFineTune,
     PARAM_Pan,
     PARAM_Legato,
     PARAM_Count

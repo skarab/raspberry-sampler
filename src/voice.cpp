@@ -34,27 +34,26 @@ void Voice::Update(int& left, int& right)
     if (_Sample!=NULL)
     {
         for (int i=0 ; i<(int)PARAM_Count ; ++i)
-            _Params[i] = _Params[i]*0.9f+_Sample->GetParam((PARAM)i)*0.1f;
+            _Params[i] = _Params[i]*0.999f+_Sample->GetParam((PARAM)i)*0.001f;
 
-        if (p<0.0f || p>=_Sample->GetLength())
+        if (_Position<0.0f || _Position>_Sample->GetLength()-1.0f)
         {
             if (_Sample->IsLooping())
             {
-                while (p>=_Sample->GetLength())
+                if (_Params[(int)PARAM_PitchFineTune]>0)
                 {
-                    _Position -= _Sample->GetLength();
-                    if (_Position<0.0f)
-                        _Position = 0.0f;
-                    p = (unsigned int)_Position;
+                    while (_Position>=_Sample->GetLength())
+                        _Position -= _Sample->GetLength();
+                }
+                else
+                {
+                    while (_Position<0.0f)
+                        _Position += _Sample->GetLength();
                 }
 
-                while (p<0.0f)
-                {
-                    _Position += _Sample->GetLength();
-                    if (_Position>_Sample->GetLength()-1)
-                        _Position = _Sample->GetLength()-1;
-                    p = (unsigned int)_Position;
-                }
+                p = (unsigned int)_Position;
+                if (p<0) p = 0;
+                if (p>_Sample->GetLength()-1) p = _Sample->GetLength()-1;
             }
             else
             {
@@ -68,7 +67,7 @@ void Voice::Update(int& left, int& right)
         {
             left = (int)_Sample->GetData()[p*2];
             right = (int)_Sample->GetData()[p*2+1];
-            _Position += _Pitch*pow(_Params[(int)PARAM_Pitch]/32.0f, 3.0f);
+            _Position += _Pitch*pow(2.0f, _Params[(int)PARAM_PitchSemiTone]/12.0f)*(_Params[(int)PARAM_PitchFineTune]/256.0f);
 
             if (_Sample->GetMode()==MODE_InstruLegato)
             {
@@ -102,7 +101,7 @@ void Voice::Play(Sample* sample, int note, int velocity)
 {
     _Position = 0.0f;
 
-    if (sample->GetParam(PARAM_Pitch)<0)
+    if (sample->GetParam(PARAM_PitchFineTune)<0)
         _Position = sample->GetLength()-1;
 
     _Note = note;

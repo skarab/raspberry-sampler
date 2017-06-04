@@ -86,10 +86,16 @@
 		<Unit filename="src/includes.h">
 			<Option virtualFolder="application/" />
 		</Unit>
-		<Unit filename="src/knob.cpp">
+		<Unit filename="src/knob_control.cpp">
 			<Option virtualFolder="controller/" />
 		</Unit>
-		<Unit filename="src/knob.h">
+		<Unit filename="src/knob_control.h">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/knob_select.cpp">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/knob_select.h">
 			<Option virtualFolder="controller/" />
 		</Unit>
 		<Unit filename="src/led.cpp">
