@@ -3,6 +3,7 @@
 
 #include "includes.h"
 #include "sample.h"
+#include "filter.h"
 
 class Voice
 {
@@ -33,8 +34,7 @@ private:
     int _Velocity;
     float _Pitch;
     float _LegatoPitch;
-    float _Left;
-    float _Right;
+    vector<Filter*> _Filters;
 };
 
 #endif

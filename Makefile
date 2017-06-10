@@ -16,6 +16,9 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/midi_key.cpp \
 	src/sample.cpp \
 	src/voice.cpp \
+	src/filter.cpp \
+	src/filter_highpass.cpp \
+	src/filter_lowpass.cpp \
 	src/wav.cpp \
 	src/button.cpp \
 	src/led.cpp \

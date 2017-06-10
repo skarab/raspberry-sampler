@@ -2,17 +2,30 @@
 
 Param PARAM_Values[PARAM_Count] = {
     { 0, 64, 20, "Volume" },
+    { 0, 100, 0, "StartPercent" },
+    { 0, 100, 100, "StopPercent" },
+    { 0, 100, 0, "LoopStartPercent" },
+    { 0, 100, 100, "LoopStopPercent" },
     { -32, 32, 0, "PitchSemiTone" },
-    { -512, 1024, 512, "PitchFineTune" },
+
     { -32, 32, 0, "Pan" },
-    { 0, 64, 32, "Legato" },
+    { -512, 512, 0, "StartFineTune" },
+    { -512, 512, 0, "StopFineTune" },
+    { -512, 512, 0, "LoopStartFineTune" },
+    { -512, 512, 0, "LoopStopFineTune" },
+    { -512, 1024, 512, "PitchFineTune" },
+
     { 0, 1024, 0, "LoopDelay" },
-    { 0, 1024, 0, "Start" },
-    { 0, 1024, 1024, "Stop" },
-    { 0, 1024, 0, "LoopStart" },
-    { 0, 1024, 1024, "LoopStop" },
-    { 0, 1024, 0, "EnvAttack" },
-    { 0, 1024, 0, "EnvRelease" }
+    { 0, 512, 1, "LoopDelayEnv" },
+    { 0, 1024, 1, "EnvAttack" },
+    { 0, 1024, 1, "EnvRelease" },
+    { 0, 64, 32, "Legato" },
+    { 0, 64, 32, "Unused" },
+
+    { 0, 256, 0, "HPCutOff" },
+    { 0, 256, 128, "HPResonance" },
+    { 0, 256, 256, "LPCutOff" },
+    { 0, 256, 128, "LPResonance" }
 };
 
 Sample::Sample(string name, string path) :
@@ -30,6 +43,50 @@ Sample::~Sample()
 {
     if (_Wav!=NULL)
         delete _Wav;
+}
+
+float Sample::GetStartPosition() const
+{
+    float position = _Params[(int)PARAM_StartPercent]*(GetLength()-1.0f)/100.0f;
+    position += _Params[(int)PARAM_StartFineTune]*50.0f;
+
+    if (position<0.0f) position = 0.0f;
+    if (position>GetLength()-1.0f) position = GetLength()-1.0f;
+
+    return position;
+}
+
+float Sample::GetStopPosition() const
+{
+    float position = _Params[(int)PARAM_StopPercent]*(GetLength()-1.0f)/100.0f;
+    position += _Params[(int)PARAM_StopFineTune]*50.0f;
+
+    if (position<0.0f) position = 0.0f;
+    if (position>GetLength()-1.0f) position = GetLength()-1.0f;
+
+    return position;
+}
+
+float Sample::GetLoopStartPosition(float start, float stop) const
+{
+    float position = _Params[(int)PARAM_LoopStartPercent]*(stop-start)/100.0f;
+    position += _Params[(int)PARAM_LoopStartFineTune]*50.0f;
+
+    if (position<start) position = start;
+    if (position>stop) position = stop;
+
+    return position;
+}
+
+float Sample::GetLoopStopPosition(float start, float stop) const
+{
+    float position = _Params[(int)PARAM_LoopStopPercent]*(stop-start)/100.0f;
+    position += _Params[(int)PARAM_LoopStopFineTune]*50.0f;
+
+    if (position<start) position = start;
+    if (position>stop) position = stop;
+
+    return position;
 }
 
 void Sample::Load(const pugi::xml_node& node)

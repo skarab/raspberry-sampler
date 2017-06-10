@@ -6,7 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;display/;" />
+		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;display/;filters/;" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -16,7 +16,7 @@
 				<Option compiler="gcc" />
 				<Option projectCompilerOptionsRelation="1" />
 				<Compiler>
-					<Add option="-std=c++11" />
+					<Add option="-std=c++98" />
 					<Add option="-g" />
 					<Add directory="src" />
 				</Compiler>
@@ -28,7 +28,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=c++11" />
+			<Add option="-std=c++98" />
 			<Add option="-g" />
 			<Add directory="src" />
 		</Compiler>
@@ -76,6 +76,24 @@
 		</Unit>
 		<Unit filename="src/error.h">
 			<Option virtualFolder="helpers/" />
+		</Unit>
+		<Unit filename="src/filter.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_highpass.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_highpass.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_lowpass.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_lowpass.h">
+			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/helpers.cpp">
 			<Option virtualFolder="helpers/" />

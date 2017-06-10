@@ -20,17 +20,31 @@ enum MODE
 enum PARAM
 {
     PARAM_Volume = 0,
+    PARAM_StartPercent,
+    PARAM_StopPercent,
+    PARAM_LoopStartPercent,
+    PARAM_LoopStopPercent,
     PARAM_PitchSemiTone,
-    PARAM_PitchFineTune,
+
     PARAM_Pan,
-    PARAM_Legato,
+    PARAM_StartFineTune,
+    PARAM_StopFineTune,
+    PARAM_LoopStartFineTune,
+    PARAM_LoopStopFineTune,
+    PARAM_PitchFineTune,
+
     PARAM_LoopDelay,
-    PARAM_Start,
-    PARAM_Stop,
-    PARAM_LoopStart,
-    PARAM_LoopStop,
+    PARAM_LoopDelayEnv,
     PARAM_EnvAttack,
     PARAM_EnvRelease,
+    PARAM_Legato,
+    PARAM_Unused,
+
+    PARAM_HPCutOff,
+    PARAM_HPResonance,
+    PARAM_LPCutOff,
+    PARAM_LPResonance,
+
     PARAM_Count
 };
 
@@ -65,6 +79,11 @@ public:
     bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
     bool UseRelease() const { return (_Mode==MODE_Key) || (_Mode==MODE_KeyLoop) || (_Mode==MODE_Instru); }
+
+    float GetStartPosition() const;
+    float GetStopPosition() const;
+    float GetLoopStartPosition(float start, float stop) const;
+    float GetLoopStopPosition(float start, float stop) const;
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);
