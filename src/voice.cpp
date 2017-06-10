@@ -31,11 +31,8 @@ bool Voice::IsPlaying(Sample* sample, int note) const
     return _Sample==sample && _Note==note;
 }
 
-void Voice::Update(int& left, int& right)
+void Voice::Update(float& left, float& right)
 {
-    float out_left = 0.0f;
-    float out_right = 0.0f;
-
     if (_Sample!=NULL)
     {
         for (int i=0 ; i<(int)PARAM_Count ; ++i)
@@ -51,8 +48,8 @@ void Voice::Update(int& left, int& right)
         if (clamp_position>stop) clamp_position = stop;
 
         int p = (int)clamp_position;
-        out_left = (float)_Sample->GetData()[p*2];
-        out_right = (float)_Sample->GetData()[p*2+1];
+        left = _Sample->GetData()[p*2]/32768.0f;
+        right = _Sample->GetData()[p*2+1]/32768.0f;
 
         _Position += _Pitch*pow(2.0f, _Params[(int)PARAM_PitchSemiTone]/12.0f)*(_Params[(int)PARAM_PitchFineTune]/512.0f);
 
@@ -63,8 +60,8 @@ void Voice::Update(int& left, int& right)
         }
 
         float pan = _Params[(int)PARAM_Pan]/32.0f;
-        if (pan<0) out_right = out_right*(1.0f+pan);
-        else out_left = out_left*(1.0f-pan);
+        if (pan<0) right = right*(1.0f+pan);
+        else left = left*(1.0f-pan);
 
         float volume = _Params[(int)PARAM_Volume]/64.0f;
 
@@ -121,18 +118,15 @@ void Voice::Update(int& left, int& right)
             _Sample = NULL;
         }
 
-        out_left = out_left*volume;
-        out_right = out_right*volume;
+        left *= volume;
+        right *= volume;
     }
 
     if (_Params.size()>0)
     {
         for (int i=0 ; i<_Filters.size() ; ++i)
-            _Filters[i]->Compute(out_left, out_right, _Params);
+            _Filters[i]->Compute(left, right, _Params);
     }
-
-    left = (int)out_left;
-    right = (int)out_right;
 }
 
 void Voice::Play(Sample* sample, int note, int velocity)

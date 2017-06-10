@@ -4,7 +4,9 @@ Device* Device::_Instance = NULL;
 
 Device::Device() :
     _Ready(false),
-    _Quit(false)
+    _Quit(false),
+    _Left(0.0f),
+    _Right(0.0f)
 {
     _Instance = this;
 
@@ -224,28 +226,31 @@ void Device::_Update(snd_pcm_uframes_t frames)
 {
     for (int i=0 ; i<frames ; ++i)
     {
-        int left = 0;
-        int right = 0;
+        float left = 0.0f;
+        float right = 0.0f;
 
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
             Voice* voice = _Voices[j];
-            int l=0, r=0;
+            float l=0.0f, r=0.0f;
             voice->Update(l, r);
             left += l;
             right += r;
         }
 
-        --left;
-        --right;
+        _Left = _Left*0.95+left*0.05f;
+        _Right = _Right*0.95+right*0.05f;
 
-        if (left>32767) left = 32767;
-        else if (left<-32768) left = -32768;
-        if (right>32767) right = 32767;
-        else if (right<-32768) right = -32768;
+        int buffer_left = (int)(_Left*32768.0f);
+        int buffer_right = (int)(_Right*32768.0f);
 
-        _Buffer[i*2] = (short)left;
-        _Buffer[i*2+1] = (short)right;
+        if (buffer_left>32767) buffer_left = 32767;
+        else if (buffer_left<-32768) buffer_left = -32768;
+        if (buffer_right>32767) buffer_right = 32767;
+        else if (buffer_right<-32768) buffer_right = -32768;
+
+        _Buffer[i*2] = (short)buffer_left;
+        _Buffer[i*2+1] = (short)buffer_right;
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)!=frames)

@@ -17,7 +17,7 @@ public:
     bool IsPlaying(Sample* sample, int note) const;
     Sample* GetSample() const { return _Sample; };
 
-    void Update(int& left, int& right);
+    void Update(float& left, float& right);
 
     void Play(Sample* sample, int note, int velocity);
     void Stop(Sample* sample, int note);
