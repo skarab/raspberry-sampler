@@ -3,7 +3,7 @@
 Param PARAM_Values[PARAM_Count] = {
     { 0, 64, 20, "Volume" },
     { -32, 32, 0, "PitchSemiTone" },
-    { -256, 512, 256, "PitchFineTune" },
+    { -512, 1024, 512, "PitchFineTune" },
     { -32, 32, 0, "Pan" },
     { 0, 64, 32, "Legato" }
 };

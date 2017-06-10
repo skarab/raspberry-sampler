@@ -3,6 +3,7 @@
 
 #include "includes.h"
 #include "voice.h"
+#include "bank.h"
 
 class Device
 {
@@ -16,6 +17,7 @@ public:
     void Play(Sample* sample, int note, int velocity);
     void Stop(Sample* sample, int note);
     void StopAll();
+    void OnUnloadBank(Bank& bank);
 
 private:
 

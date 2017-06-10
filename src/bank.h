@@ -22,6 +22,7 @@ public:
 
     Sample* GetSample(int id);
     Sample* GetSample(const MidiKey& key);
+    bool HasSample(Sample* sample) const;
 
     void Unload();
     bool Load();

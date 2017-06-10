@@ -67,7 +67,7 @@ void Voice::Update(int& left, int& right)
         {
             left = (int)_Sample->GetData()[p*2];
             right = (int)_Sample->GetData()[p*2+1];
-            _Position += _Pitch*pow(2.0f, _Params[(int)PARAM_PitchSemiTone]/12.0f)*(_Params[(int)PARAM_PitchFineTune]/256.0f);
+            _Position += _Pitch*pow(2.0f, _Params[(int)PARAM_PitchSemiTone]/12.0f)*(_Params[(int)PARAM_PitchFineTune]/512.0f);
 
             if (_Sample->GetMode()==MODE_InstruLegato)
             {
@@ -125,10 +125,10 @@ void Voice::Play(Sample* sample, int note, int velocity)
 
 void Voice::Stop(Sample* sample, int note)
 {
-    Stop();
+    ForceStop();
 }
 
-void Voice::Stop()
+void Voice::ForceStop()
 {
     _Sample = NULL;
 }

@@ -8,11 +8,11 @@
 enum MODE
 {
     MODE_OneShot = 0,
-    MODE_OneShotAdd,
     MODE_Loop,
-    MODE_LoopOnOff,
+    MODE_Key,
+    MODE_KeyLoop,
     MODE_Instru,
-    MODE_InstruAdd,
+    MODE_InstruNoRelease,
     MODE_InstruLegato,
     MODE_Count
 };
@@ -55,8 +55,8 @@ public:
     void SetParam(PARAM param, int value) { _Params[(int)param] = value; }
     int GetParam(PARAM param) const { return _Params[(int)param]; }
 
-    bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_LoopOnOff); }
-    bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruAdd) || (_Mode==MODE_InstruLegato); }
+    bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
+    bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);

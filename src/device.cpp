@@ -43,7 +43,7 @@ void Device::Play(Sample* sample, int note, int velocity)
             }
         }
     }
-    else if (sample->GetMode()!=MODE_OneShotAdd)
+    else if (sample->GetMode()!=MODE_OneShot)
     {
         for (int i=0 ; i<_Voices.size() ; ++i)
         {
@@ -71,7 +71,7 @@ void Device::Play(Sample* sample, int note, int velocity)
     {
         pthread_mutex_lock(&_Lock);
 
-        if (sample->GetMode()==MODE_LoopOnOff)
+        if (sample->GetMode()==MODE_Loop)
         {
             if (voice->IsBusy()) voice->Stop(sample, note);
             else voice->Play(sample, note, velocity);
@@ -87,9 +87,9 @@ void Device::Play(Sample* sample, int note, int velocity)
 void Device::Stop(Sample* sample, int note)
 {
     if (!sample->IsValid()
-        || (sample->GetMode()==MODE_LoopOnOff)
-        || (sample->GetMode()==MODE_OneShotAdd)
-        || (sample->GetMode()==MODE_InstruAdd)
+        || (sample->GetMode()==MODE_Loop)
+        || (sample->GetMode()==MODE_OneShot)
+        || (sample->GetMode()==MODE_InstruNoRelease)
         || (sample->GetMode()==MODE_InstruLegato))
     {
         return;
@@ -111,7 +111,18 @@ void Device::StopAll()
 {
     pthread_mutex_lock(&_Lock);
     for (int i=0 ; i<_Voices.size() ; ++i)
-        _Voices[i]->Stop();
+        _Voices[i]->ForceStop();
+    pthread_mutex_unlock(&_Lock);
+}
+
+void Device::OnUnloadBank(Bank& bank)
+{
+    pthread_mutex_lock(&_Lock);
+    for (int i=0 ; i<_Voices.size() ; ++i)
+    {
+        if (bank.HasSample(_Voices[i]->GetSample()))
+            _Voices[i]->ForceStop();
+    }
     pthread_mutex_unlock(&_Lock);
 }
 

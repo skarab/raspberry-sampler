@@ -90,6 +90,16 @@ Sample* Bank::GetSample(const MidiKey& key)
     return NULL;
 }
 
+bool Bank::HasSample(Sample* sample) const
+{
+    for (int i=0 ; i<_Samples.size() ; ++i)
+    {
+        if (_Samples[i]==sample)
+            return true;
+    }
+    return false;
+}
+
 void Bank::Unload()
 {
     if (_Loaded)

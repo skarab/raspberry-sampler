@@ -14,12 +14,13 @@ public:
     bool IsBusy() const;
     bool IsPlaying(Sample* sample) const;
     bool IsPlaying(Sample* sample, int note) const;
+    Sample* GetSample() const { return _Sample; };
 
     void Update(int& left, int& right);
 
     void Play(Sample* sample, int note, int velocity);
     void Stop(Sample* sample, int note);
-    void Stop();
+    void ForceStop();
 
 private:
 

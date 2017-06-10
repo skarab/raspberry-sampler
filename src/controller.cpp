@@ -199,12 +199,12 @@ void Controller::_OnLoadBank()
 {
     pthread_mutex_lock(&_Lock);
 
-    Device::Get().StopAll();
-
     Bank* bank = _GetBank();
 
     if (bank->IsLoaded())
     {
+        Device::Get().OnUnloadBank(*bank);
+
         bank->Unload();
         _Sample = NULL;
     }
