@@ -24,6 +24,7 @@ enum PARAM
     PARAM_PitchFineTune,
     PARAM_Pan,
     PARAM_Legato,
+    PARAM_LoopDelay,
     PARAM_Count
 };
 

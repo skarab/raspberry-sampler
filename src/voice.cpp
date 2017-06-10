@@ -36,19 +36,21 @@ void Voice::Update(int& left, int& right)
         for (int i=0 ; i<(int)PARAM_Count ; ++i)
             _Params[i] = _Params[i]*0.999f+_Sample->GetParam((PARAM)i)*0.001f;
 
+        int loop_delay = _Params[(int)PARAM_LoopDelay]*100;
+
         if (_Position<0.0f || _Position>_Sample->GetLength()-1.0f)
         {
             if (_Sample->IsLooping())
             {
                 if (_Params[(int)PARAM_PitchFineTune]>0)
                 {
-                    while (_Position>=_Sample->GetLength())
-                        _Position -= _Sample->GetLength();
+                    while (_Position>=_Sample->GetLength()+loop_delay)
+                        _Position -= _Sample->GetLength()+loop_delay;
                 }
                 else
                 {
-                    while (_Position<0.0f)
-                        _Position += _Sample->GetLength();
+                    while (_Position<-loop_delay)
+                        _Position += _Sample->GetLength()+loop_delay;
                 }
 
                 p = (unsigned int)_Position;
