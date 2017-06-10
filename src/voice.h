@@ -27,6 +27,7 @@ private:
     Sample* _Sample;
     vector<float> _Params;
     float _Position;
+    bool _Stop;
     int _Note;
     int _Velocity;
     float _Pitch;

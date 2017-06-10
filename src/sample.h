@@ -25,6 +25,12 @@ enum PARAM
     PARAM_Pan,
     PARAM_Legato,
     PARAM_LoopDelay,
+    PARAM_Start,
+    PARAM_Stop,
+    PARAM_LoopStart,
+    PARAM_LoopStop,
+    PARAM_EnvAttack,
+    PARAM_EnvRelease,
     PARAM_Count
 };
 

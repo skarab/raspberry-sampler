@@ -6,7 +6,13 @@ Param PARAM_Values[PARAM_Count] = {
     { -512, 1024, 512, "PitchFineTune" },
     { -32, 32, 0, "Pan" },
     { 0, 64, 32, "Legato" },
-    { 0, 1024, 0, "LoopDelay" }
+    { 0, 1024, 0, "LoopDelay" },
+    { 0, 1024, 0, "Start" },
+    { 0, 1024, 1024, "Stop" },
+    { 0, 1024, 0, "LoopStart" },
+    { 0, 1024, 1024, "LoopStop" },
+    { 0, 1024, 0, "EnvAttack" },
+    { 0, 1024, 0, "EnvRelease" }
 };
 
 Sample::Sample(string name, string path) :
