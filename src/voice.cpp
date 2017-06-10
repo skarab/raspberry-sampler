@@ -67,9 +67,16 @@ void Voice::Update(int& left, int& right)
         {
             volume *= _Position>=start?(_Position-start)/env_attack:0.0f;
         }
+
         if (_Position>stop-env_release)
         {
             volume *= _Position<stop?1.0f-(_Position-(stop-env_release))/env_release:0.0f;
+        }
+
+        if (_Stop && _Sample->UseRelease())
+        {
+            _StopTime += 1.0f;
+            volume *= _StopTime>env_release?0.0f:1.0f-_StopTime/env_release;
         }
 
         left = (int)(left*volume);
@@ -106,7 +113,7 @@ void Voice::Update(int& left, int& right)
                 }
             }
         }
-        else if (_Position<start || _Position>=stop)
+        else if (_Position<start || _Position>=stop || volume==0.0f)
         {
             _Sample = NULL;
         }
@@ -153,6 +160,7 @@ void Voice::Play(Sample* sample, int note, int velocity)
 void Voice::Stop(Sample* sample, int note)
 {
     _Stop = true;
+    _StopTime = 0.0f;
 }
 
 void Voice::ForceStop()

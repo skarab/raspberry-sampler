@@ -64,6 +64,7 @@ public:
 
     bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
+    bool UseRelease() const { return (_Mode==MODE_Key) || (_Mode==MODE_KeyLoop) || (_Mode==MODE_Instru); }
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);

@@ -28,6 +28,7 @@ private:
     vector<float> _Params;
     float _Position;
     bool _Stop;
+    float _StopTime;
     int _Note;
     int _Velocity;
     float _Pitch;
