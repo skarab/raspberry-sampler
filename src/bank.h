@@ -26,6 +26,8 @@ public:
 
     void Unload();
     bool Load();
+    void SetLoaded();
+
     bool Save();
 
 private:

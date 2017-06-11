@@ -4,9 +4,7 @@ Device* Device::_Instance = NULL;
 
 Device::Device() :
     _Ready(false),
-    _Quit(false),
-    _Left(0.0f),
-    _Right(0.0f)
+    _Quit(false)
 {
     _Instance = this;
 
@@ -144,24 +142,15 @@ void Device::_Run()
 
     while (!_Quit)
     {
-        usleep(1);
-
-        if (snd_pcm_wait(_PlaybackHandle, 10)<0)
-            ERROR("snd_pcm_wait failed");
-
+        snd_pcm_wait(_PlaybackHandle, 10);
         frames_to_deliver = snd_pcm_avail_update(_PlaybackHandle);
-
-        if (frames_to_deliver<0)
-            ERROR("snd_pcm_avail_update<0");
 
         if (frames_to_deliver>0)
         {
             if (frames_to_deliver>SAMPLER_BUFFER_SIZE)
                 frames_to_deliver = SAMPLER_BUFFER_SIZE;
 
-            pthread_mutex_lock(&_Lock);
             _Update(frames_to_deliver);
-            pthread_mutex_unlock(&_Lock);
         }
     }
 
@@ -186,7 +175,7 @@ void Device::_Create()
 
     snd_pcm_uframes_t buffer_size = SAMPLER_BUFFER_SIZE;
     snd_pcm_uframes_t period_size = SAMPLER_PERIOD_SIZE;
-    //if (snd_pcm_hw_params_set_buffer_size_near(_PlaybackHandle, hw_params, &buffer_size)<0) ERROR("snd_pcm_hw_params_set_buffer_size_near");
+    if (snd_pcm_hw_params_set_buffer_size_near(_PlaybackHandle, hw_params, &buffer_size)<0) ERROR("snd_pcm_hw_params_set_buffer_size_near");
     if (snd_pcm_hw_params_set_period_size_near(_PlaybackHandle, hw_params, &period_size, NULL)<0) ERROR("snd_pcm_hw_params_set_period_size_near");
 
     if (snd_pcm_hw_params(_PlaybackHandle, hw_params)<0) ERROR("snd_pcm_hw_params");
@@ -203,7 +192,7 @@ void Device::_Create()
     if (snd_pcm_prepare(_PlaybackHandle)<0)
         ERROR("snd_pcm_prepare");
 
-    _Buffer = (short*)malloc(sizeof(short)*SAMPLER_BUFFER_SIZE*SAMPLER_CHANNELS);
+    _Buffer = (short*)malloc(sizeof(short)*buffer_size*SAMPLER_CHANNELS);
     if (_Buffer==NULL)
         ERROR("failed to alloc buffer");
 
@@ -229,6 +218,8 @@ void Device::_Update(snd_pcm_uframes_t frames)
         float left = 0.0f;
         float right = 0.0f;
 
+        pthread_mutex_lock(&_Lock);
+
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
             Voice* voice = _Voices[j];
@@ -238,11 +229,10 @@ void Device::_Update(snd_pcm_uframes_t frames)
             right += r;
         }
 
-        _Left = _Left*0.95+left*0.05f;
-        _Right = _Right*0.95+right*0.05f;
+        pthread_mutex_unlock(&_Lock);
 
-        int buffer_left = (int)(_Left*32768.0f);
-        int buffer_right = (int)(_Right*32768.0f);
+        int buffer_left = (int)(left*32768.0f);
+        int buffer_right = (int)(right*32768.0f);
 
         if (buffer_left>32767) buffer_left = 32767;
         else if (buffer_left<-32768) buffer_left = -32768;
@@ -253,8 +243,6 @@ void Device::_Update(snd_pcm_uframes_t frames)
         _Buffer[i*2+1] = (short)buffer_right;
     }
 
-    if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)!=frames)
-        ERROR("update voice failed");
+    if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)
+        snd_pcm_prepare(_PlaybackHandle);
 }
-
-

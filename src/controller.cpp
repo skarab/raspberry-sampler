@@ -137,6 +137,7 @@ void Controller::Update()
     {
         changed = true;
         _Sample = _GetBank()->GetSample(_SampleSelect->GetID());
+        _ControlSelect->SetID(0);
         _UpdateControls();
     }
 
@@ -197,32 +198,32 @@ Sample* Controller::_FindSample(const MidiKey& key)
 
 void Controller::_OnLoadBank()
 {
-    pthread_mutex_lock(&_Lock);
-
     Bank* bank = _GetBank();
 
     if (bank->IsLoaded())
     {
-        Device::Get().OnUnloadBank(*bank);
+        pthread_mutex_lock(&_Lock);
 
+        Device::Get().OnUnloadBank(*bank);
         bank->Unload();
         _Sample = NULL;
+
+        pthread_mutex_unlock(&_Lock);
     }
     else
     {
         bank->Load();
 
+        pthread_mutex_lock(&_Lock);
+        bank->SetLoaded();
         _SampleSelect->SetCount(bank->GetSampleCount());
         _SampleSelect->SetID(0);
         _Sample = bank->GetSample(0);
+        pthread_mutex_unlock(&_Lock);
     }
 
     _UpdateControls();
-
-    pthread_mutex_unlock(&_Lock);
-
     _BankStatus->SetOn(bank->IsLoaded());
-
     Display::Get().Print(_BankSelect->GetID());
 }
 

@@ -3,8 +3,8 @@
 
 #define SAMPLER_DEVICE          "default"
 #define SAMPLER_VOICES          32
-#define SAMPLER_BUFFER_SIZE     4096
-#define SAMPLER_PERIOD_SIZE     16
+#define SAMPLER_BUFFER_SIZE     8192
+#define SAMPLER_PERIOD_SIZE     128
 
 #define SAMPLER_NETWORK_DEVICE  "eth0"
 #define SAMPLER_BANKS           "../samples/"

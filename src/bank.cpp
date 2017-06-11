@@ -68,6 +68,9 @@ Bank::~Bank()
 
 Sample* Bank::GetSample(int id)
 {
+    if (!_Loaded)
+        return NULL;
+
     if (id>=0 && id<_Samples.size())
         return _Samples[id];
     return NULL;
@@ -75,6 +78,9 @@ Sample* Bank::GetSample(int id)
 
 Sample* Bank::GetSample(const MidiKey& key)
 {
+    if (!_Loaded)
+        return NULL;
+
     for (int i=0 ; i<_Samples.size() ; ++i)
     {
         if ((int)_Samples[i]->IsInstru())
@@ -92,6 +98,9 @@ Sample* Bank::GetSample(const MidiKey& key)
 
 bool Bank::HasSample(Sample* sample) const
 {
+    if (!_Loaded)
+        return false;
+
     for (int i=0 ; i<_Samples.size() ; ++i)
     {
         if (_Samples[i]==sample)
@@ -175,12 +184,15 @@ bool Bank::Load()
 
     sort(_Samples.begin(), _Samples.end(), sample_sort());
 
-    _Loaded = true;
-
     Display::Get().SetLoading(false);
     LOG("ok!");
 
     return _Samples.size()>0;
+}
+
+void Bank::SetLoaded()
+{
+    _Loaded = true;
 }
 
 bool Bank::Save()

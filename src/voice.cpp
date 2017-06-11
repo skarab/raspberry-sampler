@@ -63,7 +63,7 @@ void Voice::Update(float& left, float& right)
         if (pan<0) right = right*(1.0f+pan);
         else left = left*(1.0f-pan);
 
-        float volume = _Params[(int)PARAM_Volume]/64.0f;
+        float volume = _Params[(int)PARAM_Volume]/100.0f;
 
         float env_attack = _Params[(int)PARAM_EnvAttack]*50.0f;
         float env_release = _Params[(int)PARAM_EnvRelease]*50.0f;

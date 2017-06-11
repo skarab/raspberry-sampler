@@ -1,7 +1,7 @@
 #include "sample.h"
 
 Param PARAM_Values[PARAM_Count] = {
-    { 0, 64, 20, "Volume" },
+    { 0, 200, 100, "Volume" },
     { 0, 100, 0, "StartPercent" },
     { 0, 100, 100, "StopPercent" },
     { 0, 100, 0, "LoopStartPercent" },
