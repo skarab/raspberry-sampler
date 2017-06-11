@@ -10,11 +10,11 @@ public:
 
     FilterHighPass();
 
-    virtual void Compute(float& left, float& right, vector<float>& params);
+    virtual void Compute(float& left, float& right, vector<int>& params);
 
 private:
 
-    void Compute(float& value, float* inputs, float* outputs, vector<float>& params);
+    void Compute(float& value, float* inputs, float* outputs, vector<int>& params);
 
     float _InputLeft[2];
     float _OutputLeft[2];

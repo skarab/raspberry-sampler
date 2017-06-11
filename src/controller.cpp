@@ -282,7 +282,7 @@ void Controller::_UpdateControls()
     for (int i=0 ; i<_Controls.size() ; ++i)
     {
         int id = _ControlSelect->GetID()*6+i;
-        if (id<(int)PARAM_Count && _Sample!=NULL)
+        if (id<PARAM_Count && _Sample!=NULL)
         {
             _Controls[i]->SetRange(PARAM_Values[id].Min, PARAM_Values[id].Max);
             _Controls[i]->SetValue(_Sample->GetParam((PARAM)id));
@@ -298,7 +298,7 @@ void Controller::_UpdateControls()
 void Controller::_OnControlChanged(int i)
 {
     int id = _ControlSelect->GetID()*6+i;
-    if (id<(int)PARAM_Count && _Sample!=NULL)
+    if (id<PARAM_Count && _Sample!=NULL)
     {
         int value = _Controls[i]->GetValue();
         if (value<PARAM_Values[id].Min) value = PARAM_Values[id].Min;

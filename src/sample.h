@@ -75,6 +75,7 @@ public:
     MODE GetMode() const { return _Mode; }
     void SetParam(PARAM param, int value) { _Params[(int)param] = value; }
     int GetParam(PARAM param) const { return _Params[(int)param]; }
+    const vector<int>& GetParams() const { return _Params; }
 
     bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }

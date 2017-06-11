@@ -35,8 +35,7 @@ void Voice::Update(float& left, float& right)
 {
     if (_Sample!=NULL)
     {
-        for (int i=0 ; i<(int)PARAM_Count ; ++i)
-            _Params[i] = _Params[i]*0.999f+_Sample->GetParam((PARAM)i)*0.001f;
+        memcpy(&_Params[0], &_Sample->GetParams()[0], sizeof(int)*_Sample->GetParams().size());
 
         float start = _Sample->GetStartPosition();
         float stop = _Sample->GetStopPosition();
@@ -51,22 +50,22 @@ void Voice::Update(float& left, float& right)
         left = _Sample->GetData()[p*2]/32768.0f;
         right = _Sample->GetData()[p*2+1]/32768.0f;
 
-        _Position += _Pitch*pow(2.0f, _Params[(int)PARAM_PitchSemiTone]/12.0f)*(_Params[(int)PARAM_PitchFineTune]/512.0f);
+        _Position += _Pitch*pow(2.0f, _Params[PARAM_PitchSemiTone]/12.0f)*(_Params[PARAM_PitchFineTune]/512.0f);
 
         if (_Sample->GetMode()==MODE_InstruLegato)
         {
-            float legato = 0.999f+_Params[(int)PARAM_Legato]*0.0009/64.0f;
+            float legato = 0.999f+_Params[PARAM_Legato]*0.0009/64.0f;
             _Pitch = _Pitch*legato+_LegatoPitch*(1.0f-legato);
         }
 
-        float pan = _Params[(int)PARAM_Pan]/32.0f;
+        float pan = _Params[PARAM_Pan]/32.0f;
         if (pan<0) right = right*(1.0f+pan);
         else left = left*(1.0f-pan);
 
-        float volume = _Params[(int)PARAM_Volume]/100.0f;
+        float volume = _Params[PARAM_Volume]/100.0f;
 
-        float env_attack = _Params[(int)PARAM_EnvAttack]*50.0f;
-        float env_release = _Params[(int)PARAM_EnvRelease]*50.0f;
+        float env_attack = _Params[PARAM_EnvAttack]*50.0f;
+        float env_release = _Params[PARAM_EnvRelease]*50.0f;
         if (_Position<start+env_attack)
         {
             volume *= _Position>=start?(_Position-start)/env_attack:0.0f;
@@ -85,14 +84,14 @@ void Voice::Update(float& left, float& right)
 
         if (_Sample->IsLooping() && !_Stop)
         {
-            float loop_delay = _Params[(int)PARAM_LoopDelay]*50.0f;
-            float loop_delay_env = loop_delay==0.0f?0.0f:_Params[(int)PARAM_LoopDelayEnv]*50.0f;
+            float loop_delay = _Params[PARAM_LoopDelay]*50.0f;
+            float loop_delay_env = loop_delay==0.0f?0.0f:_Params[PARAM_LoopDelayEnv]*50.0f;
             float loop_start = _Sample->GetLoopStartPosition(start, stop);
             float loop_stop = _Sample->GetLoopStopPosition(start, stop);
             if (loop_stop<loop_start+1)
                 loop_stop = loop_start+1;
 
-            if (_Params[(int)PARAM_PitchFineTune]>0)
+            if (_Params[PARAM_PitchFineTune]>0)
             {
                 while (_Position>=loop_stop+loop_delay)
                     _Position -= loop_stop-loop_start+loop_delay;
@@ -152,8 +151,8 @@ void Voice::Play(Sample* sample, int note, int velocity)
     {
         _Pitch = _LegatoPitch;
 
-        _Params.resize((int)PARAM_Count);
-        for (int i=0 ; i<(int)PARAM_Count ; ++i)
+        _Params.resize(PARAM_Count);
+        for (int i=0 ; i<PARAM_Count ; ++i)
             _Params[i] = sample->GetParam((PARAM)i);
     }
 

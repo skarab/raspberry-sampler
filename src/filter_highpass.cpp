@@ -8,19 +8,19 @@ FilterHighPass::FilterHighPass()
     memset(_OutputRight, 0, sizeof(float)*2);
 }
 
-void FilterHighPass::Compute(float& left, float& right, vector<float>& params)
+void FilterHighPass::Compute(float& left, float& right, vector<int>& params)
 {
     Compute(left, _InputLeft, _OutputLeft, params);
     Compute(right, _InputRight, _OutputRight, params);
 }
 
-void FilterHighPass::Compute(float& value, float* inputs, float* outputs, vector<float>& params)
+void FilterHighPass::Compute(float& value, float* inputs, float* outputs, vector<int>& params)
 {
-    if (params[(int)PARAM_HPCutOff]==0)
+    if (params[PARAM_HPCutOff]==0)
         return;
 
-    float r = 0.01f+(256-params[(int)PARAM_HPResonance])*(sqrtf(2.0f)-0.01f)/256.0f;
-    float f = powf(params[(int)PARAM_HPCutOff]/512.0f, 3.0f);
+    float r = 0.01f+(256-params[PARAM_HPResonance])*(sqrtf(2.0f)-0.01f)/256.0f;
+    float f = powf(params[PARAM_HPCutOff]/512.0f, 3.0f);
 
     float c = tanf(M_PI*f);
 

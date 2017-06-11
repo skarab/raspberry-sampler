@@ -8,7 +8,7 @@ class Filter
 {
 public:
 
-    virtual void Compute(float& left, float& right, vector<float>& params) {}
+    virtual void Compute(float& left, float& right, vector<int>& params) {}
 };
 
 #endif

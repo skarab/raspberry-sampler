@@ -26,7 +26,7 @@ public:
 private:
 
     Sample* _Sample;
-    vector<float> _Params;
+    vector<int> _Params;
     float _Position;
     bool _Stop;
     float _StopTime;

@@ -8,19 +8,19 @@ FilterLowPass::FilterLowPass()
     memset(_OutputRight, 0, sizeof(float)*2);
 }
 
-void FilterLowPass::Compute(float& left, float& right, vector<float>& params)
+void FilterLowPass::Compute(float& left, float& right, vector<int>& params)
 {
     Compute(left, _InputLeft, _OutputLeft, params);
     Compute(right, _InputRight, _OutputRight, params);
 }
 
-void FilterLowPass::Compute(float& value, float* inputs, float* outputs, vector<float>& params)
+void FilterLowPass::Compute(float& value, float* inputs, float* outputs, vector<int>& params)
 {
-    if (params[(int)PARAM_LPCutOff]==256)
+    if (params[PARAM_LPCutOff]==256)
         return;
 
-    float r = 0.1f+(256-params[(int)PARAM_LPResonance])*(sqrtf(2.0f)-0.1f)/256.0f;
-    float f = powf(params[(int)PARAM_LPCutOff]/512.0f, 3.0f);
+    float r = 0.1f+(256-params[PARAM_LPResonance])*(sqrtf(2.0f)-0.1f)/256.0f;
+    float f = powf(params[PARAM_LPCutOff]/512.0f, 3.0f);
 
     float c = 1.0f/tanf(M_PI*f);
 
