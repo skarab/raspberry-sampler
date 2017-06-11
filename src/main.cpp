@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     while (1)
     {
         controller->Update();
-        usleep(100);
+        usleep(1000);
     }
 
     delete controller;

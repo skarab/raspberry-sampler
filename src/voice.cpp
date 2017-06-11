@@ -6,6 +6,10 @@ Voice::Voice() :
     _Sample(NULL),
     _Position(0.0f)
 {
+    _Params.resize(PARAM_Count);
+    for (int i=0 ; i<PARAM_Count ; ++i)
+        _Params[i] = PARAM_Values[i].Default;
+
     _Filters.push_back(new FilterHighPass());
     _Filters.push_back(new FilterLowPass());
 }
@@ -121,11 +125,8 @@ void Voice::Update(float& left, float& right)
         right *= volume;
     }
 
-    if (_Params.size()>0)
-    {
-        for (int i=0 ; i<_Filters.size() ; ++i)
-            _Filters[i]->Compute(left, right, _Params);
-    }
+    for (int i=0 ; i<_Filters.size() ; ++i)
+        _Filters[i]->Compute(left, right, _Params);
 }
 
 void Voice::Play(Sample* sample, int note, int velocity)
@@ -148,13 +149,7 @@ void Voice::Play(Sample* sample, int note, int velocity)
         _LegatoPitch = pow(2.0f, (note-sample->GetMidiKey().Note)/12.0f);
 
     if (_Sample==NULL || (sample->GetMode()!=MODE_InstruLegato))
-    {
         _Pitch = _LegatoPitch;
-
-        _Params.resize(PARAM_Count);
-        for (int i=0 ; i<PARAM_Count ; ++i)
-            _Params[i] = sample->GetParam((PARAM)i);
-    }
 
     _Sample = sample;
     _Stop = false;

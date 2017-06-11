@@ -175,7 +175,7 @@ void Device::_Create()
 
     snd_pcm_uframes_t buffer_size = SAMPLER_BUFFER_SIZE;
     snd_pcm_uframes_t period_size = SAMPLER_PERIOD_SIZE;
-    if (snd_pcm_hw_params_set_buffer_size_near(_PlaybackHandle, hw_params, &buffer_size)<0) ERROR("snd_pcm_hw_params_set_buffer_size_near");
+    //if (snd_pcm_hw_params_set_buffer_size_near(_PlaybackHandle, hw_params, &buffer_size)<0) ERROR("snd_pcm_hw_params_set_buffer_size_near");
     if (snd_pcm_hw_params_set_period_size_near(_PlaybackHandle, hw_params, &period_size, NULL)<0) ERROR("snd_pcm_hw_params_set_period_size_near");
 
     if (snd_pcm_hw_params(_PlaybackHandle, hw_params)<0) ERROR("snd_pcm_hw_params");
@@ -222,9 +222,8 @@ void Device::_Update(snd_pcm_uframes_t frames)
 
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
-            Voice* voice = _Voices[j];
             float l=0.0f, r=0.0f;
-            voice->Update(l, r);
+            _Voices[j]->Update(l, r);
             left += l;
             right += r;
         }
@@ -244,5 +243,8 @@ void Device::_Update(snd_pcm_uframes_t frames)
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)
+    {
+        LOG("buffer underrun");
         snd_pcm_prepare(_PlaybackHandle);
+    }
 }
