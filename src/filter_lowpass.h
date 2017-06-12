@@ -14,6 +14,9 @@ public:
 
 private:
 
+    int _CutOff;
+    int _Resonance;
+    double _A1, _A2, _B1, _B2;
     double _InputLeft[2];
     double _OutputLeft[2];
     double _InputRight[2];

@@ -2,6 +2,9 @@
 
 FilterLowPass::FilterLowPass()
 {
+    _CutOff = -1;
+    _Resonance = -1;
+
     memset(_InputLeft, 0, sizeof(double)*2);
     memset(_OutputLeft, 0, sizeof(double)*2);
     memset(_InputRight, 0, sizeof(double)*2);
@@ -22,25 +25,30 @@ inline void FilterLowPass_Compute(float& value, double* inputs, double* outputs,
 
 void FilterLowPass::Compute(float& left, float& right, const vector<int>& params)
 {
-    int cutoff = params[PARAM_LPCutOff];
-    double resonance = params[PARAM_LPResonance];
+    if ((_CutOff!=params[PARAM_LPCutOff]) || (_Resonance!=params[PARAM_LPResonance]))
+    {
+        _CutOff = params[PARAM_LPCutOff];
+        _Resonance = params[PARAM_LPResonance];
+        int cutoff = _CutOff;
+        double resonance = _Resonance;
 
-    // fix low cutoff scratches
-    if (resonance>0.0 && cutoff<26)
-        cutoff = 20;
+        // fix low cutoff scratches
+        if (resonance>0.0 && cutoff<26)
+            cutoff = 20;
 
-    resonance = pow(1.0-resonance/200.0, 2.0);
+        resonance = pow(1.0-resonance/200.0, 2.0);
 
-    double r = 0.04+resonance*(sqrt(2.0)-0.04);
-    double f = 0.00001+pow(cutoff/400.0, 3.0);
+        double r = 0.04+resonance*(sqrt(2.0)-0.04);
+        double f = 0.00001+pow(cutoff/400.0, 3.0);
 
-    double c = 1.0/tan(M_PI*f);
+        double c = 1.0/tan(M_PI*f);
 
-    double a1 = 1.0/(1.0+r*c+c*c);
-    double a2 = 2.0*a1;
-    double b1 = 2.0*(1.0-c*c)*a1;
-    double b2 = (1.0-r*c+c*c)*a1;
+        _A1 = 1.0/(1.0+r*c+c*c);
+        _A2 = 2.0*_A1;
+        _B1 = 2.0*(1.0-c*c)*_A1;
+        _B2 = (1.0-r*c+c*c)*_A1;
+    }
 
-    FilterLowPass_Compute(left, _InputLeft, _OutputLeft, a1, a2, b1, b2);
-    FilterLowPass_Compute(right, _InputRight, _OutputRight, a1, a2, b1, b2);
+    FilterLowPass_Compute(left, _InputLeft, _OutputLeft, _A1, _A2, _B1, _B2);
+    FilterLowPass_Compute(right, _InputRight, _OutputRight, _A1, _A2, _B1, _B2);
 }
