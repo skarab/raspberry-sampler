@@ -14,10 +14,10 @@ public:
 
 private:
 
-    float _InputLeft[2];
-    float _OutputLeft[2];
-    float _InputRight[2];
-    float _OutputRight[2];
+    double _InputLeft[2];
+    double _OutputLeft[2];
+    double _InputRight[2];
+    double _OutputRight[2];
 };
 
 #endif
