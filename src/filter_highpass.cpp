@@ -24,9 +24,10 @@ inline void FilterHighPass_Compute(float& value, float* inputs, float* outputs, 
 
 void FilterHighPass::Compute(float& left, float& right, const vector<int>& params)
 {
-    float resonance = params[PARAM_HPResonance];
     int cutoff = params[PARAM_HPCutOff];
+    float resonance = params[PARAM_HPResonance];
 
+    // fix low cutoff scratches
     if (resonance>0.0f && cutoff<26)
         cutoff = 20;
 

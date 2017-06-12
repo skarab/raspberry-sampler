@@ -24,8 +24,8 @@ Param PARAM_Values[PARAM_Count] = {
 
     { 0, 200, 0, "HPCutOff" },
     { 0, 200, 0, "HPResonance" },
-    { 0, 256, 256, "LPCutOff" },
-    { 0, 256, 0, "LPResonance" }
+    { 0, 200, 200, "LPCutOff" },
+    { 0, 200, 0, "LPResonance" }
 };
 
 Sample::Sample(string name, string path) :

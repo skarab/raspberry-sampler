@@ -2,7 +2,7 @@
 #define __SAMPLER_CONFIG__
 
 #define SAMPLER_DEVICE          "default"
-#define SAMPLER_VOICES          8
+#define SAMPLER_VOICES          4
 #define SAMPLER_BUFFER_SIZE     4096
 #define SAMPLER_PERIOD_SIZE     128
 
