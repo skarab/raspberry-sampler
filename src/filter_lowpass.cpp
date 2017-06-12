@@ -31,9 +31,9 @@ void FilterLowPass::Compute(float& left, float& right, const vector<int>& params
     if (resonance>0.0f && cutoff<26)
         cutoff = 20;
 
-    resonance = pow(1.0f-resonance/200.0f, 2.0f);
+    resonance = powf(1.0f-resonance/200.0f, 2.0f);
 
-    float r = 0.1f+resonance*(sqrtf(2.0f)-0.1f);
+    float r = 0.04f+resonance*(sqrtf(2.0f)-0.04f);
     float f = 0.00001f+powf(cutoff/400.0f, 3.0f);
 
     float c = 1.0f/tanf(M_PI*f);

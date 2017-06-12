@@ -1,6 +1,7 @@
 #include "voice.h"
 #include "filter_highpass.h"
 #include "filter_lowpass.h"
+#include "filter_rc.h"
 
 Voice::Voice() :
     _Sample(NULL),
@@ -12,6 +13,7 @@ Voice::Voice() :
 
     _Filters.push_back(new FilterHighPass());
     _Filters.push_back(new FilterLowPass());
+    _Filters.push_back(new FilterRC());
 }
 
 Voice::~Voice()

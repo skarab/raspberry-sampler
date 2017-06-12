@@ -19,6 +19,7 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/filter.cpp \
 	src/filter_highpass.cpp \
 	src/filter_lowpass.cpp \
+	src/filter_rc.cpp \
 	src/wav.cpp \
 	src/button.cpp \
 	src/led.cpp \

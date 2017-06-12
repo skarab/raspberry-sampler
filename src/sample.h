@@ -44,6 +44,8 @@ enum PARAM
     PARAM_HPResonance,
     PARAM_LPCutOff,
     PARAM_LPResonance,
+    PARAM_RCCutOff,
+    PARAM_RCResonance,
 
     PARAM_Count
 };

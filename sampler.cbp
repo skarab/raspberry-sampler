@@ -95,6 +95,12 @@
 		<Unit filename="src/filter_lowpass.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
+		<Unit filename="src/filter_rc.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_rc.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
 		<Unit filename="src/helpers.cpp">
 			<Option virtualFolder="helpers/" />
 		</Unit>
