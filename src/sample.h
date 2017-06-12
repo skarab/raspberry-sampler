@@ -47,6 +47,10 @@ enum PARAM
     PARAM_RCCutOff,
     PARAM_RCResonance,
 
+    PARAM_EQLow,
+    PARAM_EQMedium,
+    PARAM_EQHigh,
+
     PARAM_Count
 };
 
