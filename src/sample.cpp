@@ -22,8 +22,8 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 64, 32, "Legato" },
     { 0, 64, 32, "Unused" },
 
-    { 0, 256, 0, "HPCutOff" },
-    { 0, 256, 0, "HPResonance" },
+    { 0, 200, 0, "HPCutOff" },
+    { 0, 200, 0, "HPResonance" },
     { 0, 256, 256, "LPCutOff" },
     { 0, 256, 0, "LPResonance" }
 };
