@@ -167,7 +167,7 @@ void Device::_Create()
     if (snd_pcm_hw_params_malloc(&hw_params)<0) ERROR("failed to alloc hw_params");
     if (snd_pcm_hw_params_any(_PlaybackHandle, hw_params)<0) ERROR("snd_pcm_hw_params_any");
     if (snd_pcm_hw_params_set_access(_PlaybackHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)<0) ERROR("SND_PCM_ACCESS_RW_INTERLEAVED");
-    if (snd_pcm_hw_params_set_format(_PlaybackHandle, hw_params, SND_PCM_FORMAT_S16_LE)<0) ERROR("SND_PCM_FORMAT_S32_LE");
+    if (snd_pcm_hw_params_set_format(_PlaybackHandle, hw_params, SND_PCM_FORMAT_FLOAT_LE)<0) ERROR("SND_PCM_FORMAT_FLOAT_LE");
     int dir = 0;
     unsigned int rate = SAMPLER_RATE;
     if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
@@ -192,7 +192,7 @@ void Device::_Create()
     if (snd_pcm_prepare(_PlaybackHandle)<0)
         ERROR("snd_pcm_prepare");
 
-    _Buffer = (short*)malloc(sizeof(short)*buffer_size*SAMPLER_CHANNELS);
+    _Buffer = (float*)malloc(sizeof(float)*buffer_size*SAMPLER_CHANNELS);
     if (_Buffer==NULL)
         ERROR("failed to alloc buffer");
 
@@ -230,16 +230,8 @@ void Device::_Update(snd_pcm_uframes_t frames)
 
         pthread_mutex_unlock(&_Lock);
 
-        int buffer_left = (int)(left*32768.0f);
-        int buffer_right = (int)(right*32768.0f);
-
-        if (buffer_left>32767) buffer_left = 32767;
-        else if (buffer_left<-32768) buffer_left = -32768;
-        if (buffer_right>32767) buffer_right = 32767;
-        else if (buffer_right<-32768) buffer_right = -32768;
-
-        _Buffer[i*2] = (short)buffer_left;
-        _Buffer[i*2+1] = (short)buffer_right;
+        _Buffer[i*2] = left;
+        _Buffer[i*2+1] = right;
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)
