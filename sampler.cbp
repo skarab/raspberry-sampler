@@ -89,6 +89,12 @@
 		<Unit filename="src/filter_eq.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
+		<Unit filename="src/filter_formant.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_formant.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
 		<Unit filename="src/filter_highpass.cpp">
 			<Option virtualFolder="filters/" />
 		</Unit>

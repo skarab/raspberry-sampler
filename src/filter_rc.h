@@ -14,8 +14,6 @@ public:
 
 private:
 
-    float _Left[2];
-    float _Right[2];
 };
 
 #endif

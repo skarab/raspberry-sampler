@@ -3,6 +3,8 @@
 #include "filter_lowpass.h"
 #include "filter_rc.h"
 #include "filter_eq.h"
+#include "filter_formant.h"
+#include "filter_moog.h"
 
 Voice::Voice() :
     _Sample(NULL),
@@ -14,8 +16,10 @@ Voice::Voice() :
 
     _Filters.push_back(new FilterHighPass());
     _Filters.push_back(new FilterLowPass());
-    _Filters.push_back(new FilterRC());
     _Filters.push_back(new FilterEQ());
+    _Filters.push_back(new FilterFormant());
+    _Filters.push_back(new FilterMoog());
+    _Filters.push_back(new FilterRC());
 }
 
 Voice::~Voice()

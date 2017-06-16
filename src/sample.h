@@ -44,12 +44,15 @@ enum PARAM
     PARAM_HPResonance,
     PARAM_LPCutOff,
     PARAM_LPResonance,
-    PARAM_RCCutOff,
-    PARAM_RCResonance,
+    PARAM_Formant,
+    PARAM_FormantID,
 
     PARAM_EQLow,
     PARAM_EQMedium,
     PARAM_EQHigh,
+
+    PARAM_MoogCutOff,
+    PARAM_MoogResonance,
 
     PARAM_Count
 };

@@ -21,6 +21,8 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/filter_lowpass.cpp \
 	src/filter_rc.cpp \
 	src/filter_eq.cpp \
+	src/filter_formant.cpp \
+	src/filter_moog.cpp \
 	src/wav.cpp \
 	src/button.cpp \
 	src/led.cpp \
