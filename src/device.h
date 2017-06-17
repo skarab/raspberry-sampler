@@ -14,6 +14,8 @@ public:
 
     static Device& Get() { return *_Instance; }
 
+    double GetNoise(int i) const;
+
     void Play(Sample* sample, int note, int velocity);
     void Stop(Sample* sample, int note);
     void StopAll();
@@ -37,6 +39,7 @@ private:
     float* _Buffer;
     vector<Voice*> _Voices;
     pthread_mutex_t _Lock;
+    double _Noise[SAMPLER_RATE];
 };
 
 #endif

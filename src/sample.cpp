@@ -39,7 +39,9 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 64, 32, "Unused2" },
 
     { 0, 200, 0, "NotchCutOff" },
-    { 0, 200, 200, "NotchBandWidth" }
+    { 0, 200, 200, "NotchBandWidth" },
+    { 0, 200, 0, "Noise" },
+    { 0, 200, 0, "NoisePink" }
 };
 
 Sample::Sample(string name, string path) :

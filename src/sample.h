@@ -58,6 +58,8 @@ enum PARAM
 
     PARAM_NotchCutOff,
     PARAM_NotchBandWidth,
+    PARAM_Noise,
+    PARAM_NoisePink,
 
     PARAM_Count
 };

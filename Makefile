@@ -17,6 +17,7 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/sample.cpp \
 	src/voice.cpp \
 	src/filter.cpp \
+	src/filter_noise.cpp \
 	src/filter_highpass.cpp \
 	src/filter_lowpass.cpp \
 	src/filter_eq.cpp \

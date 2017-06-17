@@ -1,4 +1,5 @@
 #include "voice.h"
+#include "filter_noise.h"
 #include "filter_highpass.h"
 #include "filter_lowpass.h"
 #include "filter_eq.h"
@@ -15,6 +16,7 @@ Voice::Voice() :
     for (int i=0 ; i<PARAM_Count ; ++i)
         _Params[i] = PARAM_Values[i].Default;
 
+    _Filters.push_back(new FilterNoise());
     _Filters.push_back(new FilterHighPass());
     _Filters.push_back(new FilterLowPass());
     _Filters.push_back(new FilterEQ());
@@ -47,6 +49,8 @@ bool Voice::IsPlaying(Sample* sample, int note) const
 
 void Voice::Update(float& left, float& right)
 {
+    float volume = 0.0f;
+
     if (_Sample!=NULL)
     {
         memcpy(&_Params[0], &_Sample->GetParams()[0], sizeof(int)*_Sample->GetParams().size());
@@ -76,7 +80,7 @@ void Voice::Update(float& left, float& right)
         if (pan<0) right = right*(1.0f+pan);
         else left = left*(1.0f-pan);
 
-        float volume = _Params[PARAM_Volume]/100.0f;
+        volume = _Params[PARAM_Volume]/100.0f;
 
         float env_attack = _Params[PARAM_EnvAttack]*50.0f;
         float env_release = _Params[PARAM_EnvRelease]*50.0f;
@@ -130,13 +134,13 @@ void Voice::Update(float& left, float& right)
         {
             _Sample = NULL;
         }
-
-        left *= volume;
-        right *= volume;
     }
 
     for (int i=0 ; i<_Filters.size() ; ++i)
         _Filters[i]->Compute(left, right, _Params);
+
+    left *= volume;
+    right *= volume;
 }
 
 void Voice::Play(Sample* sample, int note, int velocity)
