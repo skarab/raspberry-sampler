@@ -1,14 +1,14 @@
-#ifndef __SAMPLER_FILTER_MOOG__
-#define __SAMPLER_FILTER_MOOG__
+#ifndef __SAMPLER_FILTER_NOTCH__
+#define __SAMPLER_FILTER_NOTCH__
 
 #include "includes.h"
 #include "filter.h"
 
-class FilterMoog : public Filter
+class FilterNotch : public Filter
 {
 public:
 
-    FilterMoog();
+    FilterNotch();
 
     void Compute(float& left, float& right, const vector<int>& params);
 
@@ -16,17 +16,16 @@ private:
 
     typedef struct
     {
-        double Y1, Y2, Y3, Y4;
-        double OldX;
-        double OldY1, OldY2, OldY3;
+        double Y1, Y2;
+        double X0, X1, X2;
     } Data;
 
     void _Initialize(Data& data);
     void _Compute(float& value, Data& data);
 
     int _CutOff;
-    int _Resonance;
-    double _P, _K, _R;
+    int _BandWidth;
+    double _B0, _B1, _A1, _A2;
     Data _Left;
     Data _Right;
 };

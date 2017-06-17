@@ -113,10 +113,16 @@
 		<Unit filename="src/filter_moog.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_rc.cpp">
+		<Unit filename="src/filter_notch.cpp">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_rc.h">
+		<Unit filename="src/filter_notch.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_test.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_test.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/helpers.cpp">

@@ -34,7 +34,12 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 200, 100, "EQHigh" },
 
     { 0, 200, 200, "MoogCutOff" },
-    { 0, 200, 0, "MoogResonance" }
+    { 0, 200, 0, "MoogResonance" },
+
+    { 0, 64, 32, "Unused2" },
+
+    { 0, 200, 0, "NotchCutOff" },
+    { 0, 200, 200, "NotchBandWidth" }
 };
 
 Sample::Sample(string name, string path) :

@@ -17,12 +17,12 @@ void FilterMoog::Compute(float& left, float& right, const vector<int>& params)
         _Resonance = params[PARAM_MoogResonance];
 
         double f = pow(_CutOff/200.0, 3.0);
-        p=f*(1.8-0.8*f);
-        k=p+p-1.0;
+        _P = f*(1.8-0.8*f);
+        _K = _P+_P-1.0;
 
-        double t=(1.0-p)*1.386249;
-        double t2=12.0+t*t;
-        r = (1.0-pow(1.0-_Resonance/200.0, 3.0))*(t2+6.0*t)/(t2-6.0*t);
+        double t = (1.0-_P)*1.386249;
+        double t2 = 12.0+t*t;
+        _R = (1.0-pow(1.0-_Resonance/200.0, 3.0))*(t2+6.0*t)/(t2-6.0*t);
     }
 
     _Compute(left, _Left);
@@ -31,23 +31,27 @@ void FilterMoog::Compute(float& left, float& right, const vector<int>& params)
 
 void FilterMoog::_Initialize(Data& data)
 {
-    data.y1=data.y2=data.y3=data.y4=data.oldx=data.oldy1=data.oldy2=data.oldy3=0.0;
+    memset(&data, 0, sizeof(Data));
 }
 
 void FilterMoog::_Compute(float& value, Data& data)
 {
     // process input
-    double x = value - r*data.y4;
+    double x = value - _R*data.Y4;
 
     //Four cascaded onepole filters (bilinear transform)
-    data.y1= x*p +  data.oldx*p - k*data.y1;
-    data.y2=data.y1*p + data.oldy1*p - k*data.y2;
-    data.y3=data.y2*p + data.oldy2*p - k*data.y3;
-    data.y4=data.y3*p + data.oldy3*p - k*data.y4;
+    data.Y1 = x*_P +  data.OldX*_P - _K*data.Y1;
+    data.Y2 = data.Y1*_P + data.OldY1*_P - _K*data.Y2;
+    data.Y3 = data.Y2*_P + data.OldY2*_P - _K*data.Y3;
+    data.Y4 = data.Y3*_P + data.OldY3*_P - _K*data.Y4;
 
     //Clipper band limited sigmoid
-    data.y4-=(data.y4*data.y4*data.y4)/6.0;
+    data.Y4 -= (data.Y4*data.Y4*data.Y4)/6.0;
 
-    data.oldx = x; data.oldy1 = data.y1; data.oldy2 = data.y2; data.oldy3 = data.y3;
-    value = (float)data.y4;
+    data.OldX = x;
+    data.OldY1 = data.Y1;
+    data.OldY2 = data.Y2;
+    data.OldY3 = data.Y3;
+
+    value = (float)data.Y4;
 }

@@ -54,6 +54,11 @@ enum PARAM
     PARAM_MoogCutOff,
     PARAM_MoogResonance,
 
+    PARAM_Unused2,
+
+    PARAM_NotchCutOff,
+    PARAM_NotchBandWidth,
+
     PARAM_Count
 };
 
