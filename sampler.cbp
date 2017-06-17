@@ -95,9 +95,6 @@
 		<Unit filename="src/filter_lowpass.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_moog.cpp">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_moog.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
