@@ -9,11 +9,11 @@
 #include "filter_distortion.h"
 #include "filter_eq.h"
 #include "filter_formant.h"
+#include "filter_highpass.h"
+#include "filter_lowpass.h"
 
 /*
 #include "filter_noise.h"
-#include "filter_highpass.h"
-#include "filter_lowpass.h"
 #include "filter_moog.h"
 #include "filter_notch.h"
 */
@@ -30,6 +30,8 @@ private:
 
     FILTER_EQ _Equalizer;
     FILTER_FORMANT _Formant;
+    FILTER_HIGHPASS _HighPass;
+    FILTER_LOWPASS _LowPass;
 };
 
 #endif
