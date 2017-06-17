@@ -3,6 +3,7 @@
 Filters::Filters()
 {
     FILTER_EQ_Initialize(_Equalizer);
+    FILTER_FORMANT_Initialize(_Formant);
 }
 
 void Filters::Compute(double& left, double& right, const vector<int>& params)
@@ -12,4 +13,5 @@ void Filters::Compute(double& left, double& right, const vector<int>& params)
     FILTER_DISTORTION_Compute(left, right, params);
     FILTER_BITCRUSHER_Compute(left, right, params);
     FILTER_EQ_Compute(left, right, params, _Equalizer);
+    FILTER_FORMANT_Compute(left, right, params, _Formant);
 }
