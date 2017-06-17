@@ -101,9 +101,6 @@
 		<Unit filename="src/filter_noise.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_notch.cpp">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_notch.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
