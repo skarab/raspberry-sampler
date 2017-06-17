@@ -14,9 +14,6 @@ Device::Device() :
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 
-    for (int i=0 ; i<SAMPLER_RATE ; ++i)
-        _Noise[i] = ((rand()%20001)/10000.0-1.0)*0.06;
-
     while (!_Ready)
         usleep(10);
 }
@@ -26,11 +23,6 @@ Device::~Device()
     _Quit = true;
     pthread_join(_Thread, NULL);
     pthread_mutex_destroy(&_Lock);
-}
-
-double Device::GetNoise(int i) const
-{
-    return _Noise[i];
 }
 
 void Device::Play(Sample* sample, int note, int velocity)

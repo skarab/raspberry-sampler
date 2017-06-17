@@ -7,6 +7,12 @@ Filters::Filters()
     FILTER_HIGHPASS_Initialize(_HighPass);
     FILTER_LOWPASS_Initialize(_LowPass);
     FILTER_MOOG_Initialize(_Moog);
+    FILTER_NOISE_Initialize(_Noise);
+}
+
+void Filters::Initialize()
+{
+    FILTER_NOISE_STATIC_INITIALIZE();
 }
 
 void Filters::Compute(double& left, double& right, const vector<int>& params)
@@ -20,5 +26,6 @@ void Filters::Compute(double& left, double& right, const vector<int>& params)
     FILTER_HIGHPASS_Compute(left, right, params, _HighPass);
     FILTER_LOWPASS_Compute(left, right, params, _LowPass);
     FILTER_MOOG_Compute(left, right, params, _Moog);
+    FILTER_NOISE_Compute(left, right, params, _Noise);
 }
 

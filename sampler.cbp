@@ -98,9 +98,6 @@
 		<Unit filename="src/filter_moog.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_noise.cpp">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_noise.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
