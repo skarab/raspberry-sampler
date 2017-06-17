@@ -13,7 +13,7 @@ inline void FILTER_FORMANT_Initialize(FILTER_FORMANT& filter)
     memset(filter.Right, 0, sizeof(double)*10);
 }
 
-inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double formant, double* memory)
+inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double* memory)
 {
     static const double coeff[5][11]= {
         { 8.11044e-06, 8.943665402, -36.83889529, 92.01697887, -154.337906, 181.6233289, -151.8651235, 89.09614114, -35.10298511, 8.388101016, -0.923313471 },  // A
@@ -46,13 +46,15 @@ inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double formant,
     memory[1] = memory[0];
     memory[0] = res;
 
-    value = (res*formant)+value*(1.0-formant);
+    value = res;
 }
 
 inline void FILTER_FORMANT_Compute(double& left, double& right, const vector<int>& params, FILTER_FORMANT& filter)
 {
-    double formant = params[PARAM_Formant]/100.0;
-    FILTER_FORMANT_ComputeChannel(left, params[PARAM_FormantID], formant, filter.Left);
-    FILTER_FORMANT_ComputeChannel(right, params[PARAM_FormantID], formant, filter.Right);
+    int id = params[PARAM_Formant];
+    if (id>=0)
+    {
+        FILTER_FORMANT_ComputeChannel(left, id, filter.Left);
+        FILTER_FORMANT_ComputeChannel(right, id, filter.Right);
+    }
 }
-

@@ -50,10 +50,10 @@ inline void FILTER_LOWPASS_ComputeChannel(double& value, FILTER_LOWPASS& filter,
 
 inline void FILTER_LOWPASS_Compute(double& left, double& right, const vector<int>& params, FILTER_LOWPASS& filter)
 {
-    if ((filter.CutOff!=params[PARAM_LPCutOff]) || (filter.Resonance!=params[PARAM_LPResonance]))
+    if ((filter.CutOff!=params[PARAM_LPCutOff]) || (filter.Resonance!=params[PARAM_Resonance]))
     {
         filter.CutOff = params[PARAM_LPCutOff];
-        filter.Resonance = params[PARAM_LPResonance];
+        filter.Resonance = params[PARAM_Resonance];
 
         double cutoff = 40.0+filter.CutOff*(200.0-40.0)/200.0;
 

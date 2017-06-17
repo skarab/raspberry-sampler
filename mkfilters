@@ -1,3 +1,0 @@
-rm src/filter*.o
-make
-
