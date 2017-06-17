@@ -223,23 +223,26 @@ void Device::_Update(snd_pcm_uframes_t frames)
 {
     for (int i=0 ; i<frames ; ++i)
     {
-        float left = 0.0f;
-        float right = 0.0f;
+        double left = 0.0;
+        double right = 0.0;
 
         pthread_mutex_lock(&_Lock);
 
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
-            float l=0.0f, r=0.0f;
-            _Voices[j]->Update(l, r);
-            left += l;
-            right += r;
+            if (_Voices[j]->IsBusy())
+            {
+                double l=0.0, r=0.0;
+                _Voices[j]->Update(l, r);
+                left += l;
+                right += r;
+            }
         }
 
         pthread_mutex_unlock(&_Lock);
 
-        _Buffer[i*2] = left;
-        _Buffer[i*2+1] = right;
+        _Buffer[i*2] = (float)left;
+        _Buffer[i*2+1] = (float)right;
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)

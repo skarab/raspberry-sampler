@@ -101,10 +101,10 @@ public:
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
     bool UseRelease() const { return (_Mode==MODE_Key) || (_Mode==MODE_KeyLoop) || (_Mode==MODE_Instru); }
 
-    float GetStartPosition() const;
-    float GetStopPosition() const;
-    float GetLoopStartPosition(float start, float stop) const;
-    float GetLoopStopPosition(float start, float stop) const;
+    double GetStartPosition() const;
+    double GetStopPosition() const;
+    double GetLoopStartPosition(double start, double stop) const;
+    double GetLoopStopPosition(double start, double stop) const;
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);

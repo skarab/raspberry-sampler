@@ -1,15 +1,15 @@
-#ifndef __SAMPLER_FILTER_STEREO__
-#define __SAMPLER_FILTER_STEREO__
-
 #include "includes.h"
-#include "filter.h"
+#include "sample.h"
 
-class FilterStereo : public Filter
+inline void FILTER_STEREO_Compute(double& left, double& right, const vector<int>& params)
 {
-public:
+    double stereo = pow(params[PARAM_Stereo]/100.0, 2.0);
 
-    void Compute(float& left, float& right, const vector<int>& params);
+    double scale = stereo*0.5;
+    double m = (left+right)*0.5;
+    double s = (right-left )*scale;
 
-};
+    left = m-s;
+    right = m+s;
+}
 
-#endif

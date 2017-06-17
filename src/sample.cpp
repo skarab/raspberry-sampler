@@ -68,32 +68,32 @@ Sample::~Sample()
         delete _Wav;
 }
 
-float Sample::GetStartPosition() const
+double Sample::GetStartPosition() const
 {
-    float position = _Params[PARAM_StartPercent]*(GetLength()-1.0f)/100.0f;
-    position += _Params[PARAM_StartFineTune]*50.0f;
+    double position = _Params[PARAM_StartPercent]*(GetLength()-1.0)/100.0;
+    position += _Params[PARAM_StartFineTune]*50.0;
 
-    if (position<0.0f) position = 0.0f;
-    if (position>GetLength()-1.0f) position = GetLength()-1.0f;
+    if (position<0.0) position = 0.0;
+    if (position>GetLength()-1.0) position = GetLength()-1.0;
 
     return position;
 }
 
-float Sample::GetStopPosition() const
+double Sample::GetStopPosition() const
 {
-    float position = _Params[PARAM_StopPercent]*(GetLength()-1.0f)/100.0f;
-    position += _Params[PARAM_StopFineTune]*50.0f;
+    double position = _Params[PARAM_StopPercent]*(GetLength()-1.0)/100.0;
+    position += _Params[PARAM_StopFineTune]*50.0;
 
-    if (position<0.0f) position = 0.0f;
-    if (position>GetLength()-1.0f) position = GetLength()-1.0f;
+    if (position<0.0) position = 0.0;
+    if (position>GetLength()-1.0) position = GetLength()-1.0;
 
     return position;
 }
 
-float Sample::GetLoopStartPosition(float start, float stop) const
+double Sample::GetLoopStartPosition(double start, double stop) const
 {
-    float position = _Params[PARAM_LoopStartPercent]*(stop-start)/100.0f;
-    position += _Params[PARAM_LoopStartFineTune]*50.0f;
+    double position = _Params[PARAM_LoopStartPercent]*(stop-start)/100.0;
+    position += _Params[PARAM_LoopStartFineTune]*50.0;
 
     if (position<start) position = start;
     if (position>stop) position = stop;
@@ -101,10 +101,10 @@ float Sample::GetLoopStartPosition(float start, float stop) const
     return position;
 }
 
-float Sample::GetLoopStopPosition(float start, float stop) const
+double Sample::GetLoopStopPosition(double start, double stop) const
 {
-    float position = _Params[PARAM_LoopStopPercent]*(stop-start)/100.0f;
-    position += _Params[PARAM_LoopStopFineTune]*50.0f;
+    double position = _Params[PARAM_LoopStopPercent]*(stop-start)/100.0;
+    position += _Params[PARAM_LoopStopFineTune]*50.0;
 
     if (position<start) position = start;
     if (position>stop) position = stop;

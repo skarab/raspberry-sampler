@@ -3,7 +3,7 @@
 
 #include "includes.h"
 #include "sample.h"
-#include "filter.h"
+#include "filters.h"
 
 class Voice
 {
@@ -17,7 +17,7 @@ public:
     bool IsPlaying(Sample* sample, int note) const;
     Sample* GetSample() const { return _Sample; };
 
-    void Update(float& left, float& right);
+    void Update(double& left, double& right);
 
     void Play(Sample* sample, int note, int velocity);
     void Stop(Sample* sample, int note);
@@ -26,15 +26,14 @@ public:
 private:
 
     Sample* _Sample;
-    vector<int> _Params;
-    float _Position;
+    double _Position;
     bool _Stop;
-    float _StopTime;
+    double _StopTime;
     int _Note;
     int _Velocity;
-    float _Pitch;
-    float _LegatoPitch;
-    vector<Filter*> _Filters;
+    double _Pitch;
+    double _LegatoPitch;
+    Filters _Filters;
 };
 
 #endif

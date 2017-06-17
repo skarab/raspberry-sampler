@@ -1,45 +1,13 @@
 #include "voice.h"
-#include "filter_stereo.h"
-#include "filter_overdrive.h"
-#include "filter_noise.h"
-#include "filter_bitcrusher.h"
-#include "filter_distortion.h"
-#include "filter_highpass.h"
-#include "filter_lowpass.h"
-#include "filter_eq.h"
-#include "filter_formant.h"
-#include "filter_moog.h"
-#include "filter_notch.h"
-#include "filter_test.h"
 
 Voice::Voice() :
     _Sample(NULL),
-    _Position(0.0f)
+    _Position(0.0)
 {
-    _Params.resize(PARAM_Count);
-    for (int i=0 ; i<PARAM_Count ; ++i)
-        _Params[i] = PARAM_Values[i].Default;
-
-    _Filters.push_back(new FilterBitCrusher());
-    _Filters.push_back(new FilterOverdrive());
-
-    /*_Filters.push_back(new FilterStereo());
-    _Filters.push_back(new FilterDistortion());
-    _Filters.push_back(new FilterNoise());
-    _Filters.push_back(new FilterBitCrusher());
-    _Filters.push_back(new FilterHighPass());
-    _Filters.push_back(new FilterLowPass());
-    _Filters.push_back(new FilterEQ());
-    _Filters.push_back(new FilterFormant());
-    _Filters.push_back(new FilterMoog());
-    _Filters.push_back(new FilterNotch());
-    _Filters.push_back(new FilterTest());*/
 }
 
 Voice::~Voice()
 {
-    for (int i=0 ; i<_Filters.size() ; ++i)
-        delete _Filters[i];
 }
 
 bool Voice::IsBusy() const
@@ -57,106 +25,109 @@ bool Voice::IsPlaying(Sample* sample, int note) const
     return _Sample==sample && _Note==note;
 }
 
-void Voice::Update(float& left, float& right)
+void Voice::Update(double& left, double& right)
 {
-    float volume = 0.0f;
+    bool over = false;
+    const vector<int>& params = _Sample->GetParams();
 
-    if (_Sample!=NULL)
+    // get current sample data
+
+    double start = _Sample->GetStartPosition();
+    double stop = _Sample->GetStopPosition();
+    if (stop<start+1)
+        stop = start+1;
+
+    double clamp_position = _Position;
+    if (clamp_position<start) clamp_position = start;
+    if (clamp_position>stop) clamp_position = stop;
+
+    int p = (int)clamp_position;
+    left = _Sample->GetData()[p*2]/32768.0f;
+    right = _Sample->GetData()[p*2+1]/32768.0f;
+
+    // update position & pitch
+
+    _Position += _Pitch*pow(2.0, params[PARAM_PitchSemiTone]/12.0)*(params[PARAM_PitchFineTune]/512.0);
+
+    if (_Sample->GetMode()==MODE_InstruLegato)
     {
-        memcpy(&_Params[0], &_Sample->GetParams()[0], sizeof(int)*_Sample->GetParams().size());
-
-        float start = _Sample->GetStartPosition();
-        float stop = _Sample->GetStopPosition();
-        if (stop<start+1)
-            stop = start+1;
-
-        float clamp_position = _Position;
-        if (clamp_position<start) clamp_position = start;
-        if (clamp_position>stop) clamp_position = stop;
-
-        int p = (int)clamp_position;
-        left = _Sample->GetData()[p*2]/32768.0f;
-        right = _Sample->GetData()[p*2+1]/32768.0f;
-
-        _Position += _Pitch*pow(2.0f, _Params[PARAM_PitchSemiTone]/12.0f)*(_Params[PARAM_PitchFineTune]/512.0f);
-
-        if (_Sample->GetMode()==MODE_InstruLegato)
-        {
-            float legato = 0.999f+_Params[PARAM_Legato]*0.0009/64.0f;
-            _Pitch = _Pitch*legato+_LegatoPitch*(1.0f-legato);
-        }
-
-        float pan = _Params[PARAM_Pan]/32.0f;
-        if (pan<0) right = right*(1.0f+pan);
-        else left = left*(1.0f-pan);
-
-        volume = _Params[PARAM_Volume]/100.0f;
-
-        float env_attack = _Params[PARAM_EnvAttack]*50.0f;
-        float env_release = _Params[PARAM_EnvRelease]*50.0f;
-        if (_Position<start+env_attack)
-        {
-            volume *= _Position>=start?(_Position-start)/env_attack:0.0f;
-        }
-
-        if (_Position>stop-env_release)
-        {
-            volume *= _Position<stop?1.0f-(_Position-(stop-env_release))/env_release:0.0f;
-        }
-
-        if (_Stop && _Sample->UseRelease())
-        {
-            _StopTime += 1.0f;
-            volume *= _StopTime>env_release?0.0f:1.0f-_StopTime/env_release;
-        }
-
-        if (_Sample->IsLooping() && !_Stop)
-        {
-            float loop_delay = _Params[PARAM_LoopDelay]*50.0f;
-            float loop_delay_env = loop_delay==0.0f?0.0f:_Params[PARAM_LoopDelayEnv]*50.0f;
-            float loop_start = _Sample->GetLoopStartPosition(start, stop);
-            float loop_stop = _Sample->GetLoopStopPosition(start, stop);
-            if (loop_stop<loop_start+1)
-                loop_stop = loop_start+1;
-
-            if (_Params[PARAM_PitchFineTune]>0)
-            {
-                while (_Position>=loop_stop+loop_delay)
-                    _Position -= loop_stop-loop_start+loop_delay;
-
-                if (_Position>loop_stop-loop_delay_env)
-                {
-                    volume *= _Position>loop_stop?0.0f:1.0f-(_Position-(loop_stop-loop_delay_env))/loop_delay_env;
-                }
-            }
-            else
-            {
-                while (_Position<=loop_start-loop_delay)
-                    _Position += loop_stop-loop_start+loop_delay;
-
-                if (_Position<loop_start+loop_delay_env)
-                {
-                    volume *= _Position<loop_start?0.0f:(_Position-loop_start)/loop_delay_env;
-                }
-            }
-        }
-        else if (_Position<start || _Position>=stop || volume==0.0f)
-        {
-            _Sample = NULL;
-        }
+        double legato = 0.999+params[PARAM_Legato]*0.0009/64.0;
+        _Pitch = _Pitch*legato+_LegatoPitch*(1.0-legato);
     }
 
-    for (int i=0 ; i<_Filters.size() ; ++i)
-        _Filters[i]->Compute(left, right, _Params);
+    // panning
+
+    double pan = params[PARAM_Pan]/32.0;
+    if (pan<0) right = right*(1.0+pan);
+    else left = left*(1.0-pan);
+
+    // envelop
+
+    double volume = params[PARAM_Volume]/100.0;
+
+    double env_attack = params[PARAM_EnvAttack]*50.0;
+    double env_release = params[PARAM_EnvRelease]*50.0;
+    if (_Position<start+env_attack)
+        volume *= _Position>=start?(_Position-start)/env_attack:0.0;
+
+    if (_Position>stop-env_release)
+        volume *= _Position<stop?1.0-(_Position-(stop-env_release))/env_release:0.0;
+
+    if (_Stop && _Sample->UseRelease())
+    {
+        _StopTime += 1.0;
+        volume *= _StopTime>env_release?0.0:1.0-_StopTime/env_release;
+    }
+
+    // loop
+
+    if (_Sample->IsLooping() && !_Stop)
+    {
+        double loop_delay = params[PARAM_LoopDelay]*50.0;
+        double loop_delay_env = loop_delay==0.0?0.0:params[PARAM_LoopDelayEnv]*50.0;
+        double loop_start = _Sample->GetLoopStartPosition(start, stop);
+        double loop_stop = _Sample->GetLoopStopPosition(start, stop);
+        if (loop_stop<loop_start+1)
+            loop_stop = loop_start+1;
+
+        // reverse ?
+        if (params[PARAM_PitchFineTune]>0)
+        {
+            while (_Position>=loop_stop+loop_delay)
+                _Position -= loop_stop-loop_start+loop_delay;
+
+            if (_Position>loop_stop-loop_delay_env)
+                volume *= _Position>loop_stop?0.0:1.0-(_Position-(loop_stop-loop_delay_env))/loop_delay_env;
+        }
+        else
+        {
+            while (_Position<=loop_start-loop_delay)
+                _Position += loop_stop-loop_start+loop_delay;
+
+            if (_Position<loop_start+loop_delay_env)
+                volume *= _Position<loop_start?0.0:(_Position-loop_start)/loop_delay_env;
+        }
+    }
+    else if (_Position<start || _Position>=stop || volume==0.0)
+    {
+        over = true;
+    }
+
+    // filters & volume
+
+    _Filters.Compute(left, right, params);
 
     left *= volume;
     right *= volume;
+
+    if (over)
+        _Sample = NULL;
 }
 
 void Voice::Play(Sample* sample, int note, int velocity)
 {
-    float start = sample->GetStartPosition();
-    float stop = sample->GetStopPosition();
+    double start = sample->GetStartPosition();
+    double stop = sample->GetStopPosition();
     if (stop<start)
         stop = start;
 
@@ -167,10 +138,10 @@ void Voice::Play(Sample* sample, int note, int velocity)
 
     _Note = note;
     _Velocity = velocity;
-    _LegatoPitch = 1.0f;
+    _LegatoPitch = 1.0;
 
     if (sample->IsInstru() && note!=-1)
-        _LegatoPitch = pow(2.0f, (note-sample->GetMidiKey().Note)/12.0f);
+        _LegatoPitch = pow(2.0, (note-sample->GetMidiKey().Note)/12.0);
 
     if (_Sample==NULL || (sample->GetMode()!=MODE_InstruLegato))
         _Pitch = _LegatoPitch;
@@ -182,7 +153,7 @@ void Voice::Play(Sample* sample, int note, int velocity)
 void Voice::Stop(Sample* sample, int note)
 {
     _Stop = true;
-    _StopTime = 0.0f;
+    _StopTime = 0.0;
 }
 
 void Voice::ForceStop()

@@ -1,15 +1,11 @@
-#ifndef __SAMPLER_FILTER_OVERDRIVE__
-#define __SAMPLER_FILTER_OVERDRIVE__
-
 #include "includes.h"
-#include "filter.h"
+#include "sample.h"
 
-class FilterOverdrive : public Filter
+inline void FILTER_OVERDRIVE_Compute(double& left, double& right, const vector<int>& params)
 {
-public:
+    double amount = params[PARAM_Overdrive]/201.0;
+    double k = 2.0*amount/(1.0-amount);
 
-    void Compute(float& left, float& right, const vector<int>& params);
-
-};
-
-#endif
+    left = (1.0+k)*left/(1.0+k*fabs(left));
+    right = (1.0+k)*right/(1.0+k*fabs(right));
+}

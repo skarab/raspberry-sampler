@@ -1,14 +1,17 @@
-#ifndef __SAMPLER_FILTER_DISTORTION__
-#define __SAMPLER_FILTER_DISTORTION__
-
 #include "includes.h"
-#include "filter.h"
+#include "sample.h"
 
-class FilterDistortion : public Filter
+inline void FILTER_DISTORTION_ComputeChannel(double& in, double threshold)
 {
-public:
+    if (in>threshold || in<-threshold)
+        in = fabs(fabs(fmod(in-threshold, threshold*4.0))-threshold*2.0)-threshold;
+}
 
-    void Compute(float& left, float& right, const vector<int>& params);
-};
+inline void FILTER_DISTORTION_Compute(double& left, double& right, const vector<int>& params)
+{
+    double threshold = pow(1.0-params[PARAM_Distortion]/200.0, 4.0);
 
-#endif
+    FILTER_DISTORTION_ComputeChannel(left, threshold);
+    FILTER_DISTORTION_ComputeChannel(right, threshold);
+}
+

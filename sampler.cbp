@@ -77,16 +77,10 @@
 		<Unit filename="src/error.h">
 			<Option virtualFolder="helpers/" />
 		</Unit>
-		<Unit filename="src/filter.cpp">
-			<Option virtualFolder="filters/" />
-		</Unit>
-		<Unit filename="src/filter.h">
-			<Option virtualFolder="filters/" />
-		</Unit>
-		<Unit filename="src/filter_bitcrusher.cpp">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_bitcrusher.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_distortion.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/filter_eq.cpp">
@@ -131,10 +125,16 @@
 		<Unit filename="src/filter_notch.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_test.cpp">
+		<Unit filename="src/filter_overdrive.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_test.h">
+		<Unit filename="src/filter_stereo.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filters.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filters.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/helpers.cpp">
