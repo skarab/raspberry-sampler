@@ -44,10 +44,6 @@ inline void FILTER_HIGHPASS_Compute(double& left, double& right, const vector<in
         int cutoff = filter.CutOff;
         double resonance = filter.Resonance;
 
-        // fix low cutoff scratches
-        if (resonance>0.0 && cutoff<26)
-            cutoff = 20;
-
         resonance = pow(1.0-resonance/200.0, 2.0);
 
         double r = 0.04+resonance*(sqrt(2.0)-0.04);

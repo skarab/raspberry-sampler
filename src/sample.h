@@ -38,7 +38,7 @@ enum PARAM
     PARAM_EnvAttack,
     PARAM_EnvRelease,
     PARAM_Legato,
-    PARAM_Unused,
+    PARAM_Stereo,
 
     PARAM_HPCutOff,
     PARAM_HPResonance,
@@ -50,19 +50,11 @@ enum PARAM
     PARAM_EQLow,
     PARAM_EQMedium,
     PARAM_EQHigh,
-    PARAM_MoogCutOff,
-    PARAM_MoogResonance,
-    PARAM_Unused2,
-
-    PARAM_NotchCutOff,
-    PARAM_NotchBandWidth,
     PARAM_Noise,
     PARAM_NoisePink,
     PARAM_BitCrusher,
-    PARAM_Unused3,
 
     PARAM_Distortion,
-    PARAM_Stereo,
     PARAM_Overdrive,
 
     PARAM_Count

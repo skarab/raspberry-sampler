@@ -38,7 +38,7 @@ sampler: $(OBJS)
 	$(CXX) $(CPPFLAGS) -c $< $(HEADERS) -o $@
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) src/*.o
 
 distclean: clean
 	$(RM) sample
