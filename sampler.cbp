@@ -83,9 +83,6 @@
 		<Unit filename="src/filter_distortion.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_eq.cpp">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_eq.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
