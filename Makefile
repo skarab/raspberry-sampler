@@ -17,7 +17,11 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/sample.cpp \
 	src/voice.cpp \
 	src/filter.cpp \
+	src/filter_stereo.cpp \
+	src/filter_overdrive.cpp \
 	src/filter_noise.cpp \
+	src/filter_bitcrusher.cpp \
+	src/filter_distortion.cpp \
 	src/filter_highpass.cpp \
 	src/filter_lowpass.cpp \
 	src/filter_eq.cpp \

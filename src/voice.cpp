@@ -1,5 +1,9 @@
 #include "voice.h"
+#include "filter_stereo.h"
+#include "filter_overdrive.h"
 #include "filter_noise.h"
+#include "filter_bitcrusher.h"
+#include "filter_distortion.h"
 #include "filter_highpass.h"
 #include "filter_lowpass.h"
 #include "filter_eq.h"
@@ -16,14 +20,20 @@ Voice::Voice() :
     for (int i=0 ; i<PARAM_Count ; ++i)
         _Params[i] = PARAM_Values[i].Default;
 
+    _Filters.push_back(new FilterBitCrusher());
+    _Filters.push_back(new FilterOverdrive());
+
+    /*_Filters.push_back(new FilterStereo());
+    _Filters.push_back(new FilterDistortion());
     _Filters.push_back(new FilterNoise());
+    _Filters.push_back(new FilterBitCrusher());
     _Filters.push_back(new FilterHighPass());
     _Filters.push_back(new FilterLowPass());
     _Filters.push_back(new FilterEQ());
     _Filters.push_back(new FilterFormant());
     _Filters.push_back(new FilterMoog());
     _Filters.push_back(new FilterNotch());
-    _Filters.push_back(new FilterTest());
+    _Filters.push_back(new FilterTest());*/
 }
 
 Voice::~Voice()

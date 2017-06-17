@@ -83,6 +83,12 @@
 		<Unit filename="src/filter.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
+		<Unit filename="src/filter_bitcrusher.cpp">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_bitcrusher.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
 		<Unit filename="src/filter_eq.cpp">
 			<Option virtualFolder="filters/" />
 		</Unit>
