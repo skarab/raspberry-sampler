@@ -47,9 +47,9 @@ Sample :
    6. ins. legato: play instru legato 
 
 (7) midi attach/detach : 
-   - tap it one time, then the next received midi key is attached 
-     note: a sample has a single attachment 
-     If you switch another control before a note is received, it just cancel the tap 
+   - tap it one time, then the next received midi key is attached.  
+     Note: a sample has a single attachment. 
+     If you switch another control before a note is received, it just cancel the tap. 
    - tap it two time to detach it 
 
 (8) play 
