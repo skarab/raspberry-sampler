@@ -2,12 +2,10 @@
 Sampler for the Raspberry 3 
 
 Key concept is to have a box full of knobs to live-edit samples, linked to other instruments using midi. 
-
 Note this is WIP, the design of controllers may change, the box isn't designed yet. 
 
-soundcloud sample: https://soundcloud.com/stroodge/rasperry-sampler-filters
-
-youtube sample: https://www.youtube.com/watch?v=87chFwOwE38
+https://soundcloud.com/stroodge/rasperry-sampler-filters
+https://www.youtube.com/watch?v=87chFwOwE38
 
 
 -----------------------------------
