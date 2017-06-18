@@ -2,10 +2,12 @@
 Sampler for the Raspberry 3 
 
 Key concept is to have a box full of knobs to live-edit samples, linked to other instruments using midi. 
+
 Note this is WIP, the design of controllers may change, the box isn't designed yet. 
 
-![soundcloud](https://soundcloud.com/stroodge/rasperry-sampler-filters)
-![youtube](https://www.youtube.com/watch?v=87chFwOwE38)
+soundcloud sample: https://soundcloud.com/stroodge/rasperry-sampler-filters
+
+youtube sample: https://www.youtube.com/watch?v=87chFwOwE38
 
 
 -----------------------------------
@@ -18,13 +20,20 @@ Manual
 (0) display current edited value 
  
 Bank : 
+
 (1) select bank, basically a folder full of wavs in the main samples/ directory 
+
 (2) lights up if bank is loaded 
+
 (3) load or unload the bank 
+
 (4) save the bank (all parameters & midi settings) 
  
+
 Sample : 
+
 (5) select sample, a 16bits 44100Hz WAV file inside the bank folder 
+
 (6) switch mode : 
    0. one shot   : just play it til the end (default) 
    1. loop       : one press to start the loop, one press to stop it 
@@ -33,11 +42,13 @@ Sample :
    4. instru key : use only midi device and pitch follow the notes 
    5. instru OS  : play notes as one shot samples 
    6. ins. legato: play instru legato 
+
 (7) midi attach/detach : 
    - tap it one time, then the next received midi key is attached 
      note: a sample has a single attachment 
      If you switch another control before a note is received, it just cancel the tap 
    - tap it two time to detach it 
+
 (8) play 
  
 (9) select parameters to assign to the (10) knobs : 
@@ -52,12 +63,19 @@ Sample :
 -----------------------------------
  
 Hardware parts : 
+
 . Raspberry 3 
+
 . SD card 
+
 . 7-segment LED HT16K33 Backpack 
+
 . x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
+
 . 1 led 
+
 . 5 buttons 
+
 . cables, proto board, cobbler 
  
 
