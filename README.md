@@ -35,6 +35,7 @@ Sample :
 (5) select sample, a 16bits 44100Hz WAV file inside the bank folder 
 
 (6) switch mode : 
+   
    0. one shot   : just play it til the end (default) 
    1. loop       : one press to start the loop, one press to stop it 
    2. key        : stop as soon the key is released 
@@ -63,19 +64,12 @@ Sample :
 -----------------------------------
  
 Hardware parts : 
-
-. Raspberry 3 
-
-. SD card 
-
-. 7-segment LED HT16K33 Backpack 
-
-. x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
-
-. 1 led 
-
-. 5 buttons 
-
-. cables, proto board, cobbler 
+ - Raspberry 3 
+ - SD card 
+ - 7-segment LED HT16K33 Backpack 
+ - x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
+ - 1 led 
+ - 5 buttons 
+ - cables, proto board, cobbler 
  
 
