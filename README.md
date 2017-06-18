@@ -5,6 +5,7 @@ Key concept is to have a box full of knobs to live-edit samples, linked to other
 Note this is WIP, the design of controllers may change, the box isn't designed yet. 
 
 https://soundcloud.com/stroodge/rasperry-sampler-filters
+
 https://www.youtube.com/watch?v=87chFwOwE38
 
 
