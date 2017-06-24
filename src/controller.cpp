@@ -180,7 +180,7 @@ Bank* Controller::_GetBank()
 
 Sample* Controller::_FindSample(const MidiKey& key)
 {
-    for (int i=0 ; i<_Banks.size() ; ++i)
+    for (int i=1 ; i<_Banks.size() ; ++i)
     {
         if (_Banks[i]->IsLoaded())
         {
