@@ -30,8 +30,9 @@ private:
     FILTER_DC _DC;
     FILTER_NOISE _Noise;
     FILTER_FORMANT _Formant;
-    FILTER_EQUALIZER _Equalizer;
     FILTER_LOWPASS _LowPass;
+    FILTER_HIGHPASS _HighPass;
+    FILTER_EQUALIZER _Equalizer;
 };
 
 class FiltersVoice
@@ -50,12 +51,9 @@ private:
     FILTER_DC _DC;
     FILTER_NOISE _Noise;
     FILTER_FORMANT _Formant;
-    FILTER_EQUALIZER _Equalizer;
     FILTER_LOWPASS _LowPass;
-
-    /*
     FILTER_HIGHPASS _HighPass;
-    */
+    FILTER_EQUALIZER _Equalizer;
 };
 
 #endif

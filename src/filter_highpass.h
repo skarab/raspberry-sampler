@@ -6,24 +6,25 @@ typedef struct
     int CutOff;
     int Resonance;
     double A1, A2, B1, B2;
-    double InputLeft[2];
-    double OutputLeft[2];
-    double InputRight[2];
-    double OutputRight[2];
+    double Input[2];
+    double Output[2];
 } FILTER_HIGHPASS;
+
+inline void FILTER_HIGHPASS_Clear(FILTER_HIGHPASS& filter)
+{
+    memset(filter.Input, 0, sizeof(double)*2);
+    memset(filter.Output, 0, sizeof(double)*2);
+}
 
 inline void FILTER_HIGHPASS_Initialize(FILTER_HIGHPASS& filter)
 {
     filter.CutOff = -1;
     filter.Resonance = -1;
 
-    memset(filter.InputLeft, 0, sizeof(double)*2);
-    memset(filter.OutputLeft, 0, sizeof(double)*2);
-    memset(filter.InputRight, 0, sizeof(double)*2);
-    memset(filter.OutputRight, 0, sizeof(double)*2);
+    FILTER_HIGHPASS_Clear(filter);
 }
 
-inline void FILTER_HIGHPASS_ComputeChannel(double& value, double* inputs, double* outputs, double a1, double a2, double b1, double b2)
+inline void FILTER_HIGHPASS_Compute(double& value, double* inputs, double* outputs, double a1, double a2, double b1, double b2)
 {
     double result = a1*value+a2*inputs[0]+a1*inputs[1]-b1*outputs[0]-b2*outputs[1];
 
@@ -37,7 +38,7 @@ inline void FILTER_HIGHPASS_ComputeChannel(double& value, double* inputs, double
     value = result;
 }
 
-inline void FILTER_HIGHPASS_Compute(double& left, double& right, const vector<int>& params, FILTER_HIGHPASS& filter)
+inline void FILTER_HIGHPASS_Compute(int& value, const vector<int>& params, FILTER_HIGHPASS& filter)
 {
     if ((filter.CutOff!=params[PARAM_HPCutOff]) || (filter.Resonance!=params[PARAM_HPResonance]))
     {
@@ -59,6 +60,7 @@ inline void FILTER_HIGHPASS_Compute(double& left, double& right, const vector<in
         filter.B2 = (1.0-r*c+c*c)*filter.A1;
     }
 
-    FILTER_HIGHPASS_ComputeChannel(left, filter.InputLeft, filter.OutputLeft, filter.A1, filter.A2, filter.B1, filter.B2);
-    FILTER_HIGHPASS_ComputeChannel(right, filter.InputRight, filter.OutputRight, filter.A1, filter.A2, filter.B1, filter.B2);
+    double in = value/32767.0;
+    FILTER_HIGHPASS_Compute(in, filter.Input, filter.Output, filter.A1, filter.A2, filter.B1, filter.B2);
+    value = (int)(in*32767.0);
 }
