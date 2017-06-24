@@ -56,7 +56,7 @@ Sample :
 
     The green LED displays if the sample is attached.
 
-(8) play 
+(8) play the sample, the red LED displays if the sample is playing 
  
 (9) select parameters to assign to the (10) knobs : 
  
@@ -74,7 +74,7 @@ Hardware parts :
  - SD card 
  - 7-segment LED HT16K33 Backpack 
  - x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
- - 2 led 
+ - 3 led 
  - 5 buttons 
  - cables, proto board, cobbler 
  

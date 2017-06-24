@@ -38,7 +38,8 @@ Param PARAM_Values[PARAM_Count] = {
 };
 
 Sample::Sample() :
-    _Wav(NULL)
+    _Wav(NULL),
+    _PlayCounter(0)
 {
     _Params.resize(PARAM_Count);
     for (int i=0 ; i<PARAM_Count ; ++i)
@@ -47,7 +48,8 @@ Sample::Sample() :
 
 Sample::Sample(string name, string path) :
     _Name(name),
-    _Mode(MODE_OneShot)
+    _Mode(MODE_OneShot),
+    _PlayCounter(0)
 {
     _Wav = new Wav(path);
 

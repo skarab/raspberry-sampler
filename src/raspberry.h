@@ -18,6 +18,7 @@
 #define PIN_SAMPLE_MIDI_STATUS      RPI_PIN_01
 
 #define PIN_SAMPLE_PLAY             RPI_PIN_16
+#define PIN_SAMPLE_PLAY_STATUS      RPI_PIN_00
 
 #define PIN_CONTROL_01_LEFT         RPI_PIN_17
 #define PIN_CONTROL_01_RIGHT        RPI_PIN_04

@@ -52,11 +52,13 @@ private:
 
     KnobSelect* _SampleSelect;
     Button* _SampleMode;
+
     Button* _SampleMidiSet;
     Led* _SampleMidiStatus;
+    bool _AttachMidi;
 
     Button* _SamplePlay;
-    bool _AttachMidi;
+    Led* _SamplePlayStatus;
 
     KnobSelect* _ControlSelect;
     vector<KnobControl*> _Controls;

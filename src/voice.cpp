@@ -42,6 +42,7 @@ void Voice::Play(Sample* sample, int note, int velocity)
     else _Pitch = 1.0f;
 
     _Sample = sample;
+    _Sample->NotifyStart();
     _Stop = false;
     _InLoop = false;
 }
@@ -54,6 +55,8 @@ void Voice::Stop(Sample* sample, int note)
 
 void Voice::ForceStop()
 {
+    if (_Sample!=NULL)
+        _Sample->NotifyStop();
     _Sample = NULL;
 }
 
@@ -174,5 +177,5 @@ void Voice::Update(int& left, int& right)
     right *= volume*volume_right;
 
     if (over)
-        _Sample = NULL;
+        ForceStop();
 }

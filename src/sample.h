@@ -87,6 +87,7 @@ public:
     int GetParam(PARAM param) const { return _Params[param]; }
     const vector<int>& GetParams() const { return _Params; }
 
+    bool IsPlaying() const { return _PlayCounter>0; }
     bool IsReverse() const { return _Params[PARAM_PitchFineTune]<0; }
     bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
@@ -100,6 +101,9 @@ public:
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);
 
+    void NotifyStart() { ++_PlayCounter; }
+    void NotifyStop() { --_PlayCounter; }
+
 private:
 
     string _Name;
@@ -107,6 +111,7 @@ private:
     MidiKey _MidiKey;
     MODE _Mode;
     vector<int> _Params;
+    int _PlayCounter;
 };
 
 #endif

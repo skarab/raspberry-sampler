@@ -29,6 +29,7 @@ Controller::Controller() :
     _SampleMidiStatus = new Led(PIN_SAMPLE_MIDI_STATUS);
 
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
+    _SamplePlayStatus = new Led(PIN_SAMPLE_PLAY_STATUS);
 
     _ControlSelect = new KnobSelect((PARAM_Count-1)/6+1, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT);
     _Controls.resize(6);
@@ -55,8 +56,8 @@ Controller::~Controller()
         delete _Controls[i];
     delete _ControlSelect;
 
+    delete _SamplePlayStatus;
     delete _SamplePlay;
-
     delete _SampleMidiStatus;
     delete _SampleMidiSet;
     delete _SampleMode;
@@ -176,6 +177,12 @@ void Controller::Update()
                 _OnControlChanged(i);
             }
         }
+
+        _SamplePlayStatus->SetOn(_Sample->IsPlaying());
+    }
+    else
+    {
+        _SamplePlayStatus->SetOn(false);
     }
 
     if (changed)
@@ -304,7 +311,7 @@ void Controller::_OnStopSample()
 
 void Controller::_UpdateControls()
 {
-    _SampleMidiStatus->SetOn(!_Sample->GetMidiKey().IsNull());
+    _SampleMidiStatus->SetOn((_Sample!=NULL) && !_Sample->GetMidiKey().IsNull());
 
     for (int i=0 ; i<_Controls.size() ; ++i)
     {
