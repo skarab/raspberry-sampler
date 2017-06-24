@@ -9,7 +9,7 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 64, 32, "Legato" },
 
     { 0, 100, 0, "BitCrusher" },
-    { 0, 200, 0, "Distortion" },
+    { 0, 150, 0, "Distortion" },
     { 0, 200, 0, "Overdrive" },
     { 0, 100, 0, "Formant" },
     { 0, 5, 1, "FormantID" },
