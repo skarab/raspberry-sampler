@@ -20,8 +20,9 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 200, 100, "EQMedium" },
     { 0, 200, 100, "EQHigh" },
     { 0, 200, 200, "LPCutOff" },
+    { 0, 200, 0, "LPResonance" },
     { 0, 200, 0, "HPCutOff" },
-    { 0, 200, 0, "Resonance" },
+    { 0, 200, 0, "HPResonance" },
 
     { 0, 100, 0, "LoopStartPercent" },
     { -512, 512, 0, "LoopStartFineTune" },

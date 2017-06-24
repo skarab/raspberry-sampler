@@ -11,8 +11,8 @@
 #include "filter_distortion.h"
 #include "filter_overdrive.h"
 #include "filter_equalizer.h"
-#include "filter_highpass.h"
 #include "filter_lowpass.h"
+#include "filter_highpass.h"
 
 class FiltersGlobal
 {
@@ -31,6 +31,7 @@ private:
     FILTER_NOISE _Noise;
     FILTER_FORMANT _Formant;
     FILTER_EQUALIZER _Equalizer;
+    FILTER_LOWPASS _LowPass;
 };
 
 class FiltersVoice
@@ -50,10 +51,10 @@ private:
     FILTER_NOISE _Noise;
     FILTER_FORMANT _Formant;
     FILTER_EQUALIZER _Equalizer;
+    FILTER_LOWPASS _LowPass;
 
     /*
     FILTER_HIGHPASS _HighPass;
-    FILTER_LOWPASS _LowPass;
     */
 };
 

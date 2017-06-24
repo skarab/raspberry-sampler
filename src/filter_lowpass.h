@@ -3,59 +3,52 @@
 
 typedef struct
 {
-    double Y1, Y2, Y3, Y4;
-    double OldX;
-    double OldY1, OldY2, OldY3;
-} FILTER_LOWPASS_CHANNEL;
-
-typedef struct
-{
     int CutOff;
     int Resonance;
     double P, K, R;
-    FILTER_LOWPASS_CHANNEL Left;
-    FILTER_LOWPASS_CHANNEL Right;
+    double Y1, Y2, Y3, Y4;
+    double OldX;
+    double OldY1, OldY2, OldY3;
 } FILTER_LOWPASS;
 
 inline void FILTER_LOWPASS_Initialize(FILTER_LOWPASS& filter)
 {
+    memset(&filter, 0, sizeof(FILTER_LOWPASS));
+
     filter.CutOff = -1;
     filter.Resonance = -1;
-
-    memset(&filter.Left, 0, sizeof(FILTER_LOWPASS_CHANNEL));
-    memset(&filter.Right, 0, sizeof(FILTER_LOWPASS_CHANNEL));
 }
 
-inline void FILTER_LOWPASS_ComputeChannel(double& value, FILTER_LOWPASS& filter, FILTER_LOWPASS_CHANNEL& data)
+inline void FILTER_LOWPASS_Compute(double& value, FILTER_LOWPASS& filter)
 {
     // process input
-    double x = value - filter.R*data.Y4;
+    double x = value - filter.R*filter.Y4;
 
     //Four cascaded onepole filters (bilinear transform)
-    data.Y1 = x*filter.P +  data.OldX*filter.P - filter.K*data.Y1;
-    data.Y2 = data.Y1*filter.P + data.OldY1*filter.P - filter.K*data.Y2;
-    data.Y3 = data.Y2*filter.P + data.OldY2*filter.P - filter.K*data.Y3;
-    data.Y4 = data.Y3*filter.P + data.OldY3*filter.P - filter.K*data.Y4;
+    filter.Y1 = x*filter.P + filter.OldX*filter.P - filter.K*filter.Y1;
+    filter.Y2 = filter.Y1*filter.P + filter.OldY1*filter.P - filter.K*filter.Y2;
+    filter.Y3 = filter.Y2*filter.P + filter.OldY2*filter.P - filter.K*filter.Y3;
+    filter.Y4 = filter.Y3*filter.P + filter.OldY3*filter.P - filter.K*filter.Y4;
 
     //Clipper band limited sigmoid
-    data.Y4 -= (data.Y4*data.Y4*data.Y4)/6.0;
+    filter.Y4 -= (filter.Y4*filter.Y4*filter.Y4)/6.0;
 
-    data.OldX = x;
-    data.OldY1 = data.Y1;
-    data.OldY2 = data.Y2;
-    data.OldY3 = data.Y3;
+    filter.OldX = x;
+    filter.OldY1 = filter.Y1;
+    filter.OldY2 = filter.Y2;
+    filter.OldY3 = filter.Y3;
 
-    if (data.Y4<-10.0 || data.Y4>10.0) data.Y4 = 0.0;
+    if (filter.Y4<-10.0 || filter.Y4>10.0) filter.Y4 = 0.0;
 
-    value = data.Y4;
+    value = filter.Y4;
 }
 
-inline void FILTER_LOWPASS_Compute(double& left, double& right, const vector<int>& params, FILTER_LOWPASS& filter)
+inline void FILTER_LOWPASS_Compute(int& value, const vector<int>& params, FILTER_LOWPASS& filter)
 {
-    if ((filter.CutOff!=params[PARAM_LPCutOff]) || (filter.Resonance!=params[PARAM_Resonance]))
+    if ((filter.CutOff!=params[PARAM_LPCutOff]) || (filter.Resonance!=params[PARAM_LPResonance]))
     {
         filter.CutOff = params[PARAM_LPCutOff];
-        filter.Resonance = params[PARAM_Resonance];
+        filter.Resonance = params[PARAM_LPResonance];
 
         double cutoff = 40.0+filter.CutOff*(200.0-40.0)/200.0;
 
@@ -68,7 +61,8 @@ inline void FILTER_LOWPASS_Compute(double& left, double& right, const vector<int
         filter.R = (1.0-pow(1.0-filter.Resonance/200.0, 4.0))*(t2+6.0*t)/(t2-6.0*t);
     }
 
-    FILTER_LOWPASS_ComputeChannel(left, filter, filter.Left);
-    FILTER_LOWPASS_ComputeChannel(right, filter, filter.Right);
+    double in = value/32767.0;
+    FILTER_LOWPASS_Compute(in, filter);
+    value = (int)(in*32767.0);
 }
 

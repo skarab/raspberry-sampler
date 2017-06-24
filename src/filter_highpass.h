@@ -39,10 +39,10 @@ inline void FILTER_HIGHPASS_ComputeChannel(double& value, double* inputs, double
 
 inline void FILTER_HIGHPASS_Compute(double& left, double& right, const vector<int>& params, FILTER_HIGHPASS& filter)
 {
-    if ((filter.CutOff!=params[PARAM_HPCutOff]) || (filter.Resonance!=params[PARAM_Resonance]))
+    if ((filter.CutOff!=params[PARAM_HPCutOff]) || (filter.Resonance!=params[PARAM_HPResonance]))
     {
         filter.CutOff = params[PARAM_HPCutOff];
-        filter.Resonance = params[PARAM_Resonance];
+        filter.Resonance = params[PARAM_HPResonance];
         int cutoff = filter.CutOff;
         double resonance = filter.Resonance;
 

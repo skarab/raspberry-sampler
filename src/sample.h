@@ -38,8 +38,9 @@ enum PARAM
     PARAM_EQMedium,
     PARAM_EQHigh,
     PARAM_LPCutOff,
+    PARAM_LPResonance,
     PARAM_HPCutOff,
-    PARAM_Resonance,
+    PARAM_HPResonance,
 
     PARAM_LoopStartPercent,
     PARAM_LoopStartFineTune,
