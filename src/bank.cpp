@@ -31,7 +31,7 @@ void Bank::UpdatePlayBank()
             for (int j=0 ; j<Banks[i]->_Samples.size() ; ++j)
             {
                 Sample* sample = Banks[i]->_Samples[j];
-                if (!sample->GetMidiKey().IsNull())
+                if (!sample->GetMidiKey().IsNull() || (sample->IsPlaying() && sample->IsLooping()))
                     PlayBank->_Samples.push_back(sample);
             }
         }

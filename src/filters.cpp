@@ -17,6 +17,9 @@ void FiltersGlobal::Initialize()
 
 void FiltersGlobal::Compute(int& value, const vector<int>& params)
 {
+    float preampli = powf(2.0f, (params[PARAM_PreAmpli]-100.0f)/10.0f);
+    value = (int)(value*preampli);
+
     FILTER_NOISE_Compute(value, params, _Noise);
     FILTER_FORMANT_Compute(value, params, _Formant);
     FILTER_DC_Compute(value, _DC);
@@ -27,8 +30,8 @@ void FiltersGlobal::Compute(int& value, const vector<int>& params)
     FILTER_HIGHPASS_Compute(value, params, _HighPass);
     FILTER_EQUALIZER_Compute(value, params, _Equalizer);
 
-    float volume = powf(2.0f, (params[PARAM_Volume]-100.0f)/10.0f);
-    value = (int)(value*volume);
+    float postampli = powf(2.0f, (params[PARAM_PostAmpli]-100.0f)/10.0f);
+    value = (int)(value*postampli);
 }
 
 void FiltersGlobal::ComputeStereo(int& left, int& right, const vector<int>& params)

@@ -14,7 +14,7 @@ Voice::~Voice()
 
 bool Voice::IsBusy() const
 {
-    return _Sample!=NULL;
+    return (_Sample!=NULL) && !_Stop;
 }
 
 bool Voice::IsPlaying(Sample* sample) const
@@ -24,11 +24,19 @@ bool Voice::IsPlaying(Sample* sample) const
 
 bool Voice::IsPlaying(Sample* sample, int note) const
 {
-    return _Sample==sample && _Note==note;
+    return (_Sample==sample) && (_Note==note);
+}
+
+bool Voice::IsLooping() const
+{
+    return (_Sample!=NULL) && _Sample->IsLooping();
 }
 
 void Voice::Play(Sample* sample, int note, int velocity)
 {
+    if (_Sample!=NULL)
+        ForceStop();
+
     if (sample->IsReverse()) _Position = (float)sample->GetStopPosition();
     else _Position = (float)sample->GetStartPosition();
 
@@ -96,7 +104,8 @@ void Voice::Update(int& left, int& right)
 
     // envelop
 
-    float volume = powf(2.0f, (params[PARAM_Volume]-100.0f)/10.0f);
+    float preampli = powf(2.0f, (params[PARAM_PreAmpli]-100.0f)/10.0f);
+    float volume = powf(2.0f, (params[PARAM_PostAmpli]-100.0f)/10.0f);
 
     float env_attack = params[PARAM_EnvAttack]*100.0f;
     if (env_attack>0.0f && _Position<start+env_attack)
@@ -131,7 +140,8 @@ void Voice::Update(int& left, int& right)
     if (_Sample->IsLooping() && !_Stop)
     {
         float loop_delay = params[PARAM_LoopDelay]*100.0f;
-        float loop_delay_env = loop_delay==0.0f?0.0f:params[PARAM_LoopDelayEnv]*100.0f;
+        float loop_env_attack = params[PARAM_LoopEnvAttack]*100.0f;
+        float loop_env_release = params[PARAM_LoopEnvRelease]*100.0f;
         float loop_start = _Sample->GetLoopStartPosition(start, stop);
         float loop_stop = _Sample->GetLoopStopPosition(start, stop);
         if (loop_stop<loop_start+1)
@@ -160,10 +170,13 @@ void Voice::Update(int& left, int& right)
             }
         }
 
-        if (loop_delay_env>0.0f && _InLoop)
+        if (_InLoop)
         {
-            if (_Position>loop_stop-loop_delay_env) volume *= _Position>loop_stop?0.0:1.0-pow((_Position-(loop_stop-loop_delay_env))/loop_delay_env, 2.0f);
-            if (_Position<loop_start+loop_delay_env) volume *= _Position<loop_start?0.0:pow((_Position-loop_start)/loop_delay_env, 2.0f);
+            if (loop_env_attack>0.0f && _Position<loop_start+loop_env_attack)
+                volume *= _Position<loop_start?0.0f:powf((_Position-loop_start)/loop_env_attack, 2.0f);
+
+            if (loop_env_release>0.0f && _Position>loop_stop-loop_env_release)
+                volume *= _Position>loop_stop?0.0f:1.0f-powf((_Position-(loop_stop-loop_env_release))/loop_env_release, 2.0f);
         }
     }
     else if (_Position<start || _Position>stop)
@@ -173,9 +186,12 @@ void Voice::Update(int& left, int& right)
 
     // filters & volume
 
-    _LeftFilters.ComputeStereo(left, right, params);
+    left *= preampli;
+    right *= preampli;
+
     _LeftFilters.Compute(left, params);
     _RightFilters.Compute(right, params);
+    _LeftFilters.ComputeStereo(left, right, params);
 
     left *= volume*volume_left;
     right *= volume*volume_right;

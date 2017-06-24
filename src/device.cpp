@@ -33,41 +33,33 @@ void Device::Play(Sample* sample, int note, int velocity)
         return;
 
     Voice* voice = NULL;
+    Voice* free_voice = NULL;
 
-    if (sample->GetMode()==MODE_InstruLegato)
+    pthread_mutex_lock(&_Lock);
+
+    for (int i=0 ; i<_Voices.size() ; ++i)
     {
-        for (int i=0 ; i<_Voices.size() ; ++i)
+        if (!_Voices[i]->IsBusy())
         {
-            if (_Voices[i]->IsBusy() && _Voices[i]->IsPlaying(sample))
-            {
-                voice = _Voices[i];
-                break;
-            }
+            free_voice = _Voices[i];
+        }
+        else if (free_voice==NULL && !_Voices[i]->IsLooping())
+        {
+            free_voice = _Voices[i];
+        }
+        else if (_Voices[i]->IsPlaying(sample))
+        {
+            if (sample->GetMode()!=MODE_InstruLegato && !_Voices[i]->IsPlaying(sample, note))
+                continue;
+            voice = _Voices[i];
+            break;
         }
     }
-    else if (sample->GetMode()!=MODE_OneShot)
-    {
-        for (int i=0 ; i<_Voices.size() ; ++i)
-        {
-            if (_Voices[i]->IsBusy() && _Voices[i]->IsPlaying(sample, note))
-            {
-                voice = _Voices[i];
-                break;
-            }
-        }
-    }
+
+    pthread_mutex_unlock(&_Lock);
 
     if (voice==NULL)
-    {
-        for (int i=0 ; i<_Voices.size() ; ++i)
-        {
-            if (!_Voices[i]->IsBusy())
-            {
-                voice = _Voices[i];
-                break;
-            }
-        }
-    }
+        voice = free_voice;
 
     if (voice!=NULL)
     {
@@ -238,9 +230,9 @@ void Device::_Update(snd_pcm_uframes_t frames)
 
         pthread_mutex_unlock(&_Lock);
 
-        _LeftFilters.ComputeStereo(left, right, params);
         _LeftFilters.Compute(left, params);
         _RightFilters.Compute(right, params);
+        _LeftFilters.ComputeStereo(left, right, params);
 
         if (left<-32767) left = -32767;
         else if (left>32767) left = 32767;

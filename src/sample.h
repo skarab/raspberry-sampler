@@ -19,42 +19,40 @@ enum MODE
 
 enum PARAM
 {
-    PARAM_Volume = 0,
+    PARAM_PreAmpli,
+    PARAM_PostAmpli,
     PARAM_Pan,
     PARAM_Stereo,
-    PARAM_PitchSemiTone,
-    PARAM_PitchFineTune,
-    PARAM_Legato,
+    PARAM_Noise,
+    PARAM_NoiseMix,
 
     PARAM_BitCrusher,
     PARAM_Distortion,
     PARAM_Overdrive,
-    PARAM_Formant,
-    PARAM_FormantID,
-    PARAM_Noise,
-
-    PARAM_NoiseMix,
     PARAM_EQLow,
     PARAM_EQMedium,
     PARAM_EQHigh,
+
     PARAM_LPCutOff,
     PARAM_LPResonance,
     PARAM_HPCutOff,
     PARAM_HPResonance,
+    PARAM_Formant,
+    PARAM_FormantID,
 
-    PARAM_LoopStartPercent,
-    PARAM_LoopStartFineTune,
-    PARAM_LoopStopFineTune,
-    PARAM_LoopStopPercent,
+    PARAM_LoopStart,
+    PARAM_LoopEnvAttack,
+    PARAM_LoopEnvRelease,
+    PARAM_LoopStop,
     PARAM_LoopDelay,
-    PARAM_LoopDelayEnv,
+    PARAM_Legato,
 
-    PARAM_StartPercent,
-    PARAM_StartFineTune,
+    PARAM_Start,
     PARAM_EnvAttack,
     PARAM_EnvRelease,
-    PARAM_StopFineTune,
-    PARAM_StopPercent,
+    PARAM_Stop,
+    PARAM_PitchSemiTone,
+    PARAM_PitchFineTune,
 
     PARAM_Count
 };
@@ -95,10 +93,10 @@ public:
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
     bool UseRelease() const { return (_Mode==MODE_Key) || (_Mode==MODE_KeyLoop) || (_Mode==MODE_Instru); }
 
-    int GetStartPosition() const;
-    int GetStopPosition() const;
-    int GetLoopStartPosition(int start, int stop) const;
-    int GetLoopStopPosition(int start, int stop) const;
+    int GetStartPosition() const { return (int)(_Params[PARAM_Start]*(GetLength()-1.0f)/512.0f); }
+    int GetStopPosition() const { return (int)(_Params[PARAM_Stop]*(GetLength()-1.0f)/512.0f); }
+    int GetLoopStartPosition(int start, int stop) const { return (int)(start+(stop-start)*(_Params[PARAM_LoopStart]/512.0f)); }
+    int GetLoopStopPosition(int start, int stop) const { return (int)(start+(stop-start)*(_Params[PARAM_LoopStop]/512.0f)); }
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);

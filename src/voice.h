@@ -15,6 +15,7 @@ public:
     bool IsBusy() const;
     bool IsPlaying(Sample* sample) const;
     bool IsPlaying(Sample* sample, int note) const;
+    bool IsLooping() const;
     Sample* GetSample() const { return _Sample; };
 
     void Play(Sample* sample, int note, int velocity);
