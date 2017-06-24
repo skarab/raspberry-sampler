@@ -30,6 +30,7 @@ enum PARAM
     PARAM_Distortion,
     PARAM_Overdrive,
     PARAM_Formant,
+    PARAM_FormantID,
     PARAM_Noise,
     PARAM_NoiseMix,
 

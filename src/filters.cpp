@@ -2,7 +2,9 @@
 
 FiltersGlobal::FiltersGlobal()
 {
+    FILTER_DC_Initialize(_DC);
     FILTER_NOISE_Initialize(_Noise);
+    FILTER_FORMANT_Initialize(_Formant);
 }
 
 void FiltersGlobal::Initialize()
@@ -13,6 +15,8 @@ void FiltersGlobal::Initialize()
 void FiltersGlobal::Compute(int& value, const vector<int>& params)
 {
     FILTER_NOISE_Compute(value, params, _Noise);
+    FILTER_FORMANT_Compute(value, params, _Formant);
+    FILTER_DC_Compute(value, _DC);
 
     float volume = powf(2.0f, (params[PARAM_Volume]-100.0f)/10.0f);
     value = (int)(value*volume);
@@ -35,11 +39,17 @@ FiltersVoice::FiltersVoice()
 {
     FILTER_DC_Initialize(_DC);
     FILTER_NOISE_Initialize(_Noise);
+    FILTER_FORMANT_Initialize(_Formant);
 
     //FILTER_EQ_Initialize(_Equalizer);
-    //FILTER_FORMANT_Initialize(_Formant);
+    //
     //FILTER_HIGHPASS_Initialize(_HighPass);
     //FILTER_LOWPASS_Initialize(_LowPass);
+}
+
+void FiltersVoice::Clear()
+{
+    FILTER_FORMANT_Initialize(_Formant);
 }
 
 void FiltersVoice::Compute(int& value, const vector<int>& params)
@@ -50,10 +60,10 @@ void FiltersVoice::Compute(int& value, const vector<int>& params)
     //FILTER_EQ_Compute(left, right, params, _Equalizer);
     //FILTER_HIGHPASS_Compute(left, right, params, _HighPass);
     //FILTER_LOWPASS_Compute(left, right, params, _LowPass);
-    //FILTER_FORMANT_Compute(left, right, params, _Formant);
     //FILTER_OVERDRIVE_Compute(left, right, params);
 
     FILTER_NOISE_Compute(value, params, _Noise);
+    FILTER_FORMANT_Compute(value, params, _Formant);
     FILTER_DC_Compute(value, _DC);
 }
 

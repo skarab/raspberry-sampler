@@ -41,6 +41,9 @@ void Voice::Play(Sample* sample, int note, int velocity)
     if (sample->IsInstru() && note!=-1) _Pitch = powf(2.0f, (note-sample->GetMidiKey().Note)/12.0f);
     else _Pitch = 1.0f;
 
+    _LeftFilters.Clear();
+    _RightFilters.Clear();
+
     _Sample = sample;
     _Sample->NotifyStart();
     _Stop = false;

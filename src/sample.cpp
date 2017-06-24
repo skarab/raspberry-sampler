@@ -11,7 +11,8 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 200, 0, "BitCrusher" },
     { 0, 200, 0, "Distortion" },
     { 0, 200, 0, "Overdrive" },
-    { -1, 4, -1, "Formant" },
+    { 0, 100, 0, "Formant" },
+    { 0, 5, 1, "FormantID" },
     { 0, 200, 0, "Noise" },
     { 0, 100, 0, "NoiseMix" },
 

@@ -28,7 +28,9 @@ public:
 
 private:
 
+    FILTER_DC _DC;
     FILTER_NOISE _Noise;
+    FILTER_FORMANT _Formant;
 };
 
 class FiltersVoice
@@ -37,6 +39,8 @@ public:
 
     FiltersVoice();
 
+    void Clear();
+
     void Compute(int& value, const vector<int>& params);
     void ComputeStereo(int& left, int& right, const vector<int>& params);
 
@@ -44,10 +48,10 @@ private:
 
     FILTER_DC _DC;
     FILTER_NOISE _Noise;
+    FILTER_FORMANT _Formant;
 
     /*
     FILTER_EQUALIZER _Equalizer;
-    FILTER_FORMANT _Formant;
     FILTER_HIGHPASS _HighPass;
     FILTER_LOWPASS _LowPass;
     */

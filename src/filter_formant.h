@@ -3,18 +3,22 @@
 
 typedef struct
 {
-    double Left[10];
-    double Right[10];
+    double Data[10];
 } FILTER_FORMANT;
 
 inline void FILTER_FORMANT_Initialize(FILTER_FORMANT& filter)
 {
-    memset(filter.Left, 0, sizeof(double)*10);
-    memset(filter.Right, 0, sizeof(double)*10);
+    memset(filter.Data, 0, sizeof(double)*10);
 }
 
-inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double* memory)
+inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER_FORMANT& filter)
 {
+    float formant = params[PARAM_Formant]/100.0f;
+    int id = params[PARAM_FormantID]-1;
+
+    if (id<0 || formant==0.0f)
+        return;
+
     static const double coeff[5][11]= {
         { 8.11044e-06, 8.943665402, -36.83889529, 92.01697887, -154.337906, 181.6233289, -151.8651235, 89.09614114, -35.10298511, 8.388101016, -0.923313471 },  // A
         { 4.36215e-06, 8.90438318, -36.55179099, 91.05750846, -152.422234, 179.1170248, -149.6496211, 87.78352223, -34.60687431, 8.282228154, -0.914150747 },   // E
@@ -23,7 +27,8 @@ inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double* memory)
         { 4.09431e-07, 8.997322763, -37.20218544, 93.11385476, -156.2530937, 183.7080141, -153.2631681, 89.59539726, -35.12454591, 8.338655623, -0.910251753 }  // U
     };
 
-    double res = coeff[id][0]*value
+    double* memory = filter.Data;
+    double res = coeff[id][0]*(value/32767.0)
         +coeff[id][1]*memory[0]
         +coeff[id][2]*memory[1]
         +coeff[id][3]*memory[2]
@@ -34,9 +39,6 @@ inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double* memory)
         +coeff[id][8]*memory[7]
         +coeff[id][9]*memory[8]
         +coeff[id][10]*memory[9];
-
-    if (res>10.0 || res<-10.0)
-        res = 0.0;
 
     memory[9] = memory[8];
     memory[8] = memory[7];
@@ -49,15 +51,5 @@ inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double* memory)
     memory[1] = memory[0];
     memory[0] = res;
 
-    value = res;
-}
-
-inline void FILTER_FORMANT_Compute(double& left, double& right, const vector<int>& params, FILTER_FORMANT& filter)
-{
-    int id = params[PARAM_Formant];
-    if (id>=0)
-    {
-        FILTER_FORMANT_ComputeChannel(left, id, filter.Left);
-        FILTER_FORMANT_ComputeChannel(right, id, filter.Right);
-    }
+    value = (int)(res*32767.0*formant+value*(1.0-formant));
 }
