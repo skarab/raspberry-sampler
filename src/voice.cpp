@@ -73,6 +73,9 @@ void Voice::ForceStop()
 
 void Voice::Update(int& left, int& right)
 {
+    if (_Sample==NULL)
+        return;
+
     bool over = false;
     const vector<int>& params = _Sample->GetParams();
 

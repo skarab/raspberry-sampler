@@ -219,13 +219,10 @@ void Device::_Update(snd_pcm_uframes_t frames)
 
         for (int j=0 ; j<_Voices.size() ; ++j)
         {
-            if (_Voices[j]->IsBusy())
-            {
-                int l=0, r=0;
-                _Voices[j]->Update(l, r);
-                left += l;
-                right += r;
-            }
+            int l=0,r=0;
+            _Voices[j]->Update(l, r);
+            left += l;
+            right += r;
         }
 
         pthread_mutex_unlock(&_Lock);

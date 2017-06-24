@@ -25,7 +25,7 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 512, 0, "LoopStart" },
     { 0, 2048, 0, "LoopEnvAttack" },
     { 0, 2048, 0, "LoopEnvRelease" },
-    { 0, 512, 100, "LoopStop" },
+    { 0, 512, 512, "LoopStop" },
     { 0, 1024, 0, "LoopDelay" },
     { 0, 64, 32, "Legato" },
 
