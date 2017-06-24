@@ -4,16 +4,17 @@
 #include "includes.h"
 
 #include "filter_dc.h"
-
 #include "filter_stereo.h"
-#include "filter_overdrive.h"
+#include "filter_noise.h"
+#include "filter_formant.h"
 #include "filter_bitcrusher.h"
+
+#include "filter_overdrive.h"
 #include "filter_distortion.h"
 #include "filter_equalizer.h"
-#include "filter_formant.h"
 #include "filter_highpass.h"
 #include "filter_lowpass.h"
-#include "filter_noise.h"
+
 
 class FiltersGlobal
 {

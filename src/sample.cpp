@@ -8,7 +8,7 @@ Param PARAM_Values[PARAM_Count] = {
     { -512, 1024, 512, "PitchFineTune" },
     { 0, 64, 32, "Legato" },
 
-    { 0, 200, 0, "BitCrusher" },
+    { 0, 100, 0, "BitCrusher" },
     { 0, 200, 0, "Distortion" },
     { 0, 200, 0, "Overdrive" },
     { 0, 100, 0, "Formant" },
