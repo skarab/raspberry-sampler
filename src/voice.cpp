@@ -133,6 +133,9 @@ void Voice::Update(int& left, int& right)
 
         if (_Sample->IsReverse())
         {
+            if (_InLoop && _Position>loop_stop)
+                _Position = loop_stop;
+
             while (_Position<=loop_start-loop_delay)
             {
                 _Position += loop_stop-loop_start+loop_delay;
@@ -141,6 +144,9 @@ void Voice::Update(int& left, int& right)
         }
         else
         {
+            if (_InLoop && _Position<loop_start)
+                _Position = loop_start;
+
             while (_Position>=loop_stop+loop_delay)
             {
                 _Position -= loop_stop-loop_start+loop_delay;
@@ -166,11 +172,6 @@ void Voice::Update(int& left, int& right)
 
     left *= volume*volume_left;
     right *= volume*volume_right;
-
-    if (left<-32767) left = -32767;
-    else if (left>32767) left = 32767;
-    if (right<-32767) right = -32767;
-    else if (right>32767) right = 32767;
 
     if (over)
         _Sample = NULL;

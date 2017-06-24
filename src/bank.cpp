@@ -17,9 +17,35 @@ struct sample_sort
     }
 };
 
+vector<Bank*> Bank::Banks;
+Bank* Bank::PlayBank = NULL;
+
+void Bank::UpdatePlayBank()
+{
+    PlayBank->_Samples.erase(PlayBank->_Samples.begin()+1, PlayBank->_Samples.end());
+
+    for (int i=1 ; i<Banks.size() ; ++i)
+    {
+        if (Banks[i]->IsLoaded())
+        {
+            for (int j=0 ; j<Banks[i]->_Samples.size() ; ++j)
+            {
+                Sample* sample = Banks[i]->_Samples[j];
+                if (!sample->GetMidiKey().IsNull())
+                    PlayBank->_Samples.push_back(sample);
+            }
+        }
+    }
+}
+
 vector<Bank*> Bank::List()
 {
-    vector<Bank*> banks;
+    PlayBank = new Bank();
+    PlayBank->_Loaded = true;
+    Sample* global = new Sample();
+    PlayBank->_Samples.push_back(global);
+
+    Banks.push_back(PlayBank);
 
     DIR* dir = opendir(SAMPLER_BANKS);
     if (dir!=NULL)
@@ -31,7 +57,7 @@ vector<Bank*> Bank::List()
             if (entry->d_type==DT_DIR && entry->d_name[0]!='.')
             {
                 Bank* bank = new Bank(entry->d_name, string(SAMPLER_BANKS)+entry->d_name+"/");
-                banks.push_back(bank);
+                Banks.push_back(bank);
             }
 
             entry = readdir(dir);
@@ -40,11 +66,8 @@ vector<Bank*> Bank::List()
         closedir(dir);
     }
 
-    if (banks.size()==0)
-        LOG("no banks!");
-
-    sort(banks.begin(), banks.end(), bank_sort());
-    return banks;
+    sort(Banks.begin()+1, Banks.end(), bank_sort());
+    return Banks;
 }
 
 void Bank::Destroy(vector<Bank*>& banks)
@@ -52,6 +75,11 @@ void Bank::Destroy(vector<Bank*>& banks)
     for (int i=0 ; i<banks.size() ; ++i)
         delete banks[i];
     banks.clear();
+}
+
+Bank::Bank() :
+    _Loaded(false)
+{
 }
 
 Bank::Bank(string name, string path) :
@@ -115,8 +143,15 @@ void Bank::Unload()
     {
         LOG("unload bank %s", _Path.c_str());
 
-        for (int i=0 ; i<_Samples.size() ; ++i)
-            delete _Samples[i];
+        if (this==PlayBank)
+        {
+            delete _Samples[0];
+        }
+        else
+        {
+            for (int i=0 ; i<_Samples.size() ; ++i)
+                delete _Samples[i];
+        }
 
         _Samples.clear();
         _Loaded = false;

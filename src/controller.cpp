@@ -18,9 +18,6 @@ Controller::Controller() :
 
     _Banks = Bank::List();
 
-    if (_Banks.size()==0)
-        ERROR("no bank!");
-
     _BankSelect = new KnobSelect(_Banks.size(), PIN_BANK_SELECT_LEFT, PIN_BANK_SELECT_RIGHT);
     _BankStatus = new Led(PIN_BANK_STATUS);
     _BankLoad = new Button(PIN_BANK_LOAD);
@@ -107,6 +104,9 @@ void Controller::Update()
     {
         changed = true;
         _BankStatus->SetOn(_GetBank()->IsLoaded());
+
+        if (_IsOnPlayBank())
+            Bank::UpdatePlayBank();
 
         if (_GetBank()->IsLoaded())
         {
@@ -196,6 +196,9 @@ void Controller::_OnLoadBank()
 {
     Bank* bank = _GetBank();
 
+    if (_IsOnPlayBank())
+        return;
+
     if (bank->IsLoaded())
     {
         pthread_mutex_lock(&_Lock);
@@ -225,6 +228,9 @@ void Controller::_OnLoadBank()
 
 void Controller::_OnSaveBank()
 {
+    if (_IsOnPlayBank())
+        return;
+
     _GetBank()->Save();
     Display::Get().Print(_BankSelect->GetID());
 }
@@ -232,7 +238,10 @@ void Controller::_OnSaveBank()
 void Controller::_OnChangeMode()
 {
     pthread_mutex_lock(&_Lock);
-    if (_Sample!=NULL)
+    if (_IsOnGlobalParams())
+    {
+    }
+    else if (_Sample!=NULL)
     {
         int mode = (int)_Sample->GetMode();
         ++mode;
@@ -248,28 +257,39 @@ void Controller::_OnChangeMode()
 void Controller::_OnMidiSet()
 {
     pthread_mutex_lock(&_Lock);
-    if (_AttachMidi)
+    if (_IsOnGlobalParams())
     {
-        _AttachMidi = false;
-        if (_Sample!=NULL)
-            _Sample->GetMidiKey().SetNull();
     }
     else
     {
-        _AttachMidi = true;
+        if (_AttachMidi)
+        {
+            _AttachMidi = false;
+            if (_Sample!=NULL)
+                _Sample->GetMidiKey().SetNull();
+        }
+        else
+        {
+            _AttachMidi = true;
+        }
     }
     pthread_mutex_unlock(&_Lock);
 }
 
 void Controller::_OnStartSample()
 {
-    if (_Sample!=NULL)
+    if (_IsOnGlobalParams())
+    {
+    }
+    else if (_Sample!=NULL)
+    {
         Device::Get().Play(_Sample, -1, 64);
+    }
 }
 
 void Controller::_OnStopSample()
 {
-    if (_Sample!=NULL)
+    if (!_IsOnGlobalParams() && _Sample!=NULL)
         Device::Get().Stop(_Sample, -1);
 }
 

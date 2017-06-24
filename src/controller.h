@@ -27,6 +27,8 @@ private:
 
     Bank* _GetBank();
     Sample* _FindSample(const MidiKey& key);
+    bool _IsOnPlayBank() { return _GetBank()==Bank::PlayBank; }
+    bool _IsOnGlobalParams() { return _IsOnPlayBank() && _Sample==Bank::PlayBank->GetSample(0); }
 
     void _OnLoadBank();
     void _OnSaveBank();

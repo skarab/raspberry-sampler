@@ -9,9 +9,13 @@ class Bank
 {
 public:
 
+    static vector<Bank*> Banks;
+    static Bank* PlayBank;
+    static void UpdatePlayBank();
     static vector<Bank*> List();
     static void Destroy(vector<Bank*>& banks);
 
+    Bank();
     Bank(string name, string path);
     ~Bank();
 

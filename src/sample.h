@@ -71,6 +71,7 @@ class Sample
 {
 public:
 
+    Sample();
     Sample(string name, string path);
     ~Sample();
 

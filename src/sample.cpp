@@ -37,6 +37,14 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 100, 100, "StopPercent" }
 };
 
+Sample::Sample() :
+    _Wav(NULL)
+{
+    _Params.resize(PARAM_Count);
+    for (int i=0 ; i<PARAM_Count ; ++i)
+        _Params[i] = PARAM_Values[i].Default;
+}
+
 Sample::Sample(string name, string path) :
     _Name(name),
     _Mode(MODE_OneShot)

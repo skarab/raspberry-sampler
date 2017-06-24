@@ -24,5 +24,4 @@ private:
     int _Sequencer;
 };
 
-
 #endif
