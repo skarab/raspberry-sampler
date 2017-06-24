@@ -32,8 +32,8 @@ enum PARAM
     PARAM_Formant,
     PARAM_FormantID,
     PARAM_Noise,
-    PARAM_NoiseMix,
 
+    PARAM_NoiseMix,
     PARAM_EQLow,
     PARAM_EQMedium,
     PARAM_EQHigh,

@@ -5,28 +5,27 @@ typedef struct
 {
     double lf;
     double hf;
-    double left_f1p[4];
-    double left_f2p[4];
-    double left_sdm[4];
-    double right_f1p[4];
-    double right_f2p[4];
-    double right_sdm[4];
+    double f1p[4];
+    double f2p[4];
+    double sdm[4];
 } FILTER_EQUALIZER;
+
+inline void FILTER_EQUALIZER_Clear(FILTER_EQUALIZER& filter)
+{
+    memset(filter.f1p, 0, sizeof(double)*4);
+    memset(filter.f2p, 0, sizeof(double)*4);
+    memset(filter.sdm, 0, sizeof(double)*4);
+}
 
 inline void FILTER_EQUALIZER_Initialize(FILTER_EQUALIZER& filter)
 {
     filter.lf = 2.0*sin(M_PI*880.0/SAMPLER_RATE);
     filter.hf = 2.0*sin(M_PI*5000.0/SAMPLER_RATE);
 
-    memset(filter.left_f1p, 0, sizeof(double)*4);
-    memset(filter.left_f2p, 0, sizeof(double)*4);
-    memset(filter.left_sdm, 0, sizeof(double)*4);
-    memset(filter.right_f1p, 0, sizeof(double)*4);
-    memset(filter.right_f2p, 0, sizeof(double)*4);
-    memset(filter.right_sdm, 0, sizeof(double)*4);
+    FILTER_EQUALIZER_Clear(filter);
 }
 
-inline void FILTER_EQUALIZER_ComputeChannel(double& value, double low, double mid, double high, double lf, double hf, double* f1p, double* f2p, double* sdm)
+inline void FILTER_EQUALIZER_Compute(double& value, double low, double mid, double high, double lf, double hf, double* f1p, double* f2p, double* sdm)
 {
     static const double vsa = 1.0/4294967295.0;
     double l,m,h;
@@ -70,16 +69,14 @@ inline void FILTER_EQUALIZER_ComputeChannel(double& value, double low, double mi
     value = l+m+h;
 }
 
-inline void FILTER_EQUALIZER_Compute(double& left, double& right, const vector<int>& params, FILTER_EQUALIZER& filter)
+inline void FILTER_EQUALIZER_Compute(int& value, const vector<int>& params, FILTER_EQUALIZER& filter)
 {
-    double low = params[PARAM_EQLow]/100.0;
-    double mid = params[PARAM_EQMedium]/100.0;
-    double high = params[PARAM_EQHigh]/100.0;
+    double low = pow(2.0, (params[PARAM_EQLow]-100.0)/10.0);
+    double mid = pow(2.0, (params[PARAM_EQMedium]-100.0)/10.0);
+    double high = pow(2.0, (params[PARAM_EQHigh]-100.0)/10.0);
 
-    FILTER_EQUALIZER_ComputeChannel(left, low, mid, high, filter.lf, filter.hf, filter.left_f1p, filter.left_f2p, filter.left_sdm);
-    FILTER_EQUALIZER_ComputeChannel(right, low, mid, high, filter.lf, filter.hf, filter.right_f1p, filter.right_f2p, filter.right_sdm);
+    double in = value/32767.0;
+    FILTER_EQUALIZER_Compute(in, low, mid, high, filter.lf, filter.hf, filter.f1p, filter.f2p, filter.sdm);
+    value = (int)(in*32767.0);
 }
-
-
-
 
