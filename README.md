@@ -52,6 +52,8 @@ Sample :
      If you switch another control before a note is received, it just cancel the tap. 
    - tap it two time to detach it 
 
+    The green LED displays if the sample is attached.
+
 (8) play 
  
 (9) select parameters to assign to the (10) knobs : 

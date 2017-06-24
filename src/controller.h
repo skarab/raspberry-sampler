@@ -53,6 +53,7 @@ private:
     KnobSelect* _SampleSelect;
     Button* _SampleMode;
     Button* _SampleMidiSet;
+    Led* _SampleMidiStatus;
 
     Button* _SamplePlay;
     bool _AttachMidi;

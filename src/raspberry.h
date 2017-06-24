@@ -15,6 +15,7 @@
 #define PIN_SAMPLE_SELECT_RIGHT     RPI_PIN_25
 #define PIN_SAMPLE_MODE             RPI_PIN_07
 #define PIN_SAMPLE_MIDI_SET         RPI_PIN_12
+#define PIN_SAMPLE_MIDI_STATUS      RPI_PIN_01
 
 #define PIN_SAMPLE_PLAY             RPI_PIN_16
 
