@@ -13,7 +13,7 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 200, 0, "Overdrive" },
     { -1, 4, -1, "Formant" },
     { 0, 200, 0, "Noise" },
-    { 0, 200, 0, "NoisePink" },
+    { 0, 100, 0, "NoiseMix" },
 
     { 0, 200, 100, "EQLow" },
     { 0, 200, 100, "EQMedium" },

@@ -31,7 +31,7 @@ enum PARAM
     PARAM_Overdrive,
     PARAM_Formant,
     PARAM_Noise,
-    PARAM_NoisePink,
+    PARAM_NoiseMix,
 
     PARAM_EQLow,
     PARAM_EQMedium,

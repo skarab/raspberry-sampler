@@ -28,6 +28,7 @@ public:
 
 private:
 
+    FILTER_NOISE _Noise;
 };
 
 class FiltersVoice
@@ -42,13 +43,14 @@ public:
 private:
 
     FILTER_DC _DC;
+    FILTER_NOISE _Noise;
 
     /*
     FILTER_EQUALIZER _Equalizer;
     FILTER_FORMANT _Formant;
     FILTER_HIGHPASS _HighPass;
     FILTER_LOWPASS _LowPass;
-    FILTER_NOISE _Noise;*/
+    */
 };
 
 #endif
