@@ -1,11 +1,13 @@
 #include "includes.h"
 #include "sample.h"
 
-inline void FILTER_OVERDRIVE_Compute(double& left, double& right, const vector<int>& params)
+inline void FILTER_OVERDRIVE_Compute(int& value, const vector<int>& params)
 {
-    double amount = params[PARAM_Overdrive]/201.0;
-    double k = 2.0*amount/(1.0-amount);
-
-    left = (1.0+k)*left/(1.0+k*fabs(left));
-    right = (1.0+k)*right/(1.0+k*fabs(right));
+    float amount = params[PARAM_Overdrive]/101.0f;
+    if (amount>0.0f)
+    {
+        float k = 2.0f*amount/(1.0f-amount);
+        float in = value/32767.0f;
+        value = (int)((1.0f+k)*in*32767.0f/(1.0f+k*fabs(in)));
+    }
 }
