@@ -170,11 +170,17 @@ void Voice::Update(int& left, int& right)
 
     // filters & volume
 
+    _LeftFilters.ComputeStereo(left, right, params);
     _LeftFilters.Compute(left, params);
     _RightFilters.Compute(right, params);
 
     left *= volume*volume_left;
     right *= volume*volume_right;
+
+    if (left<-32767) left = -32767;
+    else if (left>32767) left = 32767;
+    if (right<-32767) right = -32767;
+    else if (right>32767) right = 32767;
 
     if (over)
         ForceStop();

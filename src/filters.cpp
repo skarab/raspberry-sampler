@@ -1,6 +1,34 @@
 #include "filters.h"
 
-Filters::Filters()
+FiltersGlobal::FiltersGlobal()
+{
+}
+
+void FiltersGlobal::Initialize()
+{
+    //FILTER_NOISE_STATIC_INITIALIZE();
+}
+
+void FiltersGlobal::Compute(int& value, const vector<int>& params)
+{
+    float volume = powf(2.0f, (params[PARAM_Volume]-100.0f)/10.0f);
+    value = (int)(value*volume);
+}
+
+void FiltersGlobal::ComputeStereo(int& left, int& right, const vector<int>& params)
+{
+    FILTER_STEREO_Compute(left, right, params);
+
+    float volume_left = 1.0f;
+    float volume_right = 1.0f;
+    if (params[PARAM_Pan]>0) volume_left = 1.0f-pow(params[PARAM_Pan]/32.0f, 2.0f);
+    else if (params[PARAM_Pan]<0) volume_right = 1.0f-pow(params[PARAM_Pan]/32.0f, 2.0f);
+
+    left = (int)(left*volume_left);
+    right = (int)(right*volume_right);
+}
+
+FiltersVoice::FiltersVoice()
 {
     FILTER_DC_Initialize(_DC);
 
@@ -11,14 +39,8 @@ Filters::Filters()
     //FILTER_NOISE_Initialize(_Noise);
 }
 
-void Filters::Initialize()
+void FiltersVoice::Compute(int& value, const vector<int>& params)
 {
-    //FILTER_NOISE_STATIC_INITIALIZE();
-}
-
-void Filters::Compute(int& value, const vector<int>& params)
-{
-    //FILTER_STEREO_Compute(left, right, params);
     //FILTER_NOISE_Compute(left, right, params, _Noise);
     //FILTER_DISTORTION_Compute(left, right, params);
     //FILTER_BITCRUSHER_Compute(left, right, params);
@@ -28,8 +50,10 @@ void Filters::Compute(int& value, const vector<int>& params)
     //FILTER_FORMANT_Compute(left, right, params, _Formant);
     //FILTER_OVERDRIVE_Compute(left, right, params);
 
-
-    FILTER_CLICK_REMOVER_Compute(value, _ClickRemover);
     FILTER_DC_Compute(value, _DC);
 }
 
+void FiltersVoice::ComputeStereo(int& left, int& right, const vector<int>& params)
+{
+    FILTER_STEREO_Compute(left, right, params);
+}

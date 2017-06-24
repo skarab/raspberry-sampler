@@ -14,7 +14,7 @@ Device::Device() :
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 
-    Filters::Initialize();
+    FiltersGlobal::Initialize();
 
     while (!_Ready)
         usleep(10);
@@ -215,6 +215,8 @@ void Device::_Destroy()
 
 void Device::_Update(snd_pcm_uframes_t frames)
 {
+    const vector<int>& params = Bank::PlayBank->GetSample(0)->GetParams();
+
     short int* out = _Buffer;
     for (int i=0 ; i<frames ; ++i)
     {
@@ -235,6 +237,10 @@ void Device::_Update(snd_pcm_uframes_t frames)
         }
 
         pthread_mutex_unlock(&_Lock);
+
+        _LeftFilters.ComputeStereo(left, right, params);
+        _LeftFilters.Compute(left, params);
+        _RightFilters.Compute(right, params);
 
         if (left<-32767) left = -32767;
         else if (left>32767) left = 32767;

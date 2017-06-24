@@ -34,8 +34,8 @@ private:
     float _Pitch;
     float _LegatoPitch;
     bool _InLoop;
-    Filters _LeftFilters;
-    Filters _RightFilters;
+    FiltersVoice _LeftFilters;
+    FiltersVoice _RightFilters;
 };
 
 #endif

@@ -37,6 +37,8 @@ private:
     short int* _Buffer;
     vector<Voice*> _Voices;
     pthread_mutex_t _Lock;
+    FiltersGlobal _LeftFilters;
+    FiltersGlobal _RightFilters;
 };
 
 #endif

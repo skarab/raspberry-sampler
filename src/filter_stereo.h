@@ -1,15 +1,14 @@
 #include "includes.h"
 #include "sample.h"
 
-inline void FILTER_STEREO_Compute(double& left, double& right, const vector<int>& params)
+inline void FILTER_STEREO_Compute(int& left, int& right, const vector<int>& params)
 {
-    double stereo = pow(params[PARAM_Stereo]/100.0, 2.0);
+    float stereo = powf(params[PARAM_Stereo]/100.0f, 2.0f);
+    float scale = stereo*0.5f;
+    float m = (left+right)*0.5f;
+    float s = (right-left )*scale;
 
-    double scale = stereo*0.5;
-    double m = (left+right)*0.5;
-    double s = (right-left )*scale;
-
-    left = m-s;
-    right = m+s;
+    left = (int)(m-s);
+    right = (int)(m+s);
 }
 

@@ -9,10 +9,9 @@ int main(int argc, char *argv[])
 {
     Log* log = new Log();
     Display* display = new Display();
+    Controller* controller = new Controller();
     Device* device = new Device();
     Midi* midi = new Midi();
-
-    Controller* controller = new Controller();
 
     while (1)
     {
