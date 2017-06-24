@@ -38,7 +38,14 @@ Controller::Controller() :
     _Controls[4] = new KnobControl(PIN_CONTROL_05_LEFT, PIN_CONTROL_05_RIGHT);
     _Controls[5] = new KnobControl(PIN_CONTROL_06_LEFT, PIN_CONTROL_06_RIGHT);
 
-    _OnLoadBank();
+    _SampleSelect->SetCount(1);
+    _SampleSelect->SetID(0);
+    _Sample = _GetBank()->GetSample(0);
+
+    _UpdateControls();
+    _BankStatus->SetOn(true);
+    Update();
+    Display::Get().Print(_BankSelect->GetID());
 }
 
 Controller::~Controller()

@@ -19,7 +19,6 @@ Display::Display() :
     while (!_Ready)
         usleep(10);
 
-    _PrintIP(SAMPLER_NETWORK_DEVICE);
     Clear();
 }
 
@@ -59,9 +58,6 @@ void Display::Print(int value)
 
 void Display::SetLoading(bool loading)
 {
-    if (!loading)
-        usleep(500000);
-
     _Loading = loading;
 }
 
@@ -122,53 +118,4 @@ void Display::_Print(string str)
     pthread_mutex_lock(&_Lock);
     _OldValue = str;
     pthread_mutex_unlock(&_Lock);
-}
-
-void Display::_PrintIP(string device)
-{
-    string ip = _GetIP(device);
-    if (ip.size()>0)
-    {
-        LOG("ip: %s", ip.c_str());
-
-        stringstream ss;
-        ss.str(ip);
-        string item;
-        while (getline(ss, item, '.'))
-        {
-            pthread_mutex_lock(&_Lock);
-            _Value = item;
-            pthread_mutex_unlock(&_Lock);
-
-            usleep(1000000);
-        }
-    }
-}
-
-string Display::_GetIP(string device)
-{
-    string ip = "";
-
-    struct ifaddrs* addrs = NULL;
-    struct ifaddrs* ifa = NULL;
-    getifaddrs(&addrs);
-    ifa = addrs;
-
-    while (ifa!=NULL)
-    {
-        if ((ifa!=NULL) && (device==ifa->ifa_name) && (ifa->ifa_addr!=NULL) && (ifa->ifa_addr->sa_family==AF_INET))
-        {
-            void* tmp = &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
-            char buf[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, tmp, buf, INET_ADDRSTRLEN);
-            ip = buf;
-        }
-
-        ifa = ifa->ifa_next;
-    }
-
-    if (addrs!=NULL)
-        freeifaddrs(addrs);
-
-    return ip;
 }

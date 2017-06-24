@@ -22,8 +22,6 @@ private:
 
     void _Run();
     void _Print(string str);
-    void _PrintIP(string device);
-    string _GetIP(string device);
 
     static Display* _Instance;
 
