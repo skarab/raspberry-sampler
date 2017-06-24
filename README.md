@@ -25,6 +25,8 @@ Bank :
 
 (1) select bank, basically a folder full of wavs in the main samples/ directory 
 
+    The bank 0 is the global bank : first sample contains the global parameters, main volume, filters, ... next samples are the current used samples (attached to midi), note this list is updated when switching bank so you can detach/re-attach used samples.
+
 (2) lights up if bank is loaded 
 
 (3) load or unload the bank 
@@ -72,7 +74,7 @@ Hardware parts :
  - SD card 
  - 7-segment LED HT16K33 Backpack 
  - x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
- - 1 led 
+ - 2 led 
  - 5 buttons 
  - cables, proto board, cobbler 
  
