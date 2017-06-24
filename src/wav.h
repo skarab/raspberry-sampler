@@ -12,7 +12,7 @@ public:
 
     bool IsValid() const { return _Valid; }
     unsigned int GetLength() const { return _Length; }
-    const short* GetData() const { return _Data; }
+    const short int* GetData() const { return _Data; }
 
 private:
 
@@ -22,7 +22,7 @@ private:
     bool _Valid;
     char* _FileContent;
     unsigned int _Length;
-    short* _Data;
+    short int* _Data;
 };
 
 #endif

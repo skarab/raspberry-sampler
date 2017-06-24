@@ -17,23 +17,25 @@ public:
     bool IsPlaying(Sample* sample, int note) const;
     Sample* GetSample() const { return _Sample; };
 
-    void Update(double& left, double& right);
-
     void Play(Sample* sample, int note, int velocity);
     void Stop(Sample* sample, int note);
     void ForceStop();
 
+    void Update(int& left, int& right);
+
 private:
 
     Sample* _Sample;
-    double _Position;
+    float _Position;
     bool _Stop;
-    double _StopTime;
+    float _StopTime;
     int _Note;
     int _Velocity;
-    double _Pitch;
-    double _LegatoPitch;
-    Filters _Filters;
+    float _Pitch;
+    float _LegatoPitch;
+    bool _InLoop;
+    Filters _LeftFilters;
+    Filters _RightFilters;
 };
 
 #endif

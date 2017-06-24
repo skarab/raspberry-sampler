@@ -27,6 +27,8 @@ inline void FILTER_HIGHPASS_ComputeChannel(double& value, double* inputs, double
 {
     double result = a1*value+a2*inputs[0]+a1*inputs[1]-b1*outputs[0]-b2*outputs[1];
 
+    if (result>10.0 || result<-10.0) result = 0.0;
+
     inputs[1] = inputs[0];
     inputs[0] = value;
     outputs[1] = outputs[0];

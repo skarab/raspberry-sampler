@@ -80,10 +80,13 @@
 		<Unit filename="src/filter_bitcrusher.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
+		<Unit filename="src/filter_dc.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
 		<Unit filename="src/filter_distortion.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_eq.h">
+		<Unit filename="src/filter_equalizer.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/filter_formant.h">
@@ -95,13 +98,7 @@
 		<Unit filename="src/filter_lowpass.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_moog.h">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_noise.h">
-			<Option virtualFolder="filters/" />
-		</Unit>
-		<Unit filename="src/filter_notch.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/filter_overdrive.h">

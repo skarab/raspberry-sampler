@@ -76,24 +76,25 @@ public:
 
     const string& GetName() const { return _Name; }
     bool IsValid() const { return _Wav->IsValid(); }
-    unsigned int GetLength() const { return _Wav->GetLength(); }
-    const short* GetData() const { return _Wav->GetData(); }
+    int GetLength() const { return (int)_Wav->GetLength(); }
+    const short int* GetData() const { return _Wav->GetData(); }
     const MidiKey& GetMidiKey() const { return _MidiKey; }
     MidiKey& GetMidiKey() { return _MidiKey; }
     void SetMode(MODE mode) { _Mode = mode; }
     MODE GetMode() const { return _Mode; }
-    void SetParam(PARAM param, int value) { _Params[(int)param] = value; }
-    int GetParam(PARAM param) const { return _Params[(int)param]; }
+    void SetParam(PARAM param, int value) { _Params[param] = value; }
+    int GetParam(PARAM param) const { return _Params[param]; }
     const vector<int>& GetParams() const { return _Params; }
 
+    bool IsReverse() const { return _Params[PARAM_PitchFineTune]<0; }
     bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
     bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
     bool UseRelease() const { return (_Mode==MODE_Key) || (_Mode==MODE_KeyLoop) || (_Mode==MODE_Instru); }
 
-    double GetStartPosition() const;
-    double GetStopPosition() const;
-    double GetLoopStartPosition(double start, double stop) const;
-    double GetLoopStopPosition(double start, double stop) const;
+    int GetStartPosition() const;
+    int GetStopPosition() const;
+    int GetLoopStartPosition(int start, int stop) const;
+    int GetLoopStopPosition(int start, int stop) const;
 
     void Load(const pugi::xml_node& node);
     void Save(pugi::xml_node& node);

@@ -13,10 +13,8 @@ Controller::Controller() :
     if (pthread_mutex_init(&_Lock, NULL)!=0)
         ERROR("failed to create mutex");
 
-#if ENABLE_HARDWARE
     if (!bcm2835_init())
         ERROR("failed to initialize GPIO");
-#endif
 
     _Banks = Bank::List();
 
@@ -65,9 +63,7 @@ Controller::~Controller()
 
     Bank::Destroy(_Banks);
 
-#if ENABLE_HARDWARE
     bcm2835_close();
-#endif
 
     pthread_mutex_destroy(&_Lock);
 }

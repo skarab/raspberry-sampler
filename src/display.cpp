@@ -73,9 +73,7 @@ void* Display::_RunThreaded(void* data)
 
 void Display::_Run()
 {
-#if ENABLE_HARDWARE
     _Pipe = popen(SAMPLER_DISPLAY_PIPE, "w");
-#endif
 
     LOG("display ready");
     _Ready = true;

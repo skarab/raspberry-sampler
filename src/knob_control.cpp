@@ -9,13 +9,11 @@ KnobControl::KnobControl(int pin_left, int pin_right) :
     _PinRight(pin_right),
     _Encoded(0)
 {
-#if ENABLE_HARDWARE
     bcm2835_gpio_fsel(_PinLeft, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(_PinLeft, BCM2835_GPIO_PUD_UP);
 
     bcm2835_gpio_fsel(_PinRight, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(_PinRight, BCM2835_GPIO_PUD_UP);
-#endif
 }
 
 KnobControl::~KnobControl()
@@ -46,13 +44,8 @@ bool KnobControl::Update()
 {
     bool changed = false;
 
-    int msb = 0;
-    int lsb = 0;
-
-#if ENABLE_HARDWARE
-    msb = bcm2835_gpio_lev(_PinLeft);
-    lsb = bcm2835_gpio_lev(_PinRight);
-#endif
+    int msb = bcm2835_gpio_lev(_PinLeft);
+    int lsb = bcm2835_gpio_lev(_PinRight);
 
     int encoded = (msb<<1)|lsb;
     int sum = (_Encoded<<2)|encoded;

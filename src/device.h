@@ -34,7 +34,7 @@ private:
     bool _Quit;
     pthread_t _Thread;
     snd_pcm_t* _PlaybackHandle;
-    float* _Buffer;
+    short int* _Buffer;
     vector<Voice*> _Voices;
     pthread_mutex_t _Lock;
 };

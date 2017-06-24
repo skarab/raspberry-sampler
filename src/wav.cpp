@@ -79,7 +79,7 @@ bool Wav::_Load(string path)
         return false;
     }
 
-    _Data = (short*)(_FileContent+44);
+    _Data = (short int*)(_FileContent+44);
     _Length = sample_size/4;
 
     return _Length>0;

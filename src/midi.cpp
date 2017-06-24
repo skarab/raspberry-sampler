@@ -47,10 +47,10 @@ void Midi::_Run()
     while (!_Quit)
     {
         unsigned char buffer[8];
-        read(_Sequencer, buffer, 4);
+        size_t rv = read(_Sequencer, buffer, 4);
 
         if (buffer[0]>=128)
-            read(_Sequencer, buffer+4, 4);
+            rv = read(_Sequencer, buffer+4, 4);
 
         if (buffer[0]==SEQ_MIDIPUTC && buffer[1]!=SEQ_PRIVATE)
         {

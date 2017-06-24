@@ -14,6 +14,8 @@ Device::Device() :
     if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 
+    Filters::Initialize();
+
     while (!_Ready)
         usleep(10);
 }
@@ -167,7 +169,7 @@ void Device::_Create()
     if (snd_pcm_hw_params_malloc(&hw_params)<0) ERROR("failed to alloc hw_params");
     if (snd_pcm_hw_params_any(_PlaybackHandle, hw_params)<0) ERROR("snd_pcm_hw_params_any");
     if (snd_pcm_hw_params_set_access(_PlaybackHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)<0) ERROR("SND_PCM_ACCESS_RW_INTERLEAVED");
-    if (snd_pcm_hw_params_set_format(_PlaybackHandle, hw_params, SND_PCM_FORMAT_FLOAT_LE)<0) ERROR("SND_PCM_FORMAT_FLOAT_LE");
+    if (snd_pcm_hw_params_set_format(_PlaybackHandle, hw_params, SND_PCM_FORMAT_S16_LE)<0) ERROR("SND_PCM_FORMAT_S16_LE");
     int dir = 0;
     unsigned int rate = SAMPLER_RATE;
     if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
@@ -192,7 +194,7 @@ void Device::_Create()
     if (snd_pcm_prepare(_PlaybackHandle)<0)
         ERROR("snd_pcm_prepare");
 
-    _Buffer = (float*)malloc(sizeof(float)*buffer_size*SAMPLER_CHANNELS);
+    _Buffer = (short int*)malloc(sizeof(short)*buffer_size*SAMPLER_CHANNELS);
     if (_Buffer==NULL)
         ERROR("failed to alloc buffer");
 
@@ -213,10 +215,11 @@ void Device::_Destroy()
 
 void Device::_Update(snd_pcm_uframes_t frames)
 {
+    short int* out = _Buffer;
     for (int i=0 ; i<frames ; ++i)
     {
-        double left = 0.0;
-        double right = 0.0;
+        int left = 0;
+        int right = 0;
 
         pthread_mutex_lock(&_Lock);
 
@@ -224,7 +227,7 @@ void Device::_Update(snd_pcm_uframes_t frames)
         {
             if (_Voices[j]->IsBusy())
             {
-                double l=0.0, r=0.0;
+                int l=0, r=0;
                 _Voices[j]->Update(l, r);
                 left += l;
                 right += r;
@@ -233,8 +236,13 @@ void Device::_Update(snd_pcm_uframes_t frames)
 
         pthread_mutex_unlock(&_Lock);
 
-        _Buffer[i*2] = (float)left;
-        _Buffer[i*2+1] = (float)right;
+        if (left<-32767) left = -32767;
+        else if (left>32767) left = 32767;
+        if (right<-32767) right = -32767;
+        else if (right>32767) right = 32767;
+
+        *out++ = left;
+        *out++ = right;
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)

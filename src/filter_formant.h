@@ -35,6 +35,9 @@ inline void FILTER_FORMANT_ComputeChannel(double& value, int id, double* memory)
         +coeff[id][9]*memory[8]
         +coeff[id][10]*memory[9];
 
+    if (res>10.0 || res<-10.0)
+        res = 0.0;
+
     memory[9] = memory[8];
     memory[8] = memory[7];
     memory[7] = memory[6];

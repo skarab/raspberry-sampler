@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     Device* device = new Device();
     Midi* midi = new Midi();
 
-#if ENABLE_HARDWARE
     Controller* controller = new Controller();
 
     while (1)
@@ -22,7 +21,6 @@ int main(int argc, char *argv[])
     }
 
     delete controller;
-#endif
 
     delete midi;
     delete device;

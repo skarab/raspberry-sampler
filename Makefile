@@ -1,7 +1,7 @@
 CC=gcc
 CXX=g++
 RM=rm -f
-CPPFLAGS=-O3 -s -DENABLE_HARDWARE=1
+CPPFLAGS=-O3 -s
 LDFLAGS=
 LDLIBS=-L/usr/lib -lasound -lpthread -lbcm2835
 

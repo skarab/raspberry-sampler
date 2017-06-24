@@ -31,8 +31,8 @@ Param PARAM_Values[PARAM_Count] = {
 
     { 0, 100, 0, "StartPercent" },
     { -512, 512, 0, "StartFineTune" },
-    { 0, 1024, 1, "EnvAttack" },
-    { 0, 1024, 1, "EnvRelease" },
+    { 0, 2048, 0, "EnvAttack" },
+    { 0, 2048, 0, "EnvRelease" },
     { -512, 512, 0, "StopFineTune" },
     { 0, 100, 100, "StopPercent" }
 };
@@ -54,46 +54,46 @@ Sample::~Sample()
         delete _Wav;
 }
 
-double Sample::GetStartPosition() const
+int Sample::GetStartPosition() const
 {
-    double position = _Params[PARAM_StartPercent]*(GetLength()-1.0)/100.0;
-    position += _Params[PARAM_StartFineTune]*50.0;
+    int position = _Params[PARAM_StartPercent]*(GetLength()-1)/100;
+    position += _Params[PARAM_StartFineTune]*50;
 
-    if (position<0.0) position = 0.0;
-    if (position>GetLength()-1.0) position = GetLength()-1.0;
+    if (position<0) position = 0;
+    else if (position>GetLength()-1) position = GetLength()-1;
 
     return position;
 }
 
-double Sample::GetStopPosition() const
+int Sample::GetStopPosition() const
 {
-    double position = _Params[PARAM_StopPercent]*(GetLength()-1.0)/100.0;
-    position += _Params[PARAM_StopFineTune]*50.0;
+    int position = _Params[PARAM_StopPercent]*(GetLength()-1)/100;
+    position += _Params[PARAM_StopFineTune]*50;
 
-    if (position<0.0) position = 0.0;
-    if (position>GetLength()-1.0) position = GetLength()-1.0;
+    if (position<0) position = 0;
+    else if (position>GetLength()-1) position = GetLength()-1;
 
     return position;
 }
 
-double Sample::GetLoopStartPosition(double start, double stop) const
+int Sample::GetLoopStartPosition(int start, int stop) const
 {
-    double position = _Params[PARAM_LoopStartPercent]*(stop-start)/100.0;
-    position += _Params[PARAM_LoopStartFineTune]*50.0;
+    int position = _Params[PARAM_LoopStartPercent]*(stop-start)/100;
+    position += _Params[PARAM_LoopStartFineTune]*50;
 
     if (position<start) position = start;
-    if (position>stop) position = stop;
+    else if (position>stop) position = stop;
 
     return position;
 }
 
-double Sample::GetLoopStopPosition(double start, double stop) const
+int Sample::GetLoopStopPosition(int start, int stop) const
 {
-    double position = _Params[PARAM_LoopStopPercent]*(stop-start)/100.0;
-    position += _Params[PARAM_LoopStopFineTune]*50.0;
+    int position = _Params[PARAM_LoopStopPercent]*(stop-start)/100;
+    position += _Params[PARAM_LoopStopFineTune]*50;
 
     if (position<start) position = start;
-    if (position>stop) position = stop;
+    else if (position>stop) position = stop;
 
     return position;
 }

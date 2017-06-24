@@ -45,6 +45,8 @@ inline void FILTER_LOWPASS_ComputeChannel(double& value, FILTER_LOWPASS& filter,
     data.OldY2 = data.Y2;
     data.OldY3 = data.Y3;
 
+    if (data.Y4<-10.0 || data.Y4>10.0) data.Y4 = 0.0;
+
     value = data.Y4;
 }
 
