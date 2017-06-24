@@ -213,7 +213,10 @@ void Controller::_OnLoadBank()
     Bank* bank = _GetBank();
 
     if (_IsOnPlayBank())
+    {
+        Device::Get().StopAll();
         return;
+    }
 
     if (bank->IsLoaded())
     {
@@ -245,7 +248,16 @@ void Controller::_OnLoadBank()
 void Controller::_OnSaveBank()
 {
     if (_IsOnPlayBank())
+    {
+        pthread_mutex_lock(&_Lock);
+        Bank::DetachAll();
+        _Sample = _GetBank()->GetSample(0);
+        _SampleSelect->SetCount(_GetBank()->GetSampleCount());
+        _SampleSelect->SetID(0);
+        _UpdateControls();
+        pthread_mutex_unlock(&_Lock);
         return;
+    }
 
     _GetBank()->Save();
     Display::Get().Print(_BankSelect->GetID());

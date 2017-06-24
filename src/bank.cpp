@@ -38,6 +38,14 @@ void Bank::UpdatePlayBank()
     }
 }
 
+void Bank::DetachAll()
+{
+    UpdatePlayBank();
+
+    for (int i=1 ; i<PlayBank->_Samples.size() ; ++i)
+        PlayBank->_Samples[i]->GetMidiKey().SetNull();
+}
+
 vector<Bank*> Bank::List()
 {
     PlayBank = new Bank();

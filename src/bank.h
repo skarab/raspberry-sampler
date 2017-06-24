@@ -12,6 +12,7 @@ public:
     static vector<Bank*> Banks;
     static Bank* PlayBank;
     static void UpdatePlayBank();
+    static void DetachAll();
     static vector<Bank*> List();
     static void Destroy(vector<Bank*>& banks);
 

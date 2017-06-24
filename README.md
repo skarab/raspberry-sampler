@@ -29,9 +29,9 @@ Bank :
 
 (2) lights up if bank is loaded 
 
-(3) load or unload the bank 
+(3) load or unload the bank - if on global bank : stop all samples 
 
-(4) save the bank (all parameters & midi settings) 
+(4) save the bank (all parameters & midi settings) - if on global bank : detach all samples 
  
 
 Sample : 
