@@ -1,5 +1,5 @@
 # raspberry-sampler
-Sampler for the Raspberry 3 
+Sampler based on Raspberry 3 
 
 Key concept is to have a box full of knobs to live-edit samples, linked to other instruments using midi. 
 Note this is WIP, the design of controllers may change, the box isn't designed yet. 
@@ -11,6 +11,22 @@ https://soundcloud.com/stroodge/rasperry-sampler-filters
 
 https://www.youtube.com/watch?v=87chFwOwE38
 
+-----------------------------------
+
+Features
+
+. polyphonic, up to 4 voices
+. stereo
+. realtime 16bits 44100Hz playback
+. jack output
+. usb midi input, supporting multiple devices
+. up to X midi attachments
+. support up to X banks containing X samples
+. 7 play modes including loop & instruments
+. Per-sample stereo amplifier, overdrive & bitcrusher filters
+. Global equalizer, low pass moog, high pass, noise, distortion & formant filters
+. 8 Knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
+. sampler software and samples on an usb key, allowing easy updates
 
 -----------------------------------
 
