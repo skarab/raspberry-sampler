@@ -80,7 +80,7 @@ Sample :
 
     0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Overdrive         BitCrusher
     1.  EQ Low      EQ Medium      EQ High           Distortion        Noise             NoiseMixer
-    3.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (-AEIOU)
+    2.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (-AEIOU)
  
  Sample params:
 
@@ -95,9 +95,11 @@ Hardware parts :
  - Raspberry 3 (for now its running on the 2B)
  - SD card 
  - 7-segment LED HT16K33 Backpack 
- - x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
+ - x8 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
+ - 1 switch - 3 positions
  - 3 led 
- - 5 buttons 
+ - 4 buttons 
+ - 1 play button
  - cables, proto board, cobbler 
  
 
