@@ -80,9 +80,6 @@
 		<Unit filename="src/filter_bitcrusher.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_clickremover.h">
-			<Option virtualFolder="filters/" />
-		</Unit>
 		<Unit filename="src/filter_dc.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
