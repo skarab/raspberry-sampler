@@ -16,6 +16,9 @@ inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER
     float formant = params[PARAM_Formant]/100.0f;
     int id = params[PARAM_FormantID]-1;
 
+    if (id<0 || formant==0.0f)
+        return;
+
     static const double coeff[5][11]= {
         { 8.11044e-06, 8.943665402, -36.83889529, 92.01697887, -154.337906, 181.6233289, -151.8651235, 89.09614114, -35.10298511, 8.388101016, -0.923313471 },  // A
         { 4.36215e-06, 8.90438318, -36.55179099, 91.05750846, -152.422234, 179.1170248, -149.6496211, 87.78352223, -34.60687431, 8.282228154, -0.914150747 },   // E
@@ -36,6 +39,8 @@ inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER
         +coeff[id][8]*memory[7]
         +coeff[id][9]*memory[8]
         +coeff[id][10]*memory[9];
+
+    if (res>10.0 || res<-10.0) res = 0.0;
 
     memory[9] = memory[8];
     memory[8] = memory[7];
