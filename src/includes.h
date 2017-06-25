@@ -10,6 +10,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <sched.h>
 #include <string>
 #include <vector>
 #include <map>

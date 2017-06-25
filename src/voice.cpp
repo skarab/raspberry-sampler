@@ -1,4 +1,5 @@
 #include "voice.h"
+#include "filter_stereo.h"
 
 Voice::Voice() :
     _Sample(NULL),
@@ -37,8 +38,12 @@ void Voice::Play(Sample* sample, int note, int velocity)
     if (_Sample!=NULL)
         ForceStop();
 
-    if (sample->IsReverse()) _Position = (float)sample->GetStopPosition();
-    else _Position = (float)sample->GetStartPosition();
+    float delay = sample->GetParam(PARAM_Delay)*100.0f;
+    if (sample->IsLooping())
+        delay = 0.0f;
+
+    if (sample->IsReverse()) _Position = (float)sample->GetStopPosition()+delay;
+    else _Position = (float)sample->GetStartPosition()-delay;
 
     _Note = note;
     _Velocity = velocity;
@@ -48,9 +53,6 @@ void Voice::Play(Sample* sample, int note, int velocity)
 
     if (sample->IsInstru() && note!=-1) _Pitch = powf(2.0f, (note-sample->GetMidiKey().Note)/12.0f);
     else _Pitch = 1.0f;
-
-    _LeftFilters.Clear();
-    _RightFilters.Clear();
 
     _Sample = sample;
     _Sample->NotifyStart();
@@ -116,7 +118,7 @@ void Voice::Update(int& left, int& right)
 
     float env_release = params[PARAM_EnvRelease]*100.0f;
     if (env_release>0.0f && _Position>stop-env_release)
-        volume *= _Position<stop?1.0f-pow((_Position-(stop-env_release))/env_release, 2.0f):0.0f;
+        volume *= _Position<stop?1.0f-(_Position-(stop-env_release))/env_release:0.0f;
 
     if (_Stop && _Sample->UseRelease())
     {
@@ -128,21 +130,14 @@ void Voice::Update(int& left, int& right)
 
     float volume_left = 1.0f;
     float volume_right = 1.0f;
-
-    if (params[PARAM_Pan]>0)
-    {
-        volume_left = 1.0f-pow(params[PARAM_Pan]/32.0f, 2.0f);
-    }
-    else if (params[PARAM_Pan]<0)
-    {
-        volume_right = 1.0f-pow(params[PARAM_Pan]/32.0f, 2.0f);
-    }
+    if (params[PARAM_Pan]>0) volume_left = 1.0f-params[PARAM_Pan]/32.0f;
+    else if (params[PARAM_Pan]<0) volume_right = 1.0f-params[PARAM_Pan]/32.0f;
 
     // loop
 
     if (_Sample->IsLooping() && !_Stop)
     {
-        float loop_delay = params[PARAM_LoopDelay]*100.0f;
+        float delay = params[PARAM_Delay]*100.0f;
         float loop_env_attack = params[PARAM_LoopEnvAttack]*100.0f;
         float loop_env_release = params[PARAM_LoopEnvRelease]*100.0f;
         float loop_start = _Sample->GetLoopStartPosition(start, stop);
@@ -155,9 +150,9 @@ void Voice::Update(int& left, int& right)
             if (_InLoop && _Position>loop_stop)
                 _Position = loop_stop;
 
-            while (_Position<=loop_start-loop_delay)
+            while (_Position<=loop_start-delay)
             {
-                _Position += loop_stop-loop_start+loop_delay;
+                _Position += loop_stop-loop_start+delay;
                 _InLoop = true;
             }
         }
@@ -166,9 +161,9 @@ void Voice::Update(int& left, int& right)
             if (_InLoop && _Position<loop_start)
                 _Position = loop_start;
 
-            while (_Position>=loop_stop+loop_delay)
+            while (_Position>=loop_stop+delay)
             {
-                _Position -= loop_stop-loop_start+loop_delay;
+                _Position -= loop_stop-loop_start+delay;
                 _InLoop = true;
             }
         }
@@ -179,10 +174,10 @@ void Voice::Update(int& left, int& right)
                 volume *= _Position<loop_start?0.0f:powf((_Position-loop_start)/loop_env_attack, 2.0f);
 
             if (loop_env_release>0.0f && _Position>loop_stop-loop_env_release)
-                volume *= _Position>loop_stop?0.0f:1.0f-powf((_Position-(loop_stop-loop_env_release))/loop_env_release, 2.0f);
+                volume *= _Position>loop_stop?0.0f:1.0f-(_Position-(loop_stop-loop_env_release))/loop_env_release;
         }
     }
-    else if (_Position<start || _Position>stop)
+    else if ((_Sample->IsReverse() && _Position<start) || (!_Sample->IsReverse() && _Position>stop))
     {
         over = true;
     }
@@ -194,7 +189,8 @@ void Voice::Update(int& left, int& right)
 
     _LeftFilters.Compute(left, params);
     _RightFilters.Compute(right, params);
-    _LeftFilters.ComputeStereo(left, right, params);
+
+    FILTER_STEREO_Compute(left, right, params);
 
     left *= volume*volume_left;
     right *= volume*volume_right;

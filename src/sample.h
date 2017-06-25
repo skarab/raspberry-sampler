@@ -20,18 +20,18 @@ enum MODE
 enum PARAM
 {
     PARAM_PreAmpli,
-    PARAM_PostAmpli,
     PARAM_Pan,
     PARAM_Stereo,
-    PARAM_Noise,
-    PARAM_NoiseMix,
-
-    PARAM_BitCrusher,
-    PARAM_Distortion,
+    PARAM_PostAmpli,
     PARAM_Overdrive,
+    PARAM_BitCrusher,
+
     PARAM_EQLow,
     PARAM_EQMedium,
     PARAM_EQHigh,
+    PARAM_Distortion,
+    PARAM_Noise,
+    PARAM_NoiseMix,
 
     PARAM_LPCutOff,
     PARAM_LPResonance,
@@ -40,19 +40,19 @@ enum PARAM
     PARAM_Formant,
     PARAM_FormantID,
 
-    PARAM_LoopStart,
-    PARAM_LoopEnvAttack,
-    PARAM_LoopEnvRelease,
-    PARAM_LoopStop,
-    PARAM_LoopDelay,
-    PARAM_Legato,
-
     PARAM_Start,
     PARAM_EnvAttack,
     PARAM_EnvRelease,
     PARAM_Stop,
     PARAM_PitchSemiTone,
     PARAM_PitchFineTune,
+
+    PARAM_LoopStart,
+    PARAM_LoopEnvAttack,
+    PARAM_LoopEnvRelease,
+    PARAM_LoopStop,
+    PARAM_Delay,
+    PARAM_Legato,
 
     PARAM_Count
 };

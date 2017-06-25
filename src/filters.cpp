@@ -1,4 +1,8 @@
 #include "filters.h"
+#include "filter_stereo.h"
+#include "filter_bitcrusher.h"
+#include "filter_distortion.h"
+#include "filter_overdrive.h"
 
 FiltersGlobal::FiltersGlobal()
 {
@@ -47,38 +51,8 @@ void FiltersGlobal::ComputeStereo(int& left, int& right, const vector<int>& para
     right = (int)(right*volume_right);
 }
 
-FiltersVoice::FiltersVoice()
-{
-    FILTER_DC_Initialize(_DC);
-    FILTER_NOISE_Initialize(_Noise);
-    FILTER_FORMANT_Initialize(_Formant);
-    FILTER_LOWPASS_Initialize(_LowPass);
-    FILTER_HIGHPASS_Initialize(_HighPass);
-    FILTER_EQUALIZER_Initialize(_Equalizer);
-}
-
-void FiltersVoice::Clear()
-{
-    FILTER_FORMANT_Initialize(_Formant);
-    FILTER_LOWPASS_Initialize(_LowPass);
-    FILTER_HIGHPASS_Clear(_HighPass);
-    FILTER_EQUALIZER_Clear(_Equalizer);
-}
-
 void FiltersVoice::Compute(int& value, const vector<int>& params)
 {
-    FILTER_NOISE_Compute(value, params, _Noise);
-    FILTER_FORMANT_Compute(value, params, _Formant);
-    FILTER_DC_Compute(value, _DC);
-    FILTER_DISTORTION_Compute(value, params);
     FILTER_BITCRUSHER_Compute(value, params);
     FILTER_OVERDRIVE_Compute(value, params);
-    FILTER_LOWPASS_Compute(value, params, _LowPass);
-    FILTER_HIGHPASS_Compute(value, params, _HighPass);
-    FILTER_EQUALIZER_Compute(value, params, _Equalizer);
-}
-
-void FiltersVoice::ComputeStereo(int& left, int& right, const vector<int>& params)
-{
-    FILTER_STEREO_Compute(left, right, params);
 }

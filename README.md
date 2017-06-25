@@ -60,17 +60,23 @@ Sample :
  
 (9) select parameters to assign to the (10) knobs : 
  
-    0.  Volume      Pan            Stereo Amplifier  Pitch, semi tone  Pitch, fine tune  Legato
-    1.  BitCrusher  Distortion     Overdrive         Formant filter    Noise amount      Noise pinky
-    2.  EQ Low      EQ Medium      EQ High           LP Moog CutOff    HP CutOff         Resonance
-    3.  Loop Start  LStart Ftune   LStop Ftune       Loop Stop         Loop Delay        Loop Delay Env
-    4.  Start       Start FTune    Env Attack        Env Release       Stop FTune        Stop
+ Global params:
+
+    0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Overdrive         BitCrusher
+    1.  EQ Low      EQ Medium      EQ High           Distortion        Noise             NoiseMixer
+    3.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (-AEIOU)
+ 
+ Sample params:
+
+    0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Overdrive         BitCrusher
+    1.  Start       Env Attack     Env Release       Stop              Pitch semi-tone   Pitch fine-tune
+    2.  LoopStart   Loop Attack    Loop Release      LoopStop          Delay             Legato
  
  
 -----------------------------------
  
 Hardware parts : 
- - Raspberry 3 
+ - Raspberry 3 (for now its running on the 2B)
  - SD card 
  - 7-segment LED HT16K33 Backpack 
  - x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 

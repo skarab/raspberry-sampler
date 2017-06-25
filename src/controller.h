@@ -36,6 +36,8 @@ private:
     void _OnMidiSet();
     void _OnStartSample();
     void _OnStopSample();
+
+    int _GetControlID(int knob_id);
     void _UpdateControls();
     void _OnControlChanged(int id);
 

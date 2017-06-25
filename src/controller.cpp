@@ -31,7 +31,7 @@ Controller::Controller() :
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
     _SamplePlayStatus = new Led(PIN_SAMPLE_PLAY_STATUS);
 
-    _ControlSelect = new KnobSelect((PARAM_Count-1)/6+1, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT);
+    _ControlSelect = new KnobSelect(3, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT);
     _Controls.resize(6);
     _Controls[0] = new KnobControl(PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT);
     _Controls[1] = new KnobControl(PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT);
@@ -128,6 +128,7 @@ void Controller::Update()
         {
             _Sample = NULL;
         }
+        _ControlSelect->SetID(0);
         _UpdateControls();
     }
 
@@ -321,13 +322,29 @@ void Controller::_OnStopSample()
         Device::Get().Stop(_Sample, -1);
 }
 
+int Controller::_GetControlID(int knob_id)
+{
+    int id = _ControlSelect->GetID();
+    if (_IsOnGlobalParams())
+    {
+        id = id*6+knob_id;
+    }
+    else
+    {
+        if (id==0) id = id*6+knob_id;
+        else id = (id+2)*6+knob_id;
+    }
+    return id;
+}
+
 void Controller::_UpdateControls()
 {
     _SampleMidiStatus->SetOn((_Sample!=NULL) && !_Sample->GetMidiKey().IsNull());
 
     for (int i=0 ; i<_Controls.size() ; ++i)
     {
-        int id = _ControlSelect->GetID()*6+i;
+        int id = _GetControlID(i);
+
         if (id<PARAM_Count && _Sample!=NULL)
         {
             _Controls[i]->SetRange(PARAM_Values[id].Min, PARAM_Values[id].Max);
@@ -343,7 +360,7 @@ void Controller::_UpdateControls()
 
 void Controller::_OnControlChanged(int i)
 {
-    int id = _ControlSelect->GetID()*6+i;
+    int id = _GetControlID(i);
     if (id<PARAM_Count && _Sample!=NULL)
     {
         int value = _Controls[i]->GetValue();

@@ -11,7 +11,20 @@ Device::Device() :
     if (pthread_mutex_init(&_Lock, NULL)!=0)
         ERROR("failed to create mutex");
 
-    if (pthread_create(&_Thread, NULL, _RunThreaded, (void*)this)!=0)
+    pthread_attr_t tattr;
+    sched_param param;
+
+    if (pthread_attr_init(&tattr)!=0)
+        ERROR("pthread_attr_init failed");
+    if (pthread_attr_getschedparam(&tattr, &param)!=0)
+        ERROR("pthread_attr_getschedparam failed");
+    if (pthread_attr_setschedpolicy(&tattr, SCHED_RR)!=0)
+        ERROR("pthread_attr_setschedpolicy failed");
+    param.sched_priority = 40;
+    if (pthread_attr_setschedparam(&tattr, &param)!=0)
+        ERROR("pthread_attr_setschedparam failed");
+
+    if (pthread_create(&_Thread, &tattr, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
 
     FiltersGlobal::Initialize();
@@ -164,7 +177,7 @@ void Device::_Create()
     if (snd_pcm_hw_params_set_format(_PlaybackHandle, hw_params, SND_PCM_FORMAT_S16_LE)<0) ERROR("SND_PCM_FORMAT_S16_LE");
     int dir = 0;
     unsigned int rate = SAMPLER_RATE;
-    if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &rate, &dir)<0) ERROR("snd_pcm_hw_params_set_rate_near");
+    if (snd_pcm_hw_params_set_rate_near(_PlaybackHandle, hw_params, &rate, &dir)!=0) ERROR("snd_pcm_hw_params_set_rate_near");
     if (snd_pcm_hw_params_set_channels(_PlaybackHandle, hw_params, SAMPLER_CHANNELS)<0) ERROR("snd_pcm_hw_params_set_channels");
 
     snd_pcm_uframes_t buffer_size = SAMPLER_BUFFER_SIZE;
