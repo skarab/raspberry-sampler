@@ -8,9 +8,8 @@ Note this is WIP, the design of controllers may change, the box isn't designed y
 
 Features
 
-- polyphonic, up to 4 voices
-- stereo
-- realtime 16bits 44100Hz playback
+- stereo & polyphonic, up to 4 voices
+- 44100Hz 16bts realtime playback
 - jack output
 - usb midi input, supporting multiple devices
 - up to X midi attachments
