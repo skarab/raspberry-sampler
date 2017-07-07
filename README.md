@@ -1,16 +1,34 @@
 # raspberry-sampler
-Sampler for the Raspberry 3 
+Sampler based on Raspberry 3 
 
 Key concept is to have a box full of knobs to live-edit samples, linked to other instruments using midi. 
 Note this is WIP, the design of controllers may change, the box isn't designed yet. 
 
+-----------------------------------
+
+Features
+
+- stereo & polyphonic, up to 4 voices
+- 44100Hz 16bits realtime playback
+- jack output
+- usb midi input, supporting multiple devices
+- up to X midi attachments
+- support up to X banks containing X samples
+- 7 play modes including loop & instruments
+- Per-sample stereo amplifier, overdrive & bitcrusher filters
+- Global equalizer, low pass moog, high pass, noise, distortion & formant filters
+- 8 Knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
+- sampler software and samples on an usb key, allowing easy updates
+
+-----------------------------------
+
+Links
 
 http://www.kstorm.org
 
 https://soundcloud.com/stroodge/rasperry-sampler-filters
 
 https://www.youtube.com/watch?v=87chFwOwE38
-
 
 -----------------------------------
 
@@ -64,7 +82,7 @@ Sample :
 
     0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Overdrive         BitCrusher
     1.  EQ Low      EQ Medium      EQ High           Distortion        Noise             NoiseMixer
-    3.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (-AEIOU)
+    2.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (-AEIOU)
  
  Sample params:
 
@@ -79,9 +97,11 @@ Hardware parts :
  - Raspberry 3 (for now its running on the 2B)
  - SD card 
  - 7-segment LED HT16K33 Backpack 
- - x9 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
+ - x8 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 
+ - 1 switch - 3 positions
  - 3 led 
- - 5 buttons 
+ - 4 buttons 
+ - 1 play button
  - cables, proto board, cobbler 
  
 
