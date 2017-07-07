@@ -86,7 +86,10 @@ void Controller::OnNoteOn(const MidiKey& key, int velocity)
             sample->GetMidiKey().SetNull();
 
         if (_Sample!=NULL)
+        {
             _Sample->GetMidiKey() = key;
+            _UpdateMidiStatus();
+        }
 
         sample = _Sample;
         _AttachMidi = false;
@@ -295,7 +298,10 @@ void Controller::_OnMidiSet()
         {
             _AttachMidi = false;
             if (_Sample!=NULL)
+            {
                 _Sample->GetMidiKey().SetNull();
+                _UpdateMidiStatus();
+            }
         }
         else
         {
@@ -337,9 +343,14 @@ int Controller::_GetControlID(int knob_id)
     return id;
 }
 
-void Controller::_UpdateControls()
+void Controller::_UpdateMidiStatus()
 {
     _SampleMidiStatus->SetOn((_Sample!=NULL) && !_Sample->GetMidiKey().IsNull());
+}
+
+void Controller::_UpdateControls()
+{
+    _UpdateMidiStatus();
 
     for (int i=0 ; i<_Controls.size() ; ++i)
     {

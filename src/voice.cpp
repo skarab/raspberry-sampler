@@ -131,7 +131,7 @@ void Voice::Update(int& left, int& right)
     float volume_left = 1.0f;
     float volume_right = 1.0f;
     if (params[PARAM_Pan]>0) volume_left = 1.0f-params[PARAM_Pan]/32.0f;
-    else if (params[PARAM_Pan]<0) volume_right = 1.0f-params[PARAM_Pan]/32.0f;
+    else if (params[PARAM_Pan]<0) volume_right = 1.0f+params[PARAM_Pan]/32.0f;
 
     // loop
 

@@ -44,8 +44,8 @@ void FiltersGlobal::ComputeStereo(int& left, int& right, const vector<int>& para
 
     float volume_left = 1.0f;
     float volume_right = 1.0f;
-    if (params[PARAM_Pan]>0) volume_left = 1.0f-pow(params[PARAM_Pan]/32.0f, 2.0f);
-    else if (params[PARAM_Pan]<0) volume_right = 1.0f-pow(params[PARAM_Pan]/32.0f, 2.0f);
+    if (params[PARAM_Pan]>0) volume_left = 1.0f-params[PARAM_Pan]/32.0f;
+    else if (params[PARAM_Pan]<0) volume_right = 1.0f+params[PARAM_Pan]/32.0f;
 
     left = (int)(left*volume_left);
     right = (int)(right*volume_right);
