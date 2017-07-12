@@ -26,7 +26,7 @@ Links
 
 http://www.kstorm.org
 
-https://soundcloud.com/stroodge/rasperry-sampler-filters
+https://www.youtube.com/watch?v=qFAxQr971z0
 
 https://www.youtube.com/watch?v=87chFwOwE38
 
@@ -60,11 +60,7 @@ Sample :
    
    0. one shot   : just play it til the end (default) 
    1. loop       : one press to start the loop, one press to stop it 
-   2. key        : stop as soon the key is released 
-   3. key loop   : loop til the key is released 
-   4. instru key : use only midi device and pitch follow the notes 
-   5. instru OS  : play notes as one shot samples 
-   6. ins. legato: play instru legato 
+   2. instrument : use whole midi device, pitch linked to notes 
 
 (7) midi attach/detach : 
    - tap it one time, then the next received midi key is attached.  
