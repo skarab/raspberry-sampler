@@ -19,13 +19,13 @@ enum PARAM
     PARAM_Pan,
     PARAM_Stereo,
     PARAM_PostAmpli,
-    PARAM_Overdrive,
+    PARAM_Distortion,
     PARAM_BitCrusher,
 
     PARAM_EQLow,
     PARAM_EQMedium,
     PARAM_EQHigh,
-    PARAM_Distortion,
+    PARAM_Overdrive,
     PARAM_Noise,
     PARAM_NoiseMix,
 

@@ -14,9 +14,9 @@ inline void FILTER_FORMANT_Initialize(FILTER_FORMANT& filter)
 inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER_FORMANT& filter)
 {
     float formant = params[PARAM_Formant]/100.0f;
-    int id = params[PARAM_FormantID]-1;
+    int id = params[PARAM_FormantID];
 
-    if (id<0 || formant==0.0f)
+    if (formant==0.0f)
         return;
 
     static const double coeff[5][11]= {

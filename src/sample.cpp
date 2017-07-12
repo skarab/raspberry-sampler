@@ -5,13 +5,13 @@ Param PARAM_Values[PARAM_Count] = {
     { -32, 32, 0, "Pan" },
     { 0, 200, 100, "Stereo" },
     { 0, 400, 100, "PostAmpli" },
-    { 0, 100, 0, "Overdrive" },
+    { 0, 150, 0, "Distortion" },
     { 0, 100, 0, "BitCrusher" },
 
     { 0, 200, 100, "EQLow" },
     { 0, 200, 100, "EQMedium" },
     { 0, 200, 100, "EQHigh" },
-    { 0, 150, 0, "Distortion" },
+    { 0, 100, 0, "Overdrive" },
     { 0, 200, 0, "Noise" },
     { 0, 100, 0, "NoiseMix" },
 
@@ -20,7 +20,7 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 200, 0, "HPCutOff" },
     { 0, 200, 0, "HPResonance" },
     { 0, 100, 0, "Formant" },
-    { 0, 5, 1, "FormantID" },
+    { 0, 4, 0, "FormantID" },
 
     { 0, 512, 0, "Start" },
     { 0, 2048, 0, "EnvAttack" },

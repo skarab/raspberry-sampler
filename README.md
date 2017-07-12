@@ -76,13 +76,13 @@ Sample :
  
  Global params:
 
-    0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Overdrive         BitCrusher
-    1.  EQ Low      EQ Medium      EQ High           Distortion        Noise             NoiseMixer
-    2.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (-AEIOU)
+    0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Distortion        BitCrusher
+    1.  EQ Low      EQ Medium      EQ High           Overdrive         Noise             NoiseMixer
+    2.  LP CutOff   LP Resonance   HP CutOff         HP Resonance      Formant filter    Formant ID (AEIOU)
  
  Sample params:
 
-    0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Overdrive         BitCrusher
+    0.  PreAmpli    Pan            Stereo Amplifier  PostAmpli         Distortion        BitCrusher
     1.  Start       Env Attack     Env Release       Stop              Pitch semi-tone   Pitch fine-tune
     2.  LoopStart   Loop Attack    Loop Release      LoopStop          Delay             Legato
  

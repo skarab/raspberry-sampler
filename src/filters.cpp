@@ -25,10 +25,10 @@ void FiltersGlobal::Compute(int& value, const vector<int>& params)
     value = (int)(value*preampli);
 
     FILTER_NOISE_Compute(value, params, _Noise);
-    FILTER_OVERDRIVE_Compute(value, params);
+    FILTER_FORMANT_Compute(value, params, _Formant);
     FILTER_DISTORTION_Compute(value, params);
     FILTER_BITCRUSHER_Compute(value, params);
-    FILTER_FORMANT_Compute(value, params, _Formant);
+    FILTER_OVERDRIVE_Compute(value, params);
     FILTER_DC_Compute(value, _DC);
     FILTER_LOWPASS_Compute(value, params, _LowPass);
     FILTER_HIGHPASS_Compute(value, params, _HighPass);
@@ -53,6 +53,6 @@ void FiltersGlobal::ComputeStereo(int& left, int& right, const vector<int>& para
 
 void FiltersVoice::Compute(int& value, const vector<int>& params)
 {
-    FILTER_OVERDRIVE_Compute(value, params);
+    FILTER_DISTORTION_Compute(value, params);
     FILTER_BITCRUSHER_Compute(value, params);
 }
