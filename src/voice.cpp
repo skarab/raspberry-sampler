@@ -3,9 +3,9 @@
 
 Voice::Voice() :
     _Sample(NULL),
-    _Position(0.0f),
-    _Pitch(1.0f),
-    _LegatoPitch(1.0f)
+    _Position(0.0),
+    _Pitch(1.0),
+    _LegatoPitch(1.0)
 {
 }
 
@@ -15,7 +15,7 @@ Voice::~Voice()
 
 bool Voice::IsBusy() const
 {
-    return (_Sample!=NULL) && !_Stop;
+    return _Sample!=NULL;
 }
 
 bool Voice::IsPlaying(Sample* sample) const
@@ -38,21 +38,20 @@ void Voice::Play(Sample* sample, int note, int velocity)
     if (_Sample!=NULL)
         ForceStop();
 
-    float delay = sample->GetParam(PARAM_Delay)*100.0f;
+    double delay = sample->GetParam(PARAM_Delay)*100.0;
     if (sample->IsLooping())
-        delay = 0.0f;
+        delay = 0.0;
 
-    if (sample->IsReverse()) _Position = (float)sample->GetStopPosition()+delay;
-    else _Position = (float)sample->GetStartPosition()-delay;
+    if (sample->IsReverse()) _Position = sample->GetStopPosition()+delay;
+    else _Position = sample->GetStartPosition()-delay;
 
     _Note = note;
     _Velocity = velocity;
 
-    if (sample->GetMode()==MODE_InstruLegato)
-        _LegatoPitch = _Pitch;
+    _LegatoPitch = _Pitch;
 
-    if (sample->IsInstru() && note!=-1) _Pitch = powf(2.0f, (note-sample->GetMidiKey().Note)/12.0f);
-    else _Pitch = 1.0f;
+    if (sample->IsInstru() && note!=-1) _Pitch = pow(2.0, (note-sample->GetMidiKey().Note)/12.0);
+    else _Pitch = 1.0;
 
     _Sample = sample;
     _Sample->NotifyStart();
@@ -63,7 +62,8 @@ void Voice::Play(Sample* sample, int note, int velocity)
 void Voice::Stop(Sample* sample, int note)
 {
     _Stop = true;
-    _StopTime = 0.0f;
+    _StopTime = 0.0;
+    _InLoop = false;
 }
 
 void Voice::ForceStop()
@@ -97,14 +97,14 @@ void Voice::Update(int& left, int& right)
 
     // update position & pitch
 
-    bool legato = _Sample->GetMode()==MODE_InstruLegato;
-    float pitch = legato?_LegatoPitch:_Pitch;
-    _Position += pitch*powf(2.0f, params[PARAM_PitchSemiTone]/12.0f)*(params[PARAM_PitchFineTune]/512.0f);
+    bool legato = _Sample->UseLegato();
+    double pitch = legato?_LegatoPitch:_Pitch;
+    _Position += pitch*pow(2.0, params[PARAM_PitchSemiTone]/12.0)*(params[PARAM_PitchFineTune]/512.0);
 
     if (legato)
     {
-        float lerp = 0.999f+params[PARAM_Legato]*0.0009f/64.0f;
-        _LegatoPitch = _LegatoPitch*lerp+_Pitch*(1.0f-lerp);
+        double lerp = 0.999+params[PARAM_Legato]*0.0009/64.0;
+        _LegatoPitch = _LegatoPitch*lerp+_Pitch*(1.0-lerp);
     }
 
     // envelop
@@ -114,7 +114,7 @@ void Voice::Update(int& left, int& right)
 
     float env_attack = params[PARAM_EnvAttack]*100.0f;
     if (env_attack>0.0f && _Position<start+env_attack)
-        volume *= _Position>=start?pow((_Position-start)/env_attack, 2.0f):0.0f;
+        volume *= _Position>=start?powf((_Position-start)/env_attack, 2.0f):0.0f;
 
     float env_release = params[PARAM_EnvRelease]*100.0f;
     if (env_release>0.0f && _Position>stop-env_release)

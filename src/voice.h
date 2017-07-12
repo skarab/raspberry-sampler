@@ -27,13 +27,13 @@ public:
 private:
 
     Sample* _Sample;
-    float _Position;
+    double _Position;
     bool _Stop;
-    float _StopTime;
+    double _StopTime;
     int _Note;
     int _Velocity;
-    float _Pitch;
-    float _LegatoPitch;
+    double _Pitch;
+    double _LegatoPitch;
     bool _InLoop;
     FiltersVoice _LeftFilters;
     FiltersVoice _RightFilters;

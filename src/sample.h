@@ -9,11 +9,7 @@ enum MODE
 {
     MODE_OneShot = 0,
     MODE_Loop,
-    MODE_Key,
-    MODE_KeyLoop,
     MODE_Instru,
-    MODE_InstruNoRelease,
-    MODE_InstruLegato,
     MODE_Count
 };
 
@@ -89,9 +85,10 @@ public:
 
     bool IsPlaying() const { return _PlayCounter>0; }
     bool IsReverse() const { return _Params[PARAM_PitchFineTune]<0; }
-    bool IsLooping() const { return (_Mode==MODE_Loop) || (_Mode==MODE_KeyLoop); }
-    bool IsInstru() const { return (_Mode==MODE_Instru) || (_Mode==MODE_InstruNoRelease) || (_Mode==MODE_InstruLegato); }
-    bool UseRelease() const { return (_Mode==MODE_Key) || (_Mode==MODE_KeyLoop) || (_Mode==MODE_Instru); }
+    bool IsLooping() const { return _Mode==MODE_Loop; }
+    bool IsInstru() const { return _Mode==MODE_Instru; }
+    bool UseLegato() const { return _Params[PARAM_Legato]>0; }
+    bool UseRelease() const { return IsInstru() && !UseLegato(); }
 
     int GetStartPosition() const { return (int)(_Params[PARAM_Start]*(GetLength()-1.0f)/512.0f); }
     int GetStopPosition() const { return (int)(_Params[PARAM_Stop]*(GetLength()-1.0f)/512.0f); }

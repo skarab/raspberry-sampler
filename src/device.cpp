@@ -46,7 +46,6 @@ void Device::Play(Sample* sample, int note, int velocity)
         return;
 
     Voice* voice = NULL;
-    Voice* free_voice = NULL;
 
     pthread_mutex_lock(&_Lock);
 
@@ -54,16 +53,10 @@ void Device::Play(Sample* sample, int note, int velocity)
     {
         if (!_Voices[i]->IsBusy())
         {
-            free_voice = _Voices[i];
+            voice = _Voices[i];
         }
-        else if ((free_voice==NULL) && (!_Voices[i]->IsLooping()))
+        else if (sample->IsInstru() && sample->UseLegato() && _Voices[i]->IsPlaying(sample))
         {
-            free_voice = _Voices[i];
-        }
-        else if (_Voices[i]->IsPlaying(sample))
-        {
-            if (sample->GetMode()!=MODE_InstruLegato && !_Voices[i]->IsPlaying(sample, note))
-                continue;
             voice = _Voices[i];
             break;
         }
@@ -71,36 +64,27 @@ void Device::Play(Sample* sample, int note, int velocity)
 
     pthread_mutex_unlock(&_Lock);
 
-    if (voice==NULL)
-        voice = free_voice;
-
     if (voice!=NULL)
     {
         pthread_mutex_lock(&_Lock);
 
-        if (sample->GetMode()==MODE_Loop)
+        if (sample->IsLooping() && voice->IsBusy())
         {
-            if (voice->IsBusy()) voice->Stop(sample, note);
-            else voice->Play(sample, note, velocity);
+            voice->Stop(sample, note);
         }
         else
         {
             voice->Play(sample, note, velocity);
         }
+
         pthread_mutex_unlock(&_Lock);
     }
 }
 
 void Device::Stop(Sample* sample, int note)
 {
-    if (!sample->IsValid()
-        || (sample->GetMode()==MODE_Loop)
-        || (sample->GetMode()==MODE_OneShot)
-        || (sample->GetMode()==MODE_InstruNoRelease)
-        || (sample->GetMode()==MODE_InstruLegato))
-    {
+    if (!sample->IsValid() || !sample->UseRelease())
         return;
-    }
 
     for (int i=0 ; i<_Voices.size() ; ++i)
     {
@@ -249,9 +233,8 @@ void Device::_Update(snd_pcm_uframes_t frames)
         if (right<-32767) right = -32767;
         else if (right>32767) right = 32767;
 
-        // it should be the inverse, wtf.
-        *out++ = right;
         *out++ = left;
+        *out++ = right;
     }
 
     if (snd_pcm_writei(_PlaybackHandle, _Buffer, frames)<0)
