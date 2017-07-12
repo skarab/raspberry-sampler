@@ -55,7 +55,7 @@ void Device::Play(Sample* sample, int note, int velocity)
         {
             voice = _Voices[i];
         }
-        else if (sample->IsInstru() && sample->UseLegato() && _Voices[i]->IsPlaying(sample))
+        else if ((sample->IsLooping() || (sample->IsInstru() && sample->UseLegato())) && _Voices[i]->IsPlaying(sample))
         {
             voice = _Voices[i];
             break;
