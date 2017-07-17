@@ -1,21 +1,20 @@
-#ifndef __SAMPLER_DEVICE__
-#define __SAMPLER_DEVICE__
+#ifndef __SAMPLER_CORE__
+#define __SAMPLER_CORE__
 
 #include "includes.h"
 #include "voice.h"
 #include "bank.h"
 
-class Device
+class Core
 {
 public:
 
-    Device();
-    ~Device();
+    Core();
+    ~Core();
 
-    static Device& Get() { return *_Instance; }
-
-    void Play(Sample* sample, int note, int velocity);
-    void Stop(Sample* sample, int note);
+    bool PlayMono(Sample* sample, int note, int velocity);
+    bool Play(Sample* sample, int note, int velocity);
+    bool Stop(Sample* sample, int note);
     void StopAll();
     void OnUnloadBank(Bank& bank);
 
@@ -28,7 +27,7 @@ private:
     void _Destroy();
     void _Update(snd_pcm_uframes_t frames);
 
-    static Device* _Instance;
+    static Core* _Instance;
 
     bool _Ready;
     bool _Quit;

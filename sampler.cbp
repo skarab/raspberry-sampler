@@ -6,7 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;device/;display/;filters/;" />
+		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;sound/;display/;filters/;" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -56,11 +56,11 @@
 		<Unit filename="src/controller.h">
 			<Option virtualFolder="controller/" />
 		</Unit>
-		<Unit filename="src/device.cpp">
-			<Option virtualFolder="device/" />
+		<Unit filename="src/core.cpp">
+			<Option virtualFolder="sound/" />
 		</Unit>
-		<Unit filename="src/device.h">
-			<Option virtualFolder="device/" />
+		<Unit filename="src/core.h">
+			<Option virtualFolder="sound/" />
 		</Unit>
 		<Unit filename="src/display.cpp">
 			<Option virtualFolder="display/" />
@@ -182,11 +182,17 @@
 		<Unit filename="src/sample.h">
 			<Option virtualFolder="sample/" />
 		</Unit>
+		<Unit filename="src/sound.cpp">
+			<Option virtualFolder="sound/" />
+		</Unit>
+		<Unit filename="src/sound.h">
+			<Option virtualFolder="sound/" />
+		</Unit>
 		<Unit filename="src/voice.cpp">
-			<Option virtualFolder="device/" />
+			<Option virtualFolder="sound/" />
 		</Unit>
 		<Unit filename="src/voice.h">
-			<Option virtualFolder="device/" />
+			<Option virtualFolder="sound/" />
 		</Unit>
 		<Unit filename="src/wav.cpp">
 			<Option virtualFolder="sample/" />

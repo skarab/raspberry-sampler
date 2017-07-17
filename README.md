@@ -1,5 +1,5 @@
 # raspberry-sampler
-Sampler based on Raspberry 3 
+Sampler based on Raspberry Pi 3 B 
 
 Key concept is to have a box full of knobs to live-edit samples, linked to other instruments using midi. 
 Note this is WIP, the design of controllers may change, the box isn't designed yet. 
@@ -8,7 +8,7 @@ Note this is WIP, the design of controllers may change, the box isn't designed y
 
 Features
 
-- stereo & polyphonic, up to 4 voices
+- stereo & polyphonic, up to 12 voices
 - 44100Hz 16bits realtime playback
 - jack output
 - usb midi input, supporting multiple devices
@@ -90,7 +90,7 @@ Sample :
 -----------------------------------
  
 Hardware parts : 
- - Raspberry 3 (for now its running on the 2B)
+ - Raspberry 3 B
  - SD card 
  - 7-segment LED HT16K33 Backpack 
  - x8 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother) 

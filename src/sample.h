@@ -89,6 +89,7 @@ public:
     bool IsInstru() const { return _Mode==MODE_Instru; }
     bool UseLegato() const { return _Params[PARAM_Legato]>0; }
     bool UseRelease() const { return IsInstru() && !UseLegato(); }
+    bool IsMonoVoice() const { return IsLooping() || (IsInstru() && UseLegato()); }
 
     int GetStartPosition() const { return (int)(_Params[PARAM_Start]*(GetLength()-1.0f)/512.0f); }
     int GetStopPosition() const { return (int)(_Params[PARAM_Stop]*(GetLength()-1.0f)/512.0f); }

@@ -1,15 +1,11 @@
-#include "device.h"
+#include "core.h"
 
-Device* Device::_Instance = NULL;
+Core* Core::_Instance = NULL;
 
-Device::Device() :
+Core::Core() :
     _Ready(false),
     _Quit(false)
 {
-    _Instance = this;
-
-    FiltersGlobal::Initialize();
-
     if (pthread_mutex_init(&_Lock, NULL)!=0)
         ERROR("failed to create mutex");
 
@@ -33,29 +29,22 @@ Device::Device() :
         usleep(10);
 }
 
-Device::~Device()
+Core::~Core()
 {
     _Quit = true;
     pthread_join(_Thread, NULL);
     pthread_mutex_destroy(&_Lock);
 }
 
-void Device::Play(Sample* sample, int note, int velocity)
+bool Core::PlayMono(Sample* sample, int note, int velocity)
 {
-    if (!sample->IsValid())
-        return;
-
     Voice* voice = NULL;
 
     pthread_mutex_lock(&_Lock);
 
     for (int i=0 ; i<_Voices.size() ; ++i)
     {
-        if (!_Voices[i]->IsBusy())
-        {
-            voice = _Voices[i];
-        }
-        else if ((sample->IsLooping() || (sample->IsInstru() && sample->UseLegato())) && _Voices[i]->IsPlaying(sample))
+        if (_Voices[i]->IsPlaying(sample))
         {
             voice = _Voices[i];
             break;
@@ -78,14 +67,40 @@ void Device::Play(Sample* sample, int note, int velocity)
         }
 
         pthread_mutex_unlock(&_Lock);
+        return true;
     }
+    return false;
 }
 
-void Device::Stop(Sample* sample, int note)
+bool Core::Play(Sample* sample, int note, int velocity)
 {
-    if (!sample->IsValid() || !sample->UseRelease())
-        return;
+    Voice* voice = NULL;
 
+    pthread_mutex_lock(&_Lock);
+
+    for (int i=0 ; i<_Voices.size() ; ++i)
+    {
+        if (!_Voices[i]->IsBusy())
+        {
+            voice = _Voices[i];
+            break;
+        }
+    }
+
+    pthread_mutex_unlock(&_Lock);
+
+    if (voice!=NULL)
+    {
+        pthread_mutex_lock(&_Lock);
+        voice->Play(sample, note, velocity);
+        pthread_mutex_unlock(&_Lock);
+        return true;
+    }
+    return false;
+}
+
+bool Core::Stop(Sample* sample, int note)
+{
     for (int i=0 ; i<_Voices.size() ; ++i)
     {
         if (_Voices[i]->IsPlaying(sample, note))
@@ -93,12 +108,13 @@ void Device::Stop(Sample* sample, int note)
             pthread_mutex_lock(&_Lock);
             _Voices[i]->Stop(sample, note);
             pthread_mutex_unlock(&_Lock);
-            return;
+            return true;
         }
     }
+    return false;
 }
 
-void Device::StopAll()
+void Core::StopAll()
 {
     pthread_mutex_lock(&_Lock);
     for (int i=0 ; i<_Voices.size() ; ++i)
@@ -106,7 +122,7 @@ void Device::StopAll()
     pthread_mutex_unlock(&_Lock);
 }
 
-void Device::OnUnloadBank(Bank& bank)
+void Core::OnUnloadBank(Bank& bank)
 {
     pthread_mutex_lock(&_Lock);
     for (int i=0 ; i<_Voices.size() ; ++i)
@@ -117,16 +133,16 @@ void Device::OnUnloadBank(Bank& bank)
     pthread_mutex_unlock(&_Lock);
 }
 
-void* Device::_RunThreaded(void* data)
+void* Core::_RunThreaded(void* data)
 {
-    Device* device = (Device*)data;
-    device->_Run();
+    Core* core = (Core*)data;
+    core->_Run();
 }
 
-void Device::_Run()
+void Core::_Run()
 {
     _Create();
-    LOG("device ready");
+    LOG("core ready");
     _Ready = true;
 
     snd_pcm_sframes_t frames_to_deliver;
@@ -146,10 +162,10 @@ void Device::_Run()
     }
 
     _Destroy();
-    LOG("device destroyed");
+    LOG("core destroyed");
 }
 
-void Device::_Create()
+void Core::_Create()
 {
     if (snd_pcm_open(&_PlaybackHandle, SAMPLER_DEVICE, SND_PCM_STREAM_PLAYBACK, 0)<0)
         ERROR("device is not available");
@@ -187,11 +203,11 @@ void Device::_Create()
     if (_Buffer==NULL)
         ERROR("failed to alloc buffer");
 
-    for (int i=0 ; i<SAMPLER_VOICES ; ++i)
+    for (int i=0 ; i<SAMPLER_VOICES_PER_CORE ; ++i)
         _Voices.push_back(new Voice());
 }
 
-void Device::_Destroy()
+void Core::_Destroy()
 {
     for (int i=0 ; i<_Voices.size() ; ++i)
         delete _Voices[i];
@@ -202,7 +218,7 @@ void Device::_Destroy()
     snd_pcm_close(_PlaybackHandle);
 }
 
-void Device::_Update(snd_pcm_uframes_t frames)
+void Core::_Update(snd_pcm_uframes_t frames)
 {
     const vector<int>& params = Bank::PlayBank->GetSample(0)->GetParams();
 

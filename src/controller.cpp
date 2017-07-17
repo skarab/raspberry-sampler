@@ -1,6 +1,6 @@
 #include "controller.h"
 #include "display.h"
-#include "device.h"
+#include "sound.h"
 
 Controller* Controller::_Instance = NULL;
 
@@ -96,7 +96,7 @@ void Controller::OnNoteOn(const MidiKey& key, int velocity)
     }
 
     if (sample!=NULL)
-        Device::Get().Play(sample, key.Note, velocity);
+        Sound::Get().Play(sample, key.Note, velocity);
     pthread_mutex_unlock(&_Lock);
 }
 
@@ -105,7 +105,7 @@ void Controller::OnNoteOff(const MidiKey& key)
     pthread_mutex_lock(&_Lock);
     Sample* sample = _FindSample(key);
     if (sample!=NULL)
-        Device::Get().Stop(sample, key.Note);
+        Sound::Get().Stop(sample, key.Note);
     pthread_mutex_unlock(&_Lock);
 }
 
@@ -218,7 +218,7 @@ void Controller::_OnLoadBank()
 
     if (_IsOnPlayBank())
     {
-        Device::Get().StopAll();
+        Sound::Get().StopAll();
         return;
     }
 
@@ -226,7 +226,7 @@ void Controller::_OnLoadBank()
     {
         pthread_mutex_lock(&_Lock);
 
-        Device::Get().OnUnloadBank(*bank);
+        Sound::Get().OnUnloadBank(*bank);
         bank->Unload();
         _Sample = NULL;
 
@@ -318,14 +318,14 @@ void Controller::_OnStartSample()
     }
     else if (_Sample!=NULL)
     {
-        Device::Get().Play(_Sample, -1, 64);
+        Sound::Get().Play(_Sample, -1, 64);
     }
 }
 
 void Controller::_OnStopSample()
 {
     if (!_IsOnGlobalParams() && _Sample!=NULL)
-        Device::Get().Stop(_Sample, -1);
+        Sound::Get().Stop(_Sample, -1);
 }
 
 int Controller::_GetControlID(int knob_id)
