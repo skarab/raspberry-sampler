@@ -8,7 +8,8 @@ LDLIBS=-L/usr/lib -lasound -lpthread -lbcm2835
 FILES=src/pugixml/src/pugixml.cpp \
 	src/display.cpp \
 	src/bank.cpp \
-	src/device.cpp \
+	src/sound.cpp \
+	src/core.cpp \
 	src/helpers.cpp \
 	src/error.cpp \
 	src/log.cpp \

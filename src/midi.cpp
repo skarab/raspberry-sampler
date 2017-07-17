@@ -121,7 +121,7 @@ void Midi::_Run()
             }
         }
 
-        usleep(1000);
+        usleep(3000);
     }
 
     close(_Sequencer);

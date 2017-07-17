@@ -1,6 +1,44 @@
 #include "sample.h"
 
 Param PARAM_Values[PARAM_Count] = {
+    { 0, 400, 110, "PreAmpli" },
+    { -32, 32, 1, "Pan" },
+    { 0, 200, 120, "Stereo" },
+    { 0, 400, 110, "PostAmpli" },
+    { 0, 150, 20, "Distortion" },
+    { 0, 100, 20, "BitCrusher" },
+
+    { 0, 200, 90, "EQLow" },
+    { 0, 200, 110, "EQMedium" },
+    { 0, 200, 90, "EQHigh" },
+    { 0, 100, 2, "Overdrive" },
+    { 0, 200, 10, "Noise" },
+    { 0, 100, 10, "NoiseMix" },
+
+    { 0, 200, 180, "LPCutOff" },
+    { 0, 200, 20, "LPResonance" },
+    { 0, 200, 40, "HPCutOff" },
+    { 0, 200, 40, "HPResonance" },
+    { 0, 100, 40, "Formant" },
+    { 0, 4, 1, "FormantID" },
+
+    { 0, 512, 12, "Start" },
+    { 0, 2048, 12, "EnvAttack" },
+    { 0, 2048, 12, "EnvRelease" },
+    { 0, 512, 500, "Stop" },
+    { -32, 32, 1, "PitchSemiTone" },
+    { -512, 1024, 513, "PitchFineTune" },
+
+    { 0, 512, 10, "LoopStart" },
+    { 0, 2048, 10, "LoopEnvAttack" },
+    { 0, 2048, 10, "LoopEnvRelease" },
+    { 0, 512, 510, "LoopStop" },
+    { 0, 1024, 10, "Delay" },
+    { 0, 64, 2, "Legato" }
+};
+
+/*
+Param PARAM_Values[PARAM_Count] = {
     { 0, 400, 100, "PreAmpli" },
     { -32, 32, 0, "Pan" },
     { 0, 200, 100, "Stereo" },
@@ -36,6 +74,7 @@ Param PARAM_Values[PARAM_Count] = {
     { 0, 1024, 0, "Delay" },
     { 0, 64, 0, "Legato" }
 };
+*/
 
 Sample::Sample() :
     _Wav(NULL),
@@ -48,7 +87,7 @@ Sample::Sample() :
 
 Sample::Sample(string name, string path) :
     _Name(name),
-    _Mode(MODE_OneShot),
+    _Mode(MODE_Loop),
     _PlayCounter(0)
 {
     _Wav = new Wav(path);

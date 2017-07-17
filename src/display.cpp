@@ -96,7 +96,7 @@ void Display::_Run()
         if (new_value!=_OldValue)
             _Print(new_value);
 
-        usleep(1000);
+        usleep(10000);
     }
 
     _Print("");

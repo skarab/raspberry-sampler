@@ -8,6 +8,8 @@ Device::Device() :
 {
     _Instance = this;
 
+    FiltersGlobal::Initialize();
+
     if (pthread_mutex_init(&_Lock, NULL)!=0)
         ERROR("failed to create mutex");
 
@@ -26,8 +28,6 @@ Device::Device() :
 
     if (pthread_create(&_Thread, &tattr, _RunThreaded, (void*)this)!=0)
         ERROR("failed to create thread");
-
-    FiltersGlobal::Initialize();
 
     while (!_Ready)
         usleep(10);
