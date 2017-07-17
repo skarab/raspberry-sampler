@@ -14,7 +14,7 @@ Features
 - usb midi input, supporting multiple devices
 - up to X midi attachments
 - support up to X banks containing X samples
-- 7 play modes including loop & instruments
+- one shot, loop and instrument play modes
 - Per-sample stereo amplifier, distortion  & bitcrusher filters
 - Global equalizer, low pass moog, high pass, noise, overdrive, distortion & formant filters
 - 8 Knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
