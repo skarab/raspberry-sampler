@@ -5,26 +5,26 @@
 
 enum PARAM_GLOBAL
 {
-    PARAM_GLOBAL_PreAmpli,
+    PARAM_GLOBAL_Volume,
     PARAM_GLOBAL_Pan,
     PARAM_GLOBAL_Stereo,
-    PARAM_GLOBAL_PostAmpli,
-    PARAM_GLOBAL_Distortion,
-    PARAM_GLOBAL_BitCrusher,
-
     PARAM_GLOBAL_EQLow,
     PARAM_GLOBAL_EQMedium,
     PARAM_GLOBAL_EQHigh,
-    PARAM_GLOBAL_Overdrive,
-    PARAM_GLOBAL_Noise,
-    PARAM_GLOBAL_NoiseMix,
 
     PARAM_GLOBAL_LPCutOff,
     PARAM_GLOBAL_LPResonance,
     PARAM_GLOBAL_HPCutOff,
     PARAM_GLOBAL_HPResonance,
-    PARAM_GLOBAL_Formant,
-    PARAM_GLOBAL_FormantID,
+    PARAM_GLOBAL_Unused1,
+    PARAM_GLOBAL_Unused2,
+
+    PARAM_GLOBAL_Noise,
+    PARAM_GLOBAL_NoiseMix,
+    PARAM_GLOBAL_Unused3,
+    PARAM_GLOBAL_Unused4,
+    PARAM_GLOBAL_Unused5,
+    PARAM_GLOBAL_Unused6,
 
     PARAM_GLOBAL_Count
 };
