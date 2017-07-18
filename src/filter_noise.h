@@ -55,7 +55,7 @@ inline void FILTER_NOISE_Compute(int& value, const vector<int>& params, FILTER_N
     float noise = strength*FILTER_NOISE_BUFFER[params[PARAM_GLOBAL_NoiseTexture]][filter.ID];
 
     strength = powf(params[PARAM_GLOBAL_Motor]/200.0f, 2.0f);
-    filter.HardPosition += (params[PARAM_GLOBAL_MotorSpeed]/100.0f)*8.0f+0.1f;
+    filter.HardPosition += (params[PARAM_GLOBAL_MotorSpeed]/200.0f)*8.0f+0.1f;
     int p = (int)filter.HardPosition;
     if (p>=SAMPLER_RATE)
     {

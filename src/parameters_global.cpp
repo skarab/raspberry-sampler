@@ -19,6 +19,6 @@ Param PARAM_GLOBAL_Settings[PARAM_GLOBAL_Count] = {
     { 0, 20, 0, "NoiseTexture" },
     { 0, 200, 0, "Motor" },
     { 0, 20, 0, "MotorTexture" },
-    { 0, 300, 100, "MotorSpeed" },
+    { 0, 500, 200, "MotorSpeed" },
     { 0, 100, 0, "NoiseMix" }
 };
