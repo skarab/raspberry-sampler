@@ -20,11 +20,11 @@ enum PARAM_GLOBAL
     PARAM_GLOBAL_Unused2,
 
     PARAM_GLOBAL_Noise,
+    PARAM_GLOBAL_NoiseTexture,
+    PARAM_GLOBAL_Motor,
+    PARAM_GLOBAL_MotorTexture,
+    PARAM_GLOBAL_MotorSpeed,
     PARAM_GLOBAL_NoiseMix,
-    PARAM_GLOBAL_Unused3,
-    PARAM_GLOBAL_Unused4,
-    PARAM_GLOBAL_Unused5,
-    PARAM_GLOBAL_Unused6,
 
     PARAM_GLOBAL_Count
 };

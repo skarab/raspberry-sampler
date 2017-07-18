@@ -78,7 +78,7 @@ Sample :
 
     0.  Volume        Pan            Stereo          EQ Low          EQ Medium         EQ High
     1.  LP CutOff     LP Resonance   HP CutOff       HP Resonance    --                --
-    2.  Noise         Noise Mixer    --              --              --                --
+    2.  Noise         Noise Texture  Motor           Motor Texture   Motor Speed       Noise Mixer
 
  Sample params:
 
