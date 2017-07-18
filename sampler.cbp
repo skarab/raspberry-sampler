@@ -6,7 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;sound/;display/;filters/;" />
+		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;sound/;display/;filters/;parameters/;" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -160,6 +160,18 @@
 		</Unit>
 		<Unit filename="src/midi_key.h">
 			<Option virtualFolder="midi/" />
+		</Unit>
+		<Unit filename="src/parameters_global.cpp">
+			<Option virtualFolder="parameters/" />
+		</Unit>
+		<Unit filename="src/parameters_global.h">
+			<Option virtualFolder="parameters/" />
+		</Unit>
+		<Unit filename="src/parameters_sample.cpp">
+			<Option virtualFolder="parameters/" />
+		</Unit>
+		<Unit filename="src/parameters_sample.h">
+			<Option virtualFolder="parameters/" />
 		</Unit>
 		<Unit filename="src/pugixml/src/pugiconfig.hpp">
 			<Option virtualFolder="externals/" />

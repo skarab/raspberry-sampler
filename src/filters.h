@@ -35,7 +35,15 @@ class FiltersVoice
 {
 public:
 
+    FiltersVoice();
+
     void Compute(int& value, const vector<int>& params);
+    void ComputeStereo(int& left, int& right, const vector<int>& params);
+
+private:
+
+    FILTER_DC _DC;
+    FILTER_FORMANT _Formant;
 };
 
 #endif

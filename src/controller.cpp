@@ -331,16 +331,7 @@ void Controller::_OnStopSample()
 int Controller::_GetControlID(int knob_id)
 {
     int id = _ControlSelect->GetID();
-    if (_IsOnGlobalParams())
-    {
-        id = id*6+knob_id;
-    }
-    else
-    {
-        if (id==0) id = id*6+knob_id;
-        else id = (id+2)*6+knob_id;
-    }
-    return id;
+    return id*6+knob_id;
 }
 
 void Controller::_UpdateMidiStatus()
@@ -356,10 +347,12 @@ void Controller::_UpdateControls()
     {
         int id = _GetControlID(i);
 
-        if (id<PARAM_Count && _Sample!=NULL)
+        if (id<PARAM_SAMPLE_Count && _Sample!=NULL)
         {
-            _Controls[i]->SetRange(PARAM_Values[id].Min, PARAM_Values[id].Max);
-            _Controls[i]->SetValue(_Sample->GetParam((PARAM)id));
+            const Param& settings = _Sample->GetParamSettings(id);
+
+            _Controls[i]->SetRange(settings.Min, settings.Max);
+            _Controls[i]->SetValue(_Sample->GetParam(id));
         }
         else
         {
@@ -372,11 +365,12 @@ void Controller::_UpdateControls()
 void Controller::_OnControlChanged(int i)
 {
     int id = _GetControlID(i);
-    if (id<PARAM_Count && _Sample!=NULL)
+    if (id<PARAM_SAMPLE_Count && _Sample!=NULL)
     {
+        const Param& settings = _Sample->GetParamSettings(id);
         int value = _Controls[i]->GetValue();
-        if (value<PARAM_Values[id].Min) value = PARAM_Values[id].Min;
-        if (value>PARAM_Values[id].Max) value = PARAM_Values[id].Max;
-        _Sample->SetParam((PARAM)id, value);
+        if (value<settings.Min) value = settings.Min;
+        if (value>settings.Max) value = settings.Max;
+        _Sample->SetParam(id, value);
     }
 }

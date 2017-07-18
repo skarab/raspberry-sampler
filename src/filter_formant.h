@@ -4,20 +4,23 @@
 typedef struct
 {
     double Data[10];
+    double Smooth;
 } FILTER_FORMANT;
 
 inline void FILTER_FORMANT_Initialize(FILTER_FORMANT& filter)
 {
     memset(filter.Data, 0, sizeof(double)*10);
+    filter.Smooth = 1.0;
 }
 
-inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER_FORMANT& filter)
+inline void FILTER_FORMANT_Compute(int& value, int id, FILTER_FORMANT& filter)
 {
-    float formant = params[PARAM_Formant]/100.0f;
-    int id = params[PARAM_FormantID];
-
-    if (formant==0.0f)
+    if (id==0)
+    {
+        filter.Smooth = 1.0;
         return;
+    }
+    --id;
 
     static const double coeff[5][11]= {
         { 8.11044e-06, 8.943665402, -36.83889529, 92.01697887, -154.337906, 181.6233289, -151.8651235, 89.09614114, -35.10298511, 8.388101016, -0.923313471 },  // A
@@ -40,8 +43,6 @@ inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER
         +coeff[id][9]*memory[8]
         +coeff[id][10]*memory[9];
 
-    if (res>10.0 || res<-10.0) res = 0.0;
-
     memory[9] = memory[8];
     memory[8] = memory[7];
     memory[7] = memory[6];
@@ -53,5 +54,13 @@ inline void FILTER_FORMANT_Compute(int& value, const vector<int>& params, FILTER
     memory[1] = memory[0];
     memory[0] = res;
 
-    value = (int)(res*32767.0*formant+value*(1.0-formant));
+    if (filter.Smooth>0.0)
+    {
+        value = (int)(res*32767.0*(1.0-filter.Smooth)+value*filter.Smooth);
+        filter.Smooth *= 0.9;
+    }
+    else
+    {
+        value = (int)(res*32767.0);
+    }
 }

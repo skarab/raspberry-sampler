@@ -10,6 +10,8 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/bank.cpp \
 	src/sound.cpp \
 	src/core.cpp \
+	src/parameters_sample.cpp \
+	src/parameters_global.cpp \
 	src/helpers.cpp \
 	src/error.cpp \
 	src/log.cpp \

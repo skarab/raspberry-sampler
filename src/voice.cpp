@@ -38,12 +38,12 @@ void Voice::Play(Sample* sample, int note, int velocity)
     if (_Sample!=NULL)
         ForceStop();
 
-    double delay = sample->GetParam(PARAM_Delay)*100.0;
+    double silence = sample->GetParam(PARAM_SAMPLE_Silence)*100.0;
     if (sample->IsLooping())
-        delay = 0.0;
+        silence = 0.0;
 
-    if (sample->IsReverse()) _Position = sample->GetStopPosition()+delay;
-    else _Position = sample->GetStartPosition()-delay;
+    if (sample->IsReverse()) _Position = sample->GetStopPosition()+silence;
+    else _Position = sample->GetStartPosition()-silence;
 
     _Note = note;
     _Velocity = velocity;
@@ -99,24 +99,23 @@ void Voice::Update(int& left, int& right)
 
     bool legato = _Sample->UseLegato();
     double pitch = legato?_LegatoPitch:_Pitch;
-    _Position += pitch*pow(2.0, params[PARAM_PitchSemiTone]/12.0)*(params[PARAM_PitchFineTune]/512.0);
+    _Position += pitch*pow(2.0, params[PARAM_SAMPLE_PitchSemiTone]/12.0)*(params[PARAM_SAMPLE_PitchFineTune]/1024.0);
 
     if (legato)
     {
-        double lerp = 0.999+params[PARAM_Legato]*0.0009/64.0;
+        double lerp = 0.999+params[PARAM_SAMPLE_Legato]*0.0009/64.0;
         _LegatoPitch = _LegatoPitch*lerp+_Pitch*(1.0-lerp);
     }
 
     // envelop
 
-    float preampli = powf(2.0f, (params[PARAM_PreAmpli]-100.0f)/10.0f);
-    float volume = powf(2.0f, (params[PARAM_PostAmpli]-100.0f)/10.0f);
+    float volume = powf(2.0f, (params[PARAM_SAMPLE_Volume]-100.0f)/10.0f);
 
-    float env_attack = params[PARAM_EnvAttack]*100.0f;
+    float env_attack = params[PARAM_SAMPLE_EnvAttack]*100.0f;
     if (env_attack>0.0f && _Position<start+env_attack)
         volume *= _Position>=start?powf((_Position-start)/env_attack, 2.0f):0.0f;
 
-    float env_release = params[PARAM_EnvRelease]*100.0f;
+    float env_release = params[PARAM_SAMPLE_EnvRelease]*100.0f;
     if (env_release>0.0f && _Position>stop-env_release)
         volume *= _Position<stop?1.0f-(_Position-(stop-env_release))/env_release:0.0f;
 
@@ -126,20 +125,13 @@ void Voice::Update(int& left, int& right)
         volume *= _StopTime>env_release?0.0f:1.0f-_StopTime/env_release;
     }
 
-    // panning
-
-    float volume_left = 1.0f;
-    float volume_right = 1.0f;
-    if (params[PARAM_Pan]>0) volume_left = 1.0f-params[PARAM_Pan]/32.0f;
-    else if (params[PARAM_Pan]<0) volume_right = 1.0f+params[PARAM_Pan]/32.0f;
-
     // loop
 
     if (_Sample->IsLooping() && !_Stop)
     {
-        float delay = params[PARAM_Delay]*100.0f;
-        float loop_env_attack = params[PARAM_LoopEnvAttack]*100.0f;
-        float loop_env_release = params[PARAM_LoopEnvRelease]*100.0f;
+        float silence = params[PARAM_SAMPLE_Silence]*100.0f;
+        float loop_env_attack = params[PARAM_SAMPLE_LoopEnvAttack]*100.0f;
+        float loop_env_release = params[PARAM_SAMPLE_LoopEnvRelease]*100.0f;
         float loop_start = _Sample->GetLoopStartPosition(start, stop);
         float loop_stop = _Sample->GetLoopStopPosition(start, stop);
         if (loop_stop<loop_start+1)
@@ -150,9 +142,9 @@ void Voice::Update(int& left, int& right)
             if (_InLoop && _Position>loop_stop)
                 _Position = loop_stop;
 
-            while (_Position<=loop_start-delay)
+            while (_Position<=loop_start-silence)
             {
-                _Position += loop_stop-loop_start+delay;
+                _Position += loop_stop-loop_start+silence;
                 _InLoop = true;
             }
         }
@@ -161,9 +153,9 @@ void Voice::Update(int& left, int& right)
             if (_InLoop && _Position<loop_start)
                 _Position = loop_start;
 
-            while (_Position>=loop_stop+delay)
+            while (_Position>=loop_stop+silence)
             {
-                _Position -= loop_stop-loop_start+delay;
+                _Position -= loop_stop-loop_start+silence;
                 _InLoop = true;
             }
         }
@@ -184,21 +176,12 @@ void Voice::Update(int& left, int& right)
 
     // filters & volume
 
-    left *= preampli;
-    right *= preampli;
+    left *= volume;
+    right *= volume;
 
     _LeftFilters.Compute(left, params);
     _RightFilters.Compute(right, params);
-
-    FILTER_STEREO_Compute(left, right, params);
-
-    left *= volume*volume_left;
-    right *= volume*volume_right;
-
-    if (left<-32767) left = -32767;
-    else if (left>32767) left = 32767;
-    if (right<-32767) right = -32767;
-    else if (right>32767) right = 32767;
+    _LeftFilters.ComputeStereo(left, right, params);
 
     if (over)
         ForceStop();

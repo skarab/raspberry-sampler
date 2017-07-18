@@ -1,11 +1,11 @@
 #include "includes.h"
 #include "sample.h"
 
-inline void FILTER_BITCRUSHER_Compute(int& value, const vector<int>& params)
+inline void FILTER_BITCRUSHER_Compute(int& value, int strength)
 {
     const float vol[10] = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.9f, 0.6f, 0.5f, 0.4f, 0.2f };
 
-    float bitcrush = params[PARAM_BitCrusher]/100.0f;
+    float bitcrush = strength/100.0f;
     if (bitcrush>0.0f)
     {
         int id0 = floorf(bitcrush*9.0f);

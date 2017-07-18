@@ -71,9 +71,9 @@ inline void FILTER_EQUALIZER_Compute(double& value, double low, double mid, doub
 
 inline void FILTER_EQUALIZER_Compute(int& value, const vector<int>& params, FILTER_EQUALIZER& filter)
 {
-    double low = pow(2.0, (params[PARAM_EQLow]-100.0)/10.0);
-    double mid = pow(2.0, (params[PARAM_EQMedium]-100.0)/10.0);
-    double high = pow(2.0, (params[PARAM_EQHigh]-100.0)/10.0);
+    double low = pow(2.0, (params[PARAM_GLOBAL_EQLow]-100.0)/10.0);
+    double mid = pow(2.0, (params[PARAM_GLOBAL_EQMedium]-100.0)/10.0);
+    double high = pow(2.0, (params[PARAM_GLOBAL_EQHigh]-100.0)/10.0);
 
     double in = value/32767.0;
     FILTER_EQUALIZER_Compute(in, low, mid, high, filter.lf, filter.hf, filter.f1p, filter.f2p, filter.sdm);

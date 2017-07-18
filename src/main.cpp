@@ -7,6 +7,9 @@
 
 int main(int argc, char *argv[])
 {
+    if ((int)PARAM_GLOBAL_Count!=(int)PARAM_SAMPLE_Count)
+        return -1;
+
     Log* log = new Log();
     Display* display = new Display();
     Controller* controller = new Controller();

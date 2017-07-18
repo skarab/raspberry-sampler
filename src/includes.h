@@ -31,6 +31,7 @@ using namespace std;
 #include "error.h"
 #include "helpers.h"
 #include "raspberry.h"
+#include "parameters_global.h"
 
 #endif
 
