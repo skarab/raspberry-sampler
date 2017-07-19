@@ -3,6 +3,7 @@
 
 Voice::Voice() :
     _Sample(NULL),
+    _Volume(0.0f),
     _Position(0.0),
     _Pitch(1.0),
     _LegatoPitch(1.0)
@@ -47,6 +48,7 @@ void Voice::Play(Sample* sample, int note, int velocity)
 
     _Note = note;
     _Velocity = velocity;
+    _Volume = powf(2.0f, (sample->GetParam(PARAM_SAMPLE_Volume)-100.0f)/10.0f);
 
     _LegatoPitch = _Pitch;
 
@@ -110,6 +112,8 @@ void Voice::Update(int& left, int& right)
     // envelop
 
     float volume = powf(2.0f, (params[PARAM_SAMPLE_Volume]-100.0f)/10.0f);
+    _Volume = _Volume*0.99f+volume*0.01f;
+    volume = _Volume;
 
     float env_attack = params[PARAM_SAMPLE_EnvAttack]*100.0f;
     if (env_attack>0.0f && _Position<start+env_attack)

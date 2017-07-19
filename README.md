@@ -8,15 +8,15 @@ Note this is WIP, the design of controllers may change, the box isn't designed y
 
 Features
 
-- stereo & polyphonic, up to 12 voices
+- stereo & polyphonic, up to 8 voices
 - 44100Hz 16bits realtime playback
 - jack output
 - usb midi input, supporting multiple devices
 - up to X midi attachments
 - support up to X banks containing X samples
 - one shot, loop and instrument play modes
-- Per-sample stereo amplifier, distortion  & bitcrusher filters
-- Global equalizer, low pass moog, high pass, noise, overdrive, distortion & formant filters
+- Per-sample stereo amplifier, formant, distortion & bitcrusher filters
+- Global equalizer, low pass moog, high pass, resonance & noise filters
 - 8 Knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
 - sampler software and samples on an usb key, allowing easy updates
 
@@ -77,14 +77,14 @@ Sample :
  Global params:
 
     0.  Volume        Pan            Stereo          EQ Low          EQ Medium         EQ High
-    1.  LP CutOff     LP Resonance   HP CutOff       HP Resonance    --                --
-    2.  Noise         Noise Texture  Motor           Motor Texture   Motor Speed       Noise Mixer
+    1.  LP CutOff     LP Resonance   HP CutOff       HP Resonance    Dry/Wet           Resonance
+    2.  Noise         Noise Texture  Clicks          Clicks Texture  Clicks Pitch      Noise Mixer
 
  Sample params:
 
     0.  Volume        Pan            Stereo          Formant         Distortion        BitCrusher
-    1.  Start         Env Attack     Env Release     Stop            Pitch semi-tone   Pitch fine-tune
-    2.  LoopStart     Loop Attack    Loop Release    LoopStop        Silence           Legato
+    1.  Start         Env Attack     Env Release     Stop            Pitch Semi-Tone   Pitch Fine-Tune
+    2.  Loop Start    Loop Attack    Loop Release    Loop Stop       Silence           Legato
 
 
 -----------------------------------

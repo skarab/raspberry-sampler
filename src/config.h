@@ -3,7 +3,7 @@
 
 #define SAMPLER_DEVICE          "default"
 #define SAMPLER_CORES           4
-#define SAMPLER_VOICES_PER_CORE 3
+#define SAMPLER_VOICES_PER_CORE 2
 #define SAMPLER_BUFFER_SIZE     2048
 #define SAMPLER_PERIOD_SIZE     128
 #define SAMPLER_RATE            44100

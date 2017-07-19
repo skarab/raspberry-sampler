@@ -30,8 +30,8 @@ inline void FILTER_NOISE_STATIC_INITIALIZE()
                 v += FILTER_NOISE_BUFFER[0][id];
                 c += FILTER_CLICK_BUFFER[0][id];
             }
-            FILTER_NOISE_BUFFER[j][i] = v/(s*0.8f);
-            FILTER_CLICK_BUFFER[j][i] = c/(s*0.4f);
+            FILTER_NOISE_BUFFER[j][i] = v/(s*0.6f);
+            FILTER_CLICK_BUFFER[j][i] = c/(s*0.2f);
         }
     }
 }
@@ -39,31 +39,46 @@ inline void FILTER_NOISE_STATIC_INITIALIZE()
 typedef struct
 {
     int ID;
-    double HardPosition;
+    double ClicksPosition;
 } FILTER_NOISE;
 
 inline void FILTER_NOISE_Initialize(FILTER_NOISE& filter)
 {
-    filter.ID = 0;
-    filter.HardPosition = 0.0;
+    filter.ID = rand()%SAMPLER_RATE;
+    filter.ClicksPosition = rand()%SAMPLER_RATE;
 }
 
 inline void FILTER_NOISE_Compute(int& value, const vector<int>& params, FILTER_NOISE& filter)
 {
-    float strength = powf(params[PARAM_GLOBAL_Noise]/200.0f, 2.0f);
-    filter.ID = (filter.ID+1)%SAMPLER_RATE;
-    float noise = strength*FILTER_NOISE_BUFFER[params[PARAM_GLOBAL_NoiseTexture]][filter.ID];
+    // Noise
 
-    strength = powf(params[PARAM_GLOBAL_Motor]/200.0f, 2.0f);
-    filter.HardPosition += (params[PARAM_GLOBAL_MotorSpeed]/200.0f)*8.0f+0.1f;
-    int p = (int)filter.HardPosition;
+    filter.ID = (filter.ID+1)%SAMPLER_RATE;
+    float t = params[PARAM_GLOBAL_NoiseTexture]*20.0f/200.0f;
+    int t1 = floor(t);
+    int t2 = ceil(t);
+    float l = t-t1;
+    float s1 = powf(params[PARAM_GLOBAL_Noise]/200.0f, 2.0f);
+    float noise = (FILTER_NOISE_BUFFER[t1][filter.ID]*(1.0f-l)+FILTER_NOISE_BUFFER[t2][filter.ID]*l)*s1;
+
+    // Clicks
+
+    filter.ClicksPosition += (params[PARAM_GLOBAL_ClicksPitch]/200.0)*4.0+0.01;
+    int p = (int)filter.ClicksPosition;
     if (p>=SAMPLER_RATE)
     {
         p = 0;
-        filter.HardPosition = 0.0;
+        filter.ClicksPosition = 0.0;
     }
-    noise += strength*FILTER_CLICK_BUFFER[params[PARAM_GLOBAL_MotorTexture]][p];
+
+    t = params[PARAM_GLOBAL_ClicksTexture]*20.0f/200.0f;
+    t1 = floor(t);
+    t2 = ceil(t);
+    l = t-t1;
+    float s2 = powf(params[PARAM_GLOBAL_Clicks]/200.0f, 2.0f);
+    noise += (FILTER_CLICK_BUFFER[t1][p]*(1.0f-l)+FILTER_CLICK_BUFFER[t2][p]*l)*s2;
+
+    // Mix
 
     float mix = params[PARAM_GLOBAL_NoiseMix]/100.0f;
-    value = (int)((noise/32767.0f+1.0f-strength)*value*mix+(noise+value)*(1.0f-mix));
+    value = (int)((noise/32767.0f+1.0f-(s1+s2)/2.0f)*value*mix+(noise+value)*(1.0f-mix));
 }

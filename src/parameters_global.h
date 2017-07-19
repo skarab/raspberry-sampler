@@ -16,14 +16,14 @@ enum PARAM_GLOBAL
     PARAM_GLOBAL_LPResonance,
     PARAM_GLOBAL_HPCutOff,
     PARAM_GLOBAL_HPResonance,
-    PARAM_GLOBAL_Unused1,
-    PARAM_GLOBAL_Unused2,
+    PARAM_GLOBAL_Wet,
+    PARAM_GLOBAL_Resonance,
 
     PARAM_GLOBAL_Noise,
     PARAM_GLOBAL_NoiseTexture,
-    PARAM_GLOBAL_Motor,
-    PARAM_GLOBAL_MotorTexture,
-    PARAM_GLOBAL_MotorSpeed,
+    PARAM_GLOBAL_Clicks,
+    PARAM_GLOBAL_ClicksTexture,
+    PARAM_GLOBAL_ClicksPitch,
     PARAM_GLOBAL_NoiseMix,
 
     PARAM_GLOBAL_Count

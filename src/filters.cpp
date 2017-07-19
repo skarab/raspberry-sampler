@@ -2,14 +2,17 @@
 #include "filter_stereo.h"
 #include "filter_bitcrusher.h"
 #include "filter_distortion.h"
-#include "filter_overdrive.h"
 
 FiltersGlobal::FiltersGlobal()
 {
+    _Volume = 0.0f;
+
     FILTER_DC_Initialize(_DC);
     FILTER_NOISE_Initialize(_Noise);
     FILTER_LOWPASS_Initialize(_LowPass);
     FILTER_HIGHPASS_Initialize(_HighPass);
+    FILTER_WET_Initialize(_Wet);
+    FILTER_RESONANCE_Initialize(_Resonance);
     FILTER_EQUALIZER_Initialize(_Equalizer);
 }
 
@@ -24,10 +27,13 @@ void FiltersGlobal::Compute(int& value, const vector<int>& params)
     FILTER_DC_Compute(value, _DC);
     FILTER_LOWPASS_Compute(value, params, _LowPass);
     FILTER_HIGHPASS_Compute(value, params, _HighPass);
+    FILTER_WET_Compute(value, params[PARAM_GLOBAL_Wet], _Wet);
+    FILTER_RESONANCE_Compute(value, params[PARAM_GLOBAL_Resonance], _Resonance);
     FILTER_EQUALIZER_Compute(value, params, _Equalizer);
 
     float volume = powf(2.0f, (params[PARAM_GLOBAL_Volume]-100.0f)/10.0f);
-    value = (int)(value*volume);
+    _Volume = _Volume*0.99+volume*0.01;
+    value = (int)(value*_Volume);
 }
 
 void FiltersGlobal::ComputeStereo(int& left, int& right, const vector<int>& params)

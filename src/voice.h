@@ -26,6 +26,7 @@ public:
 
 private:
 
+    float _Volume;
     Sample* _Sample;
     double _Position;
     bool _Stop;
