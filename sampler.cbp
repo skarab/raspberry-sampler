@@ -101,10 +101,13 @@
 		<Unit filename="src/filter_noise.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
-		<Unit filename="src/filter_overdrive.h">
+		<Unit filename="src/filter_resonance.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/filter_stereo.h">
+			<Option virtualFolder="filters/" />
+		</Unit>
+		<Unit filename="src/filter_wet.h">
 			<Option virtualFolder="filters/" />
 		</Unit>
 		<Unit filename="src/filters.cpp">
