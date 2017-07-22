@@ -12,7 +12,7 @@ Sample::Sample() :
 
 Sample::Sample(string name, string path) :
     _Name(name),
-    _Mode(MODE_Loop),
+    _Mode(MODE_OneShot),
     _PlayCounter(0)
 {
     _Wav = new Wav(path);
