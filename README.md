@@ -31,11 +31,6 @@ https://www.youtube.com/watch?v=qFAxQr971z0
 https://www.youtube.com/watch?v=87chFwOwE38
 
 -----------------------------------
-I build it on gentoo, dont forget the :
-git submodule init
-git submodule update
-to get pugyxml submodule.
------------------------------------
 
 Manual
 
@@ -104,5 +99,14 @@ Hardware parts :
  - 4 buttons
  - 1 play button
  - cables, proto board, cobbler
+
+-----------------------------------
+
+Manual build
+I build it using custom gentoo kernel, using openrc & alsalibs, external usb soundcard/midi enabled.
+It requires bcm2835 libs (emerge -a bcm2835), dont forget to pull submodules :
+git submodule init
+git submodule update
+I'll provide the image as soon as possible.
 
 
