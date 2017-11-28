@@ -31,6 +31,11 @@ https://www.youtube.com/watch?v=qFAxQr971z0
 https://www.youtube.com/watch?v=87chFwOwE38
 
 -----------------------------------
+I build it on gentoo, dont forget the :
+git submodule init
+git submodule update
+to get pugyxml submodule.
+-----------------------------------
 
 Manual
 
