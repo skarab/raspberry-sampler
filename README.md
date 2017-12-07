@@ -7,7 +7,7 @@ It's a sampler with bunch of knobs, dedicated to live-edit samples stored in a u
 
 Features
 
-- 8 knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
+- 8 knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds, mini jack output
 - stereo & polyphonic, up to 8 voices
 - 44100Hz 16bits realtime playback & editing
 - WAV support through the usb key, with live-plug support
@@ -15,7 +15,6 @@ Features
 - one shot, loop and instrument play modes
 - per-sample stereo amplifier, formant, distortion & bitcrusher filters
 - global equalizer, low pass moog, high pass, resonance & noise filters
-- jack output
 
 -----------------------------------
 
