@@ -107,7 +107,9 @@ It should contains a root folder named samples, and some folders (banks) contain
 SD Card
 
 It requires a 16GB micro SDHC card, the image is HERE. Just put it using kind of :
+
 dd bs=4M if=backup.img of=/dev/sdb
+
 It's a gentoo custom kernel, root filesystem is mounted as read-only, so no worry about brutals/usuals power off.
 
 -----------------------------------
@@ -115,7 +117,5 @@ It's a gentoo custom kernel, root filesystem is mounted as read-only, so no worr
 Manual build
 
 I build it using custom gentoo kernel, using openrc & alsalibs, external usb soundcard/midi enabled.
-It requires bcm2835 libs (emerge -a bcm2835), dont forget to pull submodules :
-git submodule init
-git submodule update
+It requires bcm2835 libs (emerge -a bcm2835), dont forget to pull submodules .
 ssh, samba are installed on the image.
