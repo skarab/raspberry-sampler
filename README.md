@@ -1,24 +1,21 @@
 # raspberry-sampler
 Sampler based on Raspberry Pi 3 B
 
-Key concept is to have a box full of knobs to live-edit samples, linked to other instruments using midi.
-Note this is WIP, the design of controllers may change, the box isn't designed yet.
+It's a sampler with bunch of knobs, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
 
 -----------------------------------
 
 Features
 
+- 8 knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
 - stereo & polyphonic, up to 8 voices
-- 44100Hz 16bits realtime playback
-- jack output
+- 44100Hz 16bits realtime playback & editing
+- WAV support through the usb key, with live-plug support
 - usb midi input, supporting multiple devices
-- up to X midi attachments
-- support up to X banks containing X samples
 - one shot, loop and instrument play modes
-- Per-sample stereo amplifier, formant, distortion & bitcrusher filters
-- Global equalizer, low pass moog, high pass, resonance & noise filters
-- 8 Knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds
-- sampler software and samples on an usb key, allowing easy updates
+- per-sample stereo amplifier, formant, distortion & bitcrusher filters
+- global equalizer, low pass moog, high pass, resonance & noise filters
+- jack output
 
 -----------------------------------
 
@@ -102,11 +99,21 @@ Hardware parts :
 
 -----------------------------------
 
+USB Key
+It should contains a root folder named samples, and some folders (banks) containing the 44100Hz 16bits wav files.
+
+-----------------------------------
+
+SD Card
+It requires a 16GB micro SDHC card, the image is HERE. Just put it using kind of :
+dd bs=4M if=backup.img of=/dev/sdb
+It's a gentoo custom kernel, root filesystem is mounted as read-only, so no worry about brutals/usuals power off.
+
+-----------------------------------
+
 Manual build
 I build it using custom gentoo kernel, using openrc & alsalibs, external usb soundcard/midi enabled.
 It requires bcm2835 libs (emerge -a bcm2835), dont forget to pull submodules :
 git submodule init
 git submodule update
-I'll provide the image as soon as possible.
-
-
+ssh, samba are installed on the image.
