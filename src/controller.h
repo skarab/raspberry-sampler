@@ -18,6 +18,8 @@ public:
 
     static Controller& Get() { return *_Instance; }
 
+    void OnUsbKeyMounted();
+
     void OnNoteOn(const MidiKey& key, int velocity);
     void OnNoteOff(const MidiKey& key);
 
@@ -27,8 +29,8 @@ private:
 
     Bank* _GetBank();
     Sample* _FindSample(const MidiKey& key);
-    bool _IsOnPlayBank() { return _GetBank()==Bank::PlayBank; }
-    bool _IsOnGlobalParams() { return _IsOnPlayBank() && _Sample==Bank::PlayBank->GetSample(0); }
+    bool _IsOnPlayBank() { return _BankSelect->GetID()==0; }
+    bool _IsOnGlobalParams() { return _IsOnPlayBank() && _SampleSelect->GetID()==0; }
 
     void _OnLoadBank();
     void _OnSaveBank();

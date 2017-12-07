@@ -167,8 +167,9 @@ void Core::_Run()
 
 void Core::_Create()
 {
-    if (snd_pcm_open(&_PlaybackHandle, SAMPLER_DEVICE, SND_PCM_STREAM_PLAYBACK, 0)<0)
-        ERROR("device is not available");
+    int result = snd_pcm_open(&_PlaybackHandle, SAMPLER_DEVICE, SND_PCM_STREAM_PLAYBACK, 0);
+    if (result<0)
+        ERROR(string("device is not available :")+snd_strerror(result));
 
     snd_pcm_hw_params_t* hw_params;
     if (snd_pcm_hw_params_malloc(&hw_params)<0) ERROR("failed to alloc hw_params");
@@ -220,7 +221,7 @@ void Core::_Destroy()
 
 void Core::_Update(snd_pcm_uframes_t frames)
 {
-    const vector<int>& params = Bank::PlayBank->GetSample(0)->GetParams();
+    const vector<int>& params = Bank::GetGlobalParams();
 
     short int* out = _Buffer;
     for (int i=0 ; i<frames ; ++i)

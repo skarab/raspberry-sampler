@@ -9,12 +9,12 @@ class Bank
 {
 public:
 
-    static vector<Bank*> Banks;
-    static Bank* PlayBank;
     static void UpdatePlayBank();
     static void DetachAll();
     static vector<Bank*> List();
+    static const vector<int>& GetGlobalParams() { return _PlayBank->GetSample(0)->GetParams(); }
     static void Destroy(vector<Bank*>& banks);
+    static void Finalize();
 
     Bank();
     Bank(string name, string path);
@@ -41,6 +41,9 @@ private:
     string _Path;
     vector<Sample*> _Samples;
     bool _Loaded;
+
+    static vector<Bank*> _Banks;
+    static Bank* _PlayBank;
 };
 
 #endif

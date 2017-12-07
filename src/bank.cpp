@@ -17,22 +17,22 @@ struct sample_sort
     }
 };
 
-vector<Bank*> Bank::Banks;
-Bank* Bank::PlayBank = NULL;
+vector<Bank*> Bank::_Banks;
+Bank* Bank::_PlayBank = NULL;
 
 void Bank::UpdatePlayBank()
 {
-    PlayBank->_Samples.erase(PlayBank->_Samples.begin()+1, PlayBank->_Samples.end());
+    _PlayBank->_Samples.erase(_PlayBank->_Samples.begin()+1, _PlayBank->_Samples.end());
 
-    for (int i=1 ; i<Banks.size() ; ++i)
+    for (int i=1 ; i<_Banks.size() ; ++i)
     {
-        if (Banks[i]->IsLoaded())
+        if (_Banks[i]->IsLoaded())
         {
-            for (int j=0 ; j<Banks[i]->_Samples.size() ; ++j)
+            for (int j=0 ; j<_Banks[i]->_Samples.size() ; ++j)
             {
-                Sample* sample = Banks[i]->_Samples[j];
+                Sample* sample = _Banks[i]->_Samples[j];
                 if (!sample->GetMidiKey().IsNull() || (sample->IsPlaying() && sample->IsLooping()))
-                    PlayBank->_Samples.push_back(sample);
+                    _PlayBank->_Samples.push_back(sample);
             }
         }
     }
@@ -42,20 +42,23 @@ void Bank::DetachAll()
 {
     UpdatePlayBank();
 
-    for (int i=1 ; i<PlayBank->_Samples.size() ; ++i)
-        PlayBank->_Samples[i]->GetMidiKey().SetNull();
+    for (int i=1 ; i<_PlayBank->_Samples.size() ; ++i)
+        _PlayBank->_Samples[i]->GetMidiKey().SetNull();
 }
 
 vector<Bank*> Bank::List()
 {
-    PlayBank = new Bank();
-    PlayBank->_Loaded = true;
-    Sample* global = new Sample();
-    PlayBank->_Samples.push_back(global);
+    if (_PlayBank==NULL)
+    {
+        _PlayBank = new Bank();
+        _PlayBank->_Loaded = true;
+        Sample* global = new Sample();
+        _PlayBank->_Samples.push_back(global);
 
-    Banks.push_back(PlayBank);
+        _Banks.push_back(_PlayBank);
+    }
 
-    DIR* dir = opendir(SAMPLER_BANKS);
+    DIR* dir = opendir(SAMPLER_FOLDER);
     if (dir!=NULL)
     {
         dirent* entry = readdir(dir);
@@ -64,8 +67,8 @@ vector<Bank*> Bank::List()
         {
             if (entry->d_type==DT_DIR && entry->d_name[0]!='.')
             {
-                Bank* bank = new Bank(entry->d_name, string(SAMPLER_BANKS)+entry->d_name+"/");
-                Banks.push_back(bank);
+                Bank* bank = new Bank(entry->d_name, string(SAMPLER_FOLDER)+entry->d_name+"/");
+                _Banks.push_back(bank);
             }
 
             entry = readdir(dir);
@@ -74,15 +77,23 @@ vector<Bank*> Bank::List()
         closedir(dir);
     }
 
-    sort(Banks.begin()+1, Banks.end(), bank_sort());
-    return Banks;
+    sort(_Banks.begin()+1, _Banks.end(), bank_sort());
+    return _Banks;
 }
 
 void Bank::Destroy(vector<Bank*>& banks)
 {
-    for (int i=0 ; i<banks.size() ; ++i)
+    for (int i=1 ; i<banks.size() ; ++i)
         delete banks[i];
     banks.clear();
+    banks.push_back(_PlayBank);
+    _Banks.clear();
+    _Banks.push_back(_PlayBank);
+}
+
+void Bank::Finalize()
+{
+    delete _PlayBank;
 }
 
 Bank::Bank() :
@@ -151,7 +162,7 @@ void Bank::Unload()
     {
         LOG("unload bank %s", _Path.c_str());
 
-        if (this==PlayBank)
+        if (this==_PlayBank)
         {
             delete _Samples[0];
         }

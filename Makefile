@@ -7,6 +7,7 @@ LDLIBS=-L/usr/lib -lasound -lpthread -lbcm2835
 
 FILES=src/pugixml/src/pugixml.cpp \
 	src/display.cpp \
+	src/usb_key.cpp \
 	src/bank.cpp \
 	src/sound.cpp \
 	src/core.cpp \

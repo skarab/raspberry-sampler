@@ -1,6 +1,7 @@
 #include "controller.h"
 #include "display.h"
 #include "sound.h"
+#include "usb_key.h"
 
 Controller* Controller::_Instance = NULL;
 
@@ -69,10 +70,37 @@ Controller::~Controller()
     delete _BankSelect;
 
     Bank::Destroy(_Banks);
+    Bank::Finalize();
 
     bcm2835_close();
 
     pthread_mutex_destroy(&_Lock);
+}
+
+void Controller::OnUsbKeyMounted()
+{
+    // for now just stop & fresh reload all
+
+    pthread_mutex_lock(&_Lock);
+    Bank::DetachAll();
+
+    for (int i=0 ; i<_Banks.size() ; ++i)
+        Sound::Get().OnUnloadBank(*_Banks[i]);
+
+    Bank::Destroy(_Banks);
+    _Banks = Bank::List();
+
+    _BankSelect->SetCount(_Banks.size());
+    _SampleSelect->SetCount(1);
+    _SampleSelect->SetID(0);
+    _Sample = _GetBank()->GetSample(0);
+
+    _BankSelect->SetID(0);
+    _UpdateControls();
+    _BankStatus->SetOn(true);
+    Display::Get().Print(_BankSelect->GetID());
+
+    pthread_mutex_unlock(&_Lock);
 }
 
 void Controller::OnNoteOn(const MidiKey& key, int velocity)
@@ -234,6 +262,9 @@ void Controller::_OnLoadBank()
     }
     else
     {
+        if (!UsbKey::Get().IsOK())
+            return;
+
         bank->Load();
 
         pthread_mutex_lock(&_Lock);
@@ -263,8 +294,11 @@ void Controller::_OnSaveBank()
         return;
     }
 
-    _GetBank()->Save();
-    Display::Get().Print(_BankSelect->GetID());
+    if (UsbKey::Get().IsOK())
+    {
+        _GetBank()->Save();
+        Display::Get().Print(_BankSelect->GetID());
+    }
 }
 
 void Controller::_OnChangeMode()

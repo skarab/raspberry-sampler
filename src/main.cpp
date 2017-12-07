@@ -4,6 +4,7 @@
 #include "midi.h"
 #include "bank.h"
 #include "controller.h"
+#include "usb_key.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,22 +12,31 @@ int main(int argc, char *argv[])
         return -1;
 
     Log* log = new Log();
+    UsbKey* usb_key = new UsbKey();
     Display* display = new Display();
     Controller* controller = new Controller();
     Sound* sound = new Sound();
     Midi* midi = new Midi();
 
-    while (1)
+    try
     {
-        controller->Update();
-        usleep(3000);
+        while (1)
+        {
+            usb_key->Update();
+            controller->Update();
+            usleep(3000);
+        }
+    }
+    catch(...)
+    {
+        printf("Aborted!\n");
     }
 
     delete controller;
-
     delete midi;
     delete sound;
     delete display;
+    delete usb_key;
     delete log;
 
     return 0;
