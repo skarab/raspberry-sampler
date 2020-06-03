@@ -109,7 +109,7 @@ I use FAT32.
 
 SD Card
 
-It requires a 16GB micro SDHC card, the image is here : https://downloads.kstorm.org/ksamp.img
+It requires a 16GB micro SDHC card, the image is here : https://downloads.kstorm.org/2020-06-03_ksamp.img
 Just put it using kind of :
 
 dd bs=4M if=ksamp.img of=/dev/sdb
