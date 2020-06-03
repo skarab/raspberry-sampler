@@ -126,48 +126,45 @@ It's based on a custom Gentoo kernel, using openrc, alsalibs, bcm2835, ...
 
 Steps :
 
-1. mount the sdcard on your laptop :
-
- mount /dev/sdx3 /mnt/usb/
- 
- vi /etc/fstab
- 
-remove the ",ro" flag to remove the read-only protection (don't forget to add it after changes !)
-
-2. insert the sdcard in the pi
-
-plug the network cable on your box
-
-connect alim, power on
-
-3. grab IP, either connecting to TV or from your box (should bind to 192.168.1.45 but not sure)
-
-connect using ssh :
+. pi is power off
+. plug a network cable from pi to your box
+. connect alim, it powers on
+. grab its IP (should be 192.168.1.45), either by connecting to hdmi tv or your box
+. connect using ssh: 
 
  ssh -l root 192.168.1.45
  
  password: sampler
+ 
+. remove the read-only protection:
 
-4. stop sampler running
+ vi /etc/fstab
+
+ remove the ",ro" flag on the root filesystem
+
+. reboot the pi
+. reconnect ssh
+. stop sampler running
 
  mv .bash_profile .bash_profile.old
  
- reboot
- 
- reconnect ssh
+. reboot the pi
+. reconnect ssh
 
-5. mount sampler on your latop using samba :
+. mount the sampler on your laptop using samba :
 
-mount //192.168.1.45/sampler sampler/ -o guest
+ mount //192.168.1.45/sampler sampler/ -o guest
 
 -> then you have sampler the binary, sources/ containing src & code::blocks project so you can modify, and build/run from the ssh window.
 
-git is installed so you may push things.
+git is installed so you may pull updates/push things.
 
-6. when finished :
+. when finished :
 
  add the ",ro" flag in /etc/fstab (mmcblk0p3)
  
  mv .bash_profile.old .bash_profile
  
  reboot
+
+. enjoy!
