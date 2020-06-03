@@ -127,6 +127,17 @@ It's based on a custom Gentoo kernel, using openrc, alsalibs, bcm2835, ...
 Steps :
 
  - pi is power off
+ - move the sdcard into your laptop and mount it :
+ 
+ mount /dev/sdc3 /mnt/usb
+ 
+ - remove the read-only protection:
+ 
+ vi /mnt/usb/etc/fstab
+
+ remove the ",ro" flag on the root filesystem
+ 
+ - put the sdcard into the pi
  - plug a network cable from pi to your box
  - connect alim, it powers on
  - grab its IP (should be 192.168.1.45), either by connecting to hdmi tv or your box
@@ -136,21 +147,12 @@ Steps :
  
  password: sampler
  
- - remove the read-only protection:
-
- vi /etc/fstab
-
- remove the ",ro" flag on the root filesystem
-
- - reboot the pi
- - reconnect ssh
  - stop sampler running
 
  mv .bash_profile .bash_profile.old
  
  - reboot the pi
  - reconnect ssh
-
  - mount the sampler on your laptop using samba :
 
  mount //192.168.1.45/sampler sampler/ -o guest
