@@ -166,7 +166,7 @@ git is installed so you may push things.
 
 6. when finished :
 
- add the ",ro" flag in /etc/fstab
+ add the ",ro" flag in /etc/fstab (mmcblk0p3)
  
  mv .bash_profile.old .bash_profile
  
