@@ -1,5 +1,5 @@
-# raspberry-sampler
-Sampler based on Raspberry Pi 3 B
+# KSamp
+Hardware audio sampler based on Raspberry Pi 3 B, running on linux
 
 It's a sampler with bunch of knobs, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
 
@@ -7,14 +7,14 @@ It's a sampler with bunch of knobs, dedicated to live-edit samples stored in a u
 
 Features
 
-- 8 knobs, 4 buttons, 1 play button, 1 parameters switch, 3 leds, mini jack output
+- 8 knobs, 5 buttons, 1 parameters 3P switch, 3 leds, mini jack output
 - stereo & polyphonic, up to 8 voices
 - 44100Hz 16bits realtime playback & editing
 - WAV support through the usb key, with live-plug support
 - usb midi input, supporting multiple devices
 - one shot, loop and instrument play modes
-- per-sample stereo amplifier, formant, distortion & bitcrusher filters
-- global equalizer, low pass moog, high pass, resonance & noise filters
+- per-sample time & loop selection, stereo amplifier, formant, distortion & bitcrusher filters
+- global equalizer, low pass moog, high pass, resonance & noises filters
 
 -----------------------------------
 
@@ -64,9 +64,9 @@ Sample :
      If you switch another control before a note is received, it just cancel the tap.
    - tap it two time to detach it
 
-    The green LED displays if the sample is attached.
+    The LED displays if the sample is attached.
 
-(8) play the sample, the red LED displays if the sample is playing
+(8) play the sample, the LED displays if the sample is playing
 
 (9) select parameters to assign to the (10) knobs :
 
@@ -86,36 +86,72 @@ Sample :
 -----------------------------------
 
 Hardware parts :
- - Raspberry 3 B
- - SD card
+ - Raspberry 3 Model B V1.2
+ - 16GB micro SD card HC
+ - USB key to store samples
+ - noise free USB audio card PCM2704
+ - Adafruit T-Cobbler+ (for soldering safety)
  - 7-segment LED HT16K33 Backpack
- - x8 rotary encoder (Electronics AB 9302540010), remove the guts for the parameters knobs (smoother)
+ - x8 rotary encoder (Electronics AB 9302540010), remove the guts on the parameters knobs (smoother)
  - 1 switch - 3 positions
  - 3 led
- - 4 buttons
- - 1 play button
- - cables, proto board, cobbler
+ - 5 buttons
+ - cables, tools, ...
 
 -----------------------------------
 
 USB Key
 
 It should contains a root folder named samples, and some folders (banks) containing the 44100Hz 16bits wav files.
+I use FAT32.
 
 -----------------------------------
 
 SD Card
 
-It requires a 16GB micro SDHC card, the image is HERE. Just put it using kind of :
+It requires a 16GB micro SDHC card, the image is here : https://downloads.kstorm.org/ksamp.img
+Just put it using kind of :
 
-dd bs=4M if=backup.img of=/dev/sdb
+dd bs=4M if=ksamp.img of=/dev/sdb
 
-It's a gentoo custom kernel, root filesystem is mounted as read-only, so no worry about brutals/usuals power off.
+root filesystem is mounted as read-only, so no worry about brutals/usuals power off.
 
 -----------------------------------
 
-Manual build
+Developer Manual
 
-I build it using custom gentoo kernel, using openrc & alsalibs, external usb soundcard/midi enabled.
-It requires bcm2835 libs (emerge -a bcm2835), dont forget to pull submodules .
-ssh, samba are installed on the image.
+You can either modify things right on the raspberry (textmode only) or use your laptop with code::blocks via SSH & Samba.
+It's based on a custom Gentoo kernel, using openrc, alsalibs, bcm2835, ...
+(note: you may use windows since we build on the Pi using SSH...)
+
+Steps :
+
+1. mount the sdcard on your laptop :
+ mount /dev/sdx3 /mnt/usb/
+ vi /etc/fstab
+remove the ",ro" flag to remove the read-only protection (don't forget to add it after changes !)
+
+2. insert the sdcard in the pi
+plug the network cable on your box
+connect alim, power on
+
+3. grab IP, either connecting to TV or from your box (should bind to 192.168.1.45 but not sure)
+connect using ssh :
+ ssh -l root 192.168.1.45
+ password: sampler
+
+4. stop sampler running
+ mv .bash_profile .bash_profile.old
+ reboot
+ reconnect ssh
+
+5. mount sampler on your latop using samba :
+mount //192.168.1.45/sampler sampler/ -o guest
+
+-> then you have sampler the binary, sources/ containing src & code::blocks project so you can modify, and build/run from the ssh window.
+git is installed so you may push things.
+
+6. when finished :
+ add the ",ro" flag in /etc/fstab
+ mv .bash_profile.old .bash_profile
+ reboot
