@@ -6,6 +6,7 @@
 #include "led.h"
 #include "knob_select.h"
 #include "knob_control.h"
+#include "switch.h"
 #include "bank.h"
 #include "midi_key.h"
 
@@ -65,7 +66,7 @@ private:
     Button* _SamplePlay;
     Led* _SamplePlayStatus;
 
-    KnobSelect* _ControlSelect;
+    Switch* _ControlSelect;
     vector<KnobControl*> _Controls;
 
     pthread_mutex_t _Lock;

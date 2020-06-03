@@ -32,7 +32,7 @@ Controller::Controller() :
     _SamplePlay = new Button(PIN_SAMPLE_PLAY);
     _SamplePlayStatus = new Led(PIN_SAMPLE_PLAY_STATUS);
 
-    _ControlSelect = new KnobSelect(3, PIN_CONTROL_SELECT_LEFT, PIN_CONTROL_SELECT_RIGHT);
+    _ControlSelect = new Switch(PIN_CONTROL_SELECT_UP, PIN_CONTROL_SELECT_DOWN);
     _Controls.resize(6);
     _Controls[0] = new KnobControl(PIN_CONTROL_01_LEFT, PIN_CONTROL_01_RIGHT);
     _Controls[1] = new KnobControl(PIN_CONTROL_02_LEFT, PIN_CONTROL_02_RIGHT);
@@ -159,7 +159,6 @@ void Controller::Update()
         {
             _Sample = NULL;
         }
-        _ControlSelect->SetID(0);
         _UpdateControls();
     }
 
@@ -175,7 +174,6 @@ void Controller::Update()
     {
         changed = true;
         _Sample = _GetBank()->GetSample(_SampleSelect->GetID());
-        _ControlSelect->SetID(0);
         _UpdateControls();
     }
 
@@ -364,7 +362,7 @@ void Controller::_OnStopSample()
 
 int Controller::_GetControlID(int knob_id)
 {
-    int id = _ControlSelect->GetID();
+    int id = _ControlSelect->GetValue();
     return id*6+knob_id;
 }
 

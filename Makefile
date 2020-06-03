@@ -26,6 +26,7 @@ FILES=src/pugixml/src/pugixml.cpp \
 	src/led.cpp \
 	src/knob_control.cpp \
 	src/knob_select.cpp \
+	src/switch.cpp \
 	src/controller.cpp
 
 SRCS=src/main.cpp  $(FILES)

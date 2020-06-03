@@ -6,7 +6,7 @@
 		<Option platforms="Unix;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;sound/;display/;filters/;parameters/;usb_key/;" />
+		<Option virtualFolders="controller/;externals/;sample/;midi/;application/;helpers/;sound/;display/;filters/;parameters/;usb_key/" />
 		<Build>
 			<Target title="default">
 				<Option platforms="Unix;" />
@@ -203,6 +203,12 @@
 		<Unit filename="src/sound.h">
 			<Option virtualFolder="sound/" />
 		</Unit>
+		<Unit filename="src/switch.cpp">
+			<Option virtualFolder="controller/" />
+		</Unit>
+		<Unit filename="src/switch.h">
+			<Option virtualFolder="controller/" />
+		</Unit>
 		<Unit filename="src/usb_key.cpp">
 			<Option virtualFolder="usb_key/" />
 		</Unit>
@@ -221,9 +227,6 @@
 		<Unit filename="src/wav.h">
 			<Option virtualFolder="sample/" />
 		</Unit>
-		<Extensions>
-			<code_completion />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
