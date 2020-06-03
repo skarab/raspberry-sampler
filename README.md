@@ -126,32 +126,32 @@ It's based on a custom Gentoo kernel, using openrc, alsalibs, bcm2835, ...
 
 Steps :
 
-. pi is power off
-. plug a network cable from pi to your box
-. connect alim, it powers on
-. grab its IP (should be 192.168.1.45), either by connecting to hdmi tv or your box
-. connect using ssh: 
+ - pi is power off
+ - plug a network cable from pi to your box
+ - connect alim, it powers on
+ - grab its IP (should be 192.168.1.45), either by connecting to hdmi tv or your box
+ - connect using ssh: 
 
  ssh -l root 192.168.1.45
  
  password: sampler
  
-. remove the read-only protection:
+ - remove the read-only protection:
 
  vi /etc/fstab
 
  remove the ",ro" flag on the root filesystem
 
-. reboot the pi
-. reconnect ssh
-. stop sampler running
+ - reboot the pi
+ - reconnect ssh
+ - stop sampler running
 
  mv .bash_profile .bash_profile.old
  
-. reboot the pi
-. reconnect ssh
+ - reboot the pi
+ - reconnect ssh
 
-. mount the sampler on your laptop using samba :
+ - mount the sampler on your laptop using samba :
 
  mount //192.168.1.45/sampler sampler/ -o guest
 
@@ -159,7 +159,7 @@ Steps :
 
 git is installed so you may pull updates/push things.
 
-. when finished :
+ - when finished :
 
  add the ",ro" flag in /etc/fstab (mmcblk0p3)
  
@@ -167,4 +167,4 @@ git is installed so you may pull updates/push things.
  
  reboot
 
-. enjoy!
+ - enjoy!
