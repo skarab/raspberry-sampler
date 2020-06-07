@@ -1,4 +1,4 @@
-# wip name
+# x8 sampler
 Hardware audio sampler based on Raspberry Pi 3 B, running on linux
 
 It's an audio sampler with bunch of knobs and oldschool LED segment screen, giving analog feeling, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
