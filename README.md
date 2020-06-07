@@ -1,7 +1,7 @@
-# KSamp
+# wip name
 Hardware audio sampler based on Raspberry Pi 3 B, running on linux
 
-It's a sampler with bunch of knobs, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
+It's an audio sampler with bunch of knobs and oldschool LED segment screen, giving analog feeling, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
 
 -----------------------------------
 
@@ -112,7 +112,7 @@ SD Card
 It requires a 16GB micro SDHC card, the image is here : https://downloads.kstorm.org/2020-06-03_ksamp.img
 Just put it using kind of :
 
-dd bs=4M if=ksamp.img of=/dev/sdb
+dd bs=4M if=ksamp.img of=/dev/sdx
 
 root filesystem is mounted as read-only, so no worry about brutals/usuals power off.
 
@@ -129,7 +129,7 @@ Steps :
  - pi is power off
  - move the sdcard into your laptop and mount it :
  
- mount /dev/sdc3 /mnt/usb
+ mount /dev/sdcx /mnt/usb
  
  - remove the read-only protection:
  
