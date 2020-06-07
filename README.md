@@ -149,7 +149,7 @@ Steps :
  
  - stop sampler running
 
- mv .bash_profile .bash_profile.old
+ mv ~/.bash_profile ~/.bash_profile.old
  
  - reboot the pi
  - reconnect ssh
@@ -165,7 +165,7 @@ git is installed so you may pull updates/push things.
 
  add the ",ro" flag in /etc/fstab (mmcblk0p3)
  
- mv .bash_profile.old .bash_profile
+ mv ~/.bash_profile.old ~/.bash_profile
  
  reboot
 
