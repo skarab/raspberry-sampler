@@ -1,7 +1,7 @@
-# KSamp
+# x8 sampler
 Hardware audio sampler based on Raspberry Pi 3 B, running on linux
 
-It's a sampler with bunch of knobs, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
+It's an audio sampler with bunch of knobs and oldschool LED segment screen, giving analog feeling, dedicated to live-edit samples stored in a usb key. It's easily linked to other instruments using usb-midi.
 
 -----------------------------------
 
@@ -112,7 +112,7 @@ SD Card
 It requires a 16GB micro SDHC card, the image is here : https://downloads.kstorm.org/2020-06-03_ksamp.img
 Just put it using kind of :
 
-dd bs=4M if=ksamp.img of=/dev/sdb
+dd bs=4M if=ksamp.img of=/dev/sdx
 
 root filesystem is mounted as read-only, so no worry about brutals/usuals power off.
 
@@ -127,6 +127,17 @@ It's based on a custom Gentoo kernel, using openrc, alsalibs, bcm2835, ...
 Steps :
 
  - pi is power off
+ - move the sdcard into your laptop and mount it :
+ 
+ mount /dev/sdcx /mnt/usb
+ 
+ - remove the read-only protection:
+ 
+ vi /mnt/usb/etc/fstab
+
+ remove the ",ro" flag on the root filesystem
+ 
+ - put the sdcard into the pi
  - plug a network cable from pi to your box
  - connect alim, it powers on
  - grab its IP (should be 192.168.1.45), either by connecting to hdmi tv or your box
@@ -136,21 +147,12 @@ Steps :
  
  password: sampler
  
- - remove the read-only protection:
-
- vi /etc/fstab
-
- remove the ",ro" flag on the root filesystem
-
- - reboot the pi
- - reconnect ssh
  - stop sampler running
 
- mv .bash_profile .bash_profile.old
+ mv ~/.bash_profile ~/.bash_profile.old
  
  - reboot the pi
  - reconnect ssh
-
  - mount the sampler on your laptop using samba :
 
  mount //192.168.1.45/sampler sampler/ -o guest
@@ -163,7 +165,7 @@ git is installed so you may pull updates/push things.
 
  add the ",ro" flag in /etc/fstab (mmcblk0p3)
  
- mv .bash_profile.old .bash_profile
+ mv ~/.bash_profile.old ~/.bash_profile
  
  reboot
 
