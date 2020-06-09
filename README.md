@@ -170,3 +170,10 @@ git is installed so you may pull updates/push things.
  reboot
 
  - enjoy!
+
+-----------------------------------
+Board [wip]
+
+
+![alt text](https://raw.githubusercontent.com/skarab/raspberry-sampler/master/board.png)
+
