@@ -90,7 +90,7 @@ Hardware parts :
  - 16GB micro SD card HC
  - USB key to store samples
  - noise free USB audio card PCM2704
- - Adafruit T-Cobbler+ (for soldering safety)
+ - Adafruit T-Cobbler+ (for soldering safety & case design)
  - 7-segment LED HT16K33 Backpack
  - x8 rotary encoder (Electronics AB 9302540010), remove the guts on the parameters knobs (smoother)
  - 1 switch - 3 positions
@@ -172,8 +172,11 @@ git is installed so you may pull updates/push things.
  - enjoy!
 
 -----------------------------------
-Board [wip]
+Board
 
+I build the case in wood, got the oldschool chrome buttons from my father. I could make a full plan of the case but it all depends on the components you choose. For the choosen encoders I needed 3mm wood, the panel is 6mm wood, had/have a stock of wood but I have all made with what I have, total price is already high. I wanted to keep the thing tight, so the panel brokes, dont forget to buy some good paintable wood-glue...
+Maybe I'll make a 3d print version in the future, but wont be that fun !
 
 ![alt text](https://raw.githubusercontent.com/skarab/raspberry-sampler/master/board.png)
 
+If you need more details about how to fit all those, send mail/pm.
