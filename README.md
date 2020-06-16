@@ -178,5 +178,6 @@ I build the case in wood, got the oldschool chrome buttons from my father. I cou
 Maybe I'll make a 3d print version in the future, but wont be that fun !
 
 ![alt text](https://raw.githubusercontent.com/skarab/raspberry-sampler/master/board.png)
+300ppi.
 
 If you need more details about how to fit all those, send mail/pm.
