@@ -16,6 +16,13 @@ Features
 - per-sample time & loop selection, stereo amplifier, formant, distortion & bitcrusher filters
 - global equalizer, low pass moog, high pass, resonance & noises filters
 
+
+Known issues
+
+- latency, when using load of midi & samples/effects you will experience some delay, just deal with it. I have added the "silence" parameter which allow to resync things a bit...
+- some glitches / cracks, there is no auto smoothing, so you hear exactly whats going on, there are parameters to avoid it (like the envelop), this requires just a bit of mastering the whole thing
+- when playing midi full instrument you need to lower the sample volume else it mays saturate
+
 -----------------------------------
 
 Links
